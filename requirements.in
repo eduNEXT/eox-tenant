@@ -1,3 +1,5 @@
 coverage==4.5.1
 Django==1.11.13
+edx-opaque-keys==0.4.4
+jsonfield==2.0.2
 pylint==1.9.3
