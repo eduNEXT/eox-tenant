@@ -3,15 +3,18 @@ File configuration for eox-tenant.
 """
 from django.apps import AppConfig
 
-class EdunextOpenEdxExtensionsConfig(AppConfig):
+class EdunextOpenedxExtensionsTenantConfig(AppConfig):
     """
+    App configuration
     """
     name = 'eox_tenant'
-    verbose_name = "Edunext Open edx extensions tenant."
+    verbose_name = "Edunext Openedx Multitenancy."
 
     plugin_app = {
         'settings_config': {
-            'lms.djangoapp': {},
-            'cms.djangoapp': {},
+            'lms.djangoapp': {
+                'common': {'relative_path': 'settings.common'},
+                'aws': {'relative_path': 'settings.aws'},
+            },
         },
     }
