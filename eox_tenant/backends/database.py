@@ -2,8 +2,11 @@
 Microsite backend that reads the configuration from the database
 """
 from util.url import strip_port_from_host  # pylint: disable=import-error
-from eox_tenant.ednx_microsites.backends.base import BaseMicrositeBackend
+from eox_tenant.models import Microsite
+from eox_tenant.backends.base import BaseMicrositeBackend
 
+class ClassName(object):
+    """docstring for ClassName"""
 
 class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
     """
@@ -22,7 +25,6 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         Return all the microsites from the database storing the results in the current request to avoid
         quering the DB multiple times in the same request
         """
-        from eox_tenant.ednx_microsites.models import Microsite
         cache_key = "all-microsites-iterator"
         cached_list = self.get_key_from_cache(cache_key)
 
@@ -44,8 +46,6 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         if not self.has_configuration_set() or not domain:
             return
 
-        from eox_tenant.ednx_microsites.models import Microsite
-
         microsite = Microsite.get_microsite_for_domain(domain)
         if microsite:
             self._set_microsite_config_from_obj(microsite.subdomain, domain, microsite)
@@ -65,8 +65,6 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         This returns all configuration for all microsites
         """
         config = {}
-
-        from eox_tenant.ednx_microsites.models import Microsite
 
         candidates = Microsite.objects.all()  # pylint: disable=no-member
         for microsite in candidates:
