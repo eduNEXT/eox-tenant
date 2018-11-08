@@ -29,7 +29,7 @@ setup(
     zip_safe=False,
     entry_points={
         "lms.djangoapp": [
-            "eox_tenant = eox_tenant.apps:EdunextOpenEdxExtensionsTenantConfig"
+            "eox_tenant = eox_tenant.apps:EdunextOpenedxExtensionsTenantConfig"
         ],
     }
 )

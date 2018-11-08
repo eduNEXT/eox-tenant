@@ -28,6 +28,7 @@ class Microsite(models.Model):
     values = JSONField(null=False, blank=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
 
     class Meta:
+        # Note to ops: The table already exists under a different name due to the migration from EOE.
         db_table = 'ednx_microsites_microsites'
 
     def __unicode__(self):
