@@ -2,17 +2,22 @@
 Microsite backend that reads the configuration from the database
 """
 from util.url import strip_port_from_host  # pylint: disable=import-error
-from eox_tenant.models import Microsite
 from eox_tenant.backends.base import BaseMicrositeBackend
 
-class ClassName(object):
-    """docstring for ClassName"""
 
 class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
     """
     Microsite backend that reads the microsites definitions from the database
     using the custom models from edunext
     """
+    _microsite_manager = None
+
+    @property
+    def microsite_manager(self):
+        if not self._microsite_manager:
+            from eox_tenant.models import Microsite
+            self._microsite_manager = Microsite
+        return self._microsite_manager
 
     def has_configuration_set(self):
         """
@@ -25,13 +30,14 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         Return all the microsites from the database storing the results in the current request to avoid
         quering the DB multiple times in the same request
         """
+
         cache_key = "all-microsites-iterator"
         cached_list = self.get_key_from_cache(cache_key)
 
         if cached_list:
             candidates = cached_list
         else:
-            candidates = Microsite.objects.all()  # pylint: disable=no-member
+            candidates = self.microsite_manager.objects.all()  # pylint: disable=no-member
             self.set_key_to_cache(cache_key, candidates)
 
         for microsite in candidates:
@@ -45,8 +51,7 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         """
         if not self.has_configuration_set() or not domain:
             return
-
-        microsite = Microsite.get_microsite_for_domain(domain)
+        microsite = self.microsite_manager.get_microsite_for_domain(domain)
         if microsite:
             self._set_microsite_config_from_obj(microsite.subdomain, domain, microsite)
             return
@@ -54,10 +59,10 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         # if no match on subdomain then see if there is a 'default' microsite
         # defined in the db. If so, then use it
         try:
-            microsite = Microsite.objects.get(key='default')  # pylint: disable=no-member
+            microsite = self.microsite_manager.objects.get(key='default')  # pylint: disable=no-member
             self._set_microsite_config_from_obj(microsite.subdomain, domain, microsite)
             return
-        except Microsite.DoesNotExist:  # pylint: disable=no-member
+        except self.microsite_manager.DoesNotExist:  # pylint: disable=no-member
             return
 
     def get_all_config(self):
@@ -66,7 +71,7 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         """
         config = {}
 
-        candidates = Microsite.objects.all()  # pylint: disable=no-member
+        candidates = self.microsite_manager.objects.all()  # pylint: disable=no-member
         for microsite in candidates:
             values = microsite.values
             config[microsite.key] = values
