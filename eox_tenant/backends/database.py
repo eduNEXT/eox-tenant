@@ -1,8 +1,8 @@
 """
 Microsite backend that reads the configuration from the database
 """
-from util.url import strip_port_from_host  # pylint: disable=import-error
 from eox_tenant.backends.base import BaseMicrositeBackend
+from eox_tenant.edxapp_wrapper.get_common_util import get_strip_port_from_host as strip_port_from_host
 
 
 class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):

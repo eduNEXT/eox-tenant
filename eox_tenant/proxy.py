@@ -8,7 +8,9 @@ from openedx.conf import settings
 """
 from django.conf import settings as base_settings
 
-from microsite_configuration import microsite  # pylint: disable=import-error
+from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
+
+MICROSITE = get_microsite()
 
 
 class MicrositeAwareSettings(object):
@@ -20,9 +22,9 @@ class MicrositeAwareSettings(object):
 
     def __getattr__(self, name):
         try:
-            if isinstance(microsite.get_value(name), dict):
-                return microsite.get_dict(name, getattr(base_settings, name, None))
-            return microsite.get_value(name, getattr(base_settings, name))
+            if isinstance(MICROSITE.get_value(name), dict):
+                return MICROSITE.get_dict(name, getattr(base_settings, name, None))
+            return MICROSITE.get_value(name, getattr(base_settings, name))
         except KeyError:
             return getattr(base_settings, name)
 
