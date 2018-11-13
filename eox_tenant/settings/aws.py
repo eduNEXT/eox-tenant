@@ -32,3 +32,5 @@ def plugin_settings(settings):
     # Microsite settings
     settings.MICROSITE_BACKEND = 'eox_tenant.backends.database.EdunextCompatibleDatabaseMicrositeBackend'
     settings.MICROSITE_TEMPLATE_BACKEND = 'eox_tenant.backends.filebased.EdunextCompatibleFilebasedMicrositeTemplateBackend'
+    settings.MICROSITE_CONFIGURATION_BACKEND = 'eox_tenant.edxapp_wrapper.backends.microsite_configuration_h_v1'
+    settings.COMMON_UTIL = 'eox_tenant.edxapp_wrapper.backends.common_util_h_v1'
