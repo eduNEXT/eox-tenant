@@ -10,7 +10,7 @@ def get_version():
     """
     Retrives the version string from __init__.py.
     """
-    file_path = os.path.join('eox-tenant', '__init__.py')
+    file_path = os.path.join('eox_tenant', '__init__.py')
     initfile_lines = open(file_path, 'rt').readlines()
     version_regex = r"^__version__ = ['\"]([^'\"]*)['\"]"
     for line in initfile_lines:
@@ -25,9 +25,11 @@ setup(
     description='Edunext Open edx extensions tenant.',
     author='eduNEXT',
     author_email='contact@edunext.co',
-    packages=['eox-tenant'],
+    packages=['eox_tenant'],
     zip_safe=False,
     entry_points={
-        "lms.djangoapp": [],
+        "lms.djangoapp": [
+            "eox_tenant = eox_tenant.apps:EdunextOpenedxExtensionsTenantConfig"
+        ],
     }
 )
