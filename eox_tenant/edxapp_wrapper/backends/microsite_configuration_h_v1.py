@@ -17,9 +17,9 @@ def get_base_microsite_backend():
     return InterfaceConnectionBackend
 
 
-def get_microsite_get_value():
+def get_microsite_get_value(*args, **kwargs):
     """ Backend to get get_value. """
-    return get_value
+    return get_value(*args, **kwargs)
 
 
 def get_base_microsite_template_backend():
