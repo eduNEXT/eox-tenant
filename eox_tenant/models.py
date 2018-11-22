@@ -30,6 +30,7 @@ class Microsite(models.Model):
     class Meta:
         # Note to ops: The table already exists under a different name due to the migration from EOE.
         db_table = 'ednx_microsites_microsites'
+        app_label = "eox_tenant"
 
     def __unicode__(self):
         return self.key

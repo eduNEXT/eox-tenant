@@ -43,6 +43,17 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         for microsite in candidates:
             yield microsite
 
+    def get_config_by_domain(self, domain):
+        """
+        Return the configuration and key available for a given domain without applying it
+        to the local thread
+        """
+        microsite = self.microsite_manager.get_microsite_for_domain(domain)
+        if microsite:
+            return microsite.values, microsite.key
+        else:
+            return {}, None
+
     def set_config_by_domain(self, domain):
         """
         For a given request domain, find a match in our microsite configuration
