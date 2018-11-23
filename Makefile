@@ -16,3 +16,11 @@ clean: ## delete most git-ignored files
 
 requirements: ## install environment requirements
 	pip install -r requirements.txt
+
+run-test: clean ## Run test suite.
+	coverage run --source="." manage.py test
+	coverage report --fail-under=10
+
+run-quality-test: clean ## Run quality test.
+	pycodestyle ./eox_tenant
+	pylint ./eox_tenant --rcfile=./setup.cfg

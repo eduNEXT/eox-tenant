@@ -14,6 +14,9 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
 
     @property
     def microsite_manager(self):
+        """
+        Return eox_tenant microsite manager.
+        """
         if not self._microsite_manager:
             from eox_tenant.models import Microsite
             self._microsite_manager = Microsite
@@ -96,7 +99,7 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
             current = microsite.values
             org_filter = current.get('course_org_filter')
             if org_filter:
-                if isinstance(org_filter, basestring):
+                if isinstance(org_filter, str):
                     org_filter = set([org_filter])
                 if org in org_filter:
                     result = current.get(val_name, default)

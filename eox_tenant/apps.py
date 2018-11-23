@@ -3,6 +3,7 @@ File configuration for eox-tenant.
 """
 from django.apps import AppConfig
 
+
 class EdunextOpenedxExtensionsTenantConfig(AppConfig):
     """
     App configuration

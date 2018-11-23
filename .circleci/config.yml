@@ -40,6 +40,15 @@ jobs:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            coverage run --source="." manage.py test
+            coverage report --fail-under=10
+            pycodestyle ./eox_tenant
+            pylint ./eox_tenant --rcfile=./setup.cfg
+
   # Based on answer https://discuss.circleci.com/t/run-tests-on-multiple-versions-of-python/15462
   test-2.7:
     docker:
@@ -68,3 +77,12 @@ jobs:
           paths:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            coverage run --source="." --rcfile=.coveragerc manage.py test
+            coverage report --fail-under=10 --rcfile=.coveragerc
+            pycodestyle ./eox_tenant
+            pylint ./eox_tenant --rcfile=./setup.cfg

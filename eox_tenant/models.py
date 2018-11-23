@@ -28,6 +28,9 @@ class Microsite(models.Model):
     values = JSONField(null=False, blank=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
 
     class Meta:
+        """
+        Model meta class.
+        """
         # Note to ops: The table already exists under a different name due to the migration from EOE.
         db_table = 'ednx_microsites_microsites'
 
@@ -42,7 +45,7 @@ class Microsite(models.Model):
         # MicrositeOrganizationMapping.get_organizations_for_microsite_by_pk(self.id)
         org_filter = self.values.get('course_org_filter')  # pylint: disable=no-member
 
-        if isinstance(org_filter, basestring):
+        if isinstance(org_filter, str):
             org_filter = [org_filter]
 
         return org_filter
