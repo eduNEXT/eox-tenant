@@ -11,7 +11,11 @@ SECRET_KEY = 'secret-key'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-INSTALLED_APPS = ()
+INSTALLED_APPS = [
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'eox_tenant'
+]
 
 TIME_ZONE = 'UTC'
 
@@ -24,6 +28,7 @@ DATABASES = {
     }
 }
 
+
 def plugin_settings(settings):
     """
     Set of plugin settings used by the Open Edx platform.
@@ -31,6 +36,6 @@ def plugin_settings(settings):
     """
     # Plugin settings.
     settings.MICROSITE_BACKEND = 'eox_tenant.backends.database.EdunextCompatibleDatabaseMicrositeBackend'
-    settings.MICROSITE_TEMPLATE_BACKEND = 'eox_tenant.backends.filebased.EdunextCompatibleFilebasedMicrositeTemplateBackend'
+    settings.MICROSITE_TEMPLATE_BACKEND = \
+        'eox_tenant.backends.filebased.EdunextCompatibleFilebasedMicrositeTemplateBackend'
     settings.MICROSITE_CONFIGURATION_BACKEND = 'eox_tenant.edxapp_wrapper.backends.microsite_configuration_h_v1'
-    settings.COMMON_UTIL = 'eox_tenant.edxapp_wrapper.backends.common_util_h_v1'

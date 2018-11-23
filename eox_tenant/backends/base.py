@@ -16,8 +16,11 @@ import threading
 
 from django.conf import settings
 
-from eox_tenant.edxapp_wrapper.get_common_util import get_strip_port_from_host as strip_port_from_host
-from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite_get_value as microsite_get_value
+from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
+from eox_tenant.edxapp_wrapper.get_microsite_configuration import (
+    get_microsite_get_value as microsite_get_value,
+    get_base_microsite_backend,
+)
 
 
 # pylint: disable=unused-argument
@@ -104,7 +107,6 @@ class AbstractBaseMicrositeBackend(object):
 
 # This is the connection point between openedx and this module
 # We need to pass the class inheritance validation, and also stand alone for tests
-from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_base_microsite_backend
 INTERFACE_CONNECTION_BACKEND = get_base_microsite_backend()
 
 

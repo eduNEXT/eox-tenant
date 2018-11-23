@@ -5,7 +5,7 @@ TODO: add me
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from eox_tenant.ednx_microsites.models import Microsite
+from eox_tenant.models import Microsite
 
 
 class MicrositeModelTest(TestCase):

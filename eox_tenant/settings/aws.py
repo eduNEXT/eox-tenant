@@ -1,11 +1,11 @@
 """
-AWS settings for eox_tenant project.
+Settings for eox_tenant project meant to be called on the edx-platform/*/envs/aws.py module
 """
 
-from .common import * # pylint: disable=wildcard-import
+from .common import *  # pylint: disable=wildcard-import
 
 
-def plugin_settings(settings):
+def plugin_settings(settings):  # pylint: disable=function-redefined
     """
     Set of plugin settings used by the Open Edx platform.
     More info: https://github.com/edx/edx-platform/blob/master/openedx/core/djangoapps/plugins/README.rst

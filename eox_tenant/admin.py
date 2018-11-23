@@ -31,8 +31,8 @@ class MicrositeAdmin(admin.ModelAdmin):
         # pylint: disable=broad-except
         try:
             return microsite.values.get('SITE_NAME', "NOT CONFIGURED")
-        except Exception, error:
-            return unicode(error)
+        except Exception as error:
+            return str(error)
 
     def template_dir(self, microsite):
         """
@@ -41,8 +41,8 @@ class MicrositeAdmin(admin.ModelAdmin):
         # pylint: disable=broad-except
         try:
             return microsite.values.get('template_dir', "NOT CONFIGURED")
-        except Exception, error:
-            return unicode(error)
+        except Exception as error:
+            return str(error)
 
     def course_org_filter(self, microsite):
         """
@@ -51,8 +51,8 @@ class MicrositeAdmin(admin.ModelAdmin):
         # pylint: disable=broad-except
         try:
             return microsite.values.get('course_org_filter', "NOT CONFIGURED")
-        except Exception, error:
-            return unicode(error)
+        except Exception as error:
+            return str(error)
 
 
 admin.site.register(Microsite, MicrositeAdmin)

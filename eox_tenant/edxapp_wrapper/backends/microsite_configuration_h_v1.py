@@ -1,6 +1,6 @@
 """ Backend abstraction. """
 
-from microsite_configuration.microsite import ( # pylint: disable=import-error
+from microsite_configuration.microsite import (  # pylint: disable=import-error
     get_value,
     is_request_in_microsite,
 )
@@ -38,5 +38,5 @@ def get_is_request_in_microsite():
 
 def get_microsite():
     """ Backend to get microsite. """
-    from microsite_configuration import microsite # pylint: disable=import-error
+    from microsite_configuration import microsite  # pylint: disable=import-error
     return microsite
