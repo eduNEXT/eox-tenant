@@ -24,7 +24,6 @@ import os
 from datetime import datetime
 
 from django.conf import settings as base_settings
-from django.core import signals
 
 from eox_tenant.backends.database import EdunextCompatibleDatabaseMicrositeBackend
 
