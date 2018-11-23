@@ -1,6 +1,7 @@
 """
 Microsite backend that reads the configuration from the database
 """
+from django.utils import six
 from eox_tenant.backends.base import BaseMicrositeBackend
 from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
 
@@ -99,7 +100,7 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
             current = microsite.values
             org_filter = current.get('course_org_filter')
             if org_filter:
-                if isinstance(org_filter, str):
+                if isinstance(org_filter, six.string_types):
                     org_filter = set([org_filter])
                 if org in org_filter:
                     result = current.get(val_name, default)
