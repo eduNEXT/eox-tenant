@@ -2,10 +2,11 @@
 """
 Tests for the signals module
 """
+from __future__ import print_function, unicode_literals
+
 from datetime import datetime, timedelta
 
 from django.test import TestCase
-from django.core.exceptions import ValidationError
 from mock import MagicMock, patch
 
 from eox_tenant.signals import (
@@ -71,6 +72,8 @@ class StartTenantSignalTest(TestCase):
     @patch('eox_tenant.signals._update_settings')
     def test_can_not_keep_because_analysis(self, _update_mock, _reset_mock, _analyze_mock):
         """
+        Unless the domain and current config match, the analysis will always
+        determine we can not keep the current settings
         """
         environ = MagicMock()
         environ.get.return_value = 'tenant.com'
@@ -88,6 +91,8 @@ class StartTenantSignalTest(TestCase):
     @patch('eox_tenant.signals._update_settings')
     def test_can_keep(self, _update_mock, _reset_mock, _analyze_mock):
         """
+        When the domain and current config match, the analysis will
+        determine that we can keep the current settings
         """
         environ = MagicMock()
         environ.get.return_value = 'tenant.com'
@@ -153,7 +158,7 @@ class SettingsOverridesTest(TestCase):
         Must reset after every test
         """
         from django.conf import settings
-        settings._setup()
+        settings._setup()  # pylint: disable=protected-access
 
     @patch('eox_tenant.signals._get_tenant_config')
     def test_udpate_settings_mark(self, _get_config_mock):
@@ -168,7 +173,7 @@ class SettingsOverridesTest(TestCase):
         _update_settings("tenant.com")
 
         with self.assertRaises(AttributeError):
-            settings.EDNX_TENANT_KEY
+            settings.EDNX_TENANT_KEY  # pylint: disable=pointless-statement
 
     @patch('eox_tenant.signals._get_tenant_config')
     def test_udpate_settings(self, _get_config_mock):
@@ -183,7 +188,7 @@ class SettingsOverridesTest(TestCase):
 
         _update_settings("tenant.com")
 
-        settings.EDNX_TENANT_KEY
+        settings.EDNX_TENANT_KEY  # pylint: disable=pointless-statement
 
     @patch('eox_tenant.signals._get_tenant_config')
     def test_udpate_settings_with_property(self, _get_config_mock):
@@ -199,7 +204,7 @@ class SettingsOverridesTest(TestCase):
 
         _update_settings("tenant.com")
 
-        self.assertEquals(settings.TEST_PROPERTY, "My value")
+        self.assertEqual(settings.TEST_PROPERTY, "My value")
 
     @patch('eox_tenant.signals._get_tenant_config')
     def test_udpate_settings_with_dict(self, _get_config_mock):
@@ -217,7 +222,7 @@ class SettingsOverridesTest(TestCase):
 
         _update_settings("tenant.com")
 
-        self.assertEquals(settings.TEST_DICT.get("TEST_PROPERTY"), "My value")
+        self.assertEqual(settings.TEST_DICT.get("TEST_PROPERTY"), "My value")
 
     @patch('eox_tenant.signals._get_tenant_config')
     def test_udpate_settings_with_existing_dict(self, _get_config_mock):
@@ -235,5 +240,5 @@ class SettingsOverridesTest(TestCase):
 
         _update_settings("tenant.com")
 
-        self.assertEquals(settings.TEST_DICT_OVERRIDE_TEST.get("key1"), "Some Value")
-        self.assertEquals(settings.TEST_DICT_OVERRIDE_TEST.get("key2"), "My value")
+        self.assertEqual(settings.TEST_DICT_OVERRIDE_TEST.get("key1"), "Some Value")
+        self.assertEqual(settings.TEST_DICT_OVERRIDE_TEST.get("key2"), "My value")

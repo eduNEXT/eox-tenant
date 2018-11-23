@@ -18,11 +18,13 @@ LOGGING['loggers']['eox_tenant'] = {
 }
 
 """
+from __future__ import print_function, unicode_literals
+
 import logging
 import os
-
 from datetime import datetime
 
+import six
 from django.conf import settings as base_settings
 
 from eox_tenant.backends.database import EdunextCompatibleDatabaseMicrositeBackend
@@ -49,7 +51,7 @@ def _update_settings(domain):
     base_settings.EDNX_TENANT_SETUP_TIME = datetime.now()
 
     LOG.debug("PID: %s CONFIGURING THE SETTINGS OBJECT | %s", os.getpid(), tenant_key)
-    for key, value in config.iteritems():
+    for key, value in six.iteritems(config):
         if isinstance(value, dict):
             merged = getattr(base_settings, key, {}).copy()
             merged.update(value)
@@ -86,7 +88,8 @@ def _analyze_current_settings(domain):
             LOG.debug("SETTINGS WILL RESET | Reason: domain and current settings do not match")
     except AttributeError:
         must_reset = True
-        LOG.debug("SETTINGS WILL RESET | Reason: we could not find EDNX_TENANT_DOMAIN in the current settings object. PID: %s", os.getpid())
+        LOG.debug("SETTINGS WILL RESET | Reason: we could not find "
+                  "EDNX_TENANT_DOMAIN in the current settings object. PID: %s", os.getpid())
 
     return must_reset, can_keep
 
@@ -95,7 +98,7 @@ def _perform_reset():
     """
     Defers to the original django.conf.settings to a new initialization
     """
-    base_settings._setup()
+    base_settings._setup()  # pylint: disable=protected-access
     LOG.debug("Reset on the settings object for PID: %s", os.getpid())
 
 
@@ -125,7 +128,7 @@ def _get_tenant_config(domain):
     return backend.get_config_by_domain(domain)
 
 
-def start_tenant(sender, environ, **kwargs):
+def start_tenant(sender, environ, **kwargs):  # pylint: disable=unused-argument
     """
     This function runs every time a request is started.
     It will analyze the current settings object, the domain from the incoming
@@ -164,7 +167,7 @@ def start_tenant(sender, environ, **kwargs):
     _update_settings(domain)
 
 
-def finish_tenant(sender, **kwargs):
+def finish_tenant(sender, **kwargs):  # pylint: disable=unused-argument
     """
     This function should terminate the tenant specific changes
 
@@ -175,7 +178,7 @@ def finish_tenant(sender, **kwargs):
     pass
 
 
-def clear_tenant(sender, request, **kwargs):
+def clear_tenant(sender, request, **kwargs):  # pylint: disable=unused-argument
     """
     This function should terminate the tenant specific changes when the request fails unexpectedly
 
