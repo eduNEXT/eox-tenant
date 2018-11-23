@@ -19,3 +19,8 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         'MICROSITE_TEMPLATE_BACKEND',
         settings.MICROSITE_TEMPLATE_BACKEND
     )
+
+    settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS = getattr(settings, 'ENV_TOKENS', {}).get(
+        'EOX_MAX_CONFIG_OVERRIDE_SECONDS',
+        settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS
+    )
