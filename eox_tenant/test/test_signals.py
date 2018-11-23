@@ -112,7 +112,6 @@ class StartTenantSignalTest(TestCase):
 
         self.assertFalse(_ttl_reached())
 
-
     def test__analyze_current_settings_no_domain(self):
         """
         The settings for a blank incoming request can not be kept and must not be restarted
@@ -219,7 +218,6 @@ class SettingsOverridesTest(TestCase):
         _update_settings("tenant.com")
 
         self.assertEquals(settings.TEST_DICT.get("TEST_PROPERTY"), "My value")
-
 
     @patch('eox_tenant.signals._get_tenant_config')
     def test_udpate_settings_with_existing_dict(self, _get_config_mock):
