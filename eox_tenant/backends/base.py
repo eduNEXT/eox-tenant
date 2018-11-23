@@ -16,7 +16,7 @@ import threading
 
 from django.conf import settings
 
-from eox_tenant.edxapp_wrapper.get_common_util import get_strip_port_from_host as strip_port_from_host
+from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
 from eox_tenant.edxapp_wrapper.get_microsite_configuration import (
     get_microsite_get_value as microsite_get_value,
     get_base_microsite_backend,

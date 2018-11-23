@@ -2,7 +2,7 @@
 Microsite backend that reads the configuration from the database
 """
 from eox_tenant.backends.base import BaseMicrositeBackend
-from eox_tenant.edxapp_wrapper.get_common_util import get_strip_port_from_host as strip_port_from_host
+from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
 
 
 class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
