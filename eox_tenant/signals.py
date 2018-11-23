@@ -23,7 +23,6 @@ import os
 
 from datetime import datetime
 
-from celery.signals import after_task_publish, before_task_publish
 from django.conf import settings as base_settings
 from django.core import signals
 
@@ -43,21 +42,21 @@ def _update_settings(domain):
     config, tenant_key = _get_tenant_config(domain)
 
     if not config.get("EDNX_USE_SIGNAL"):
-        LOG.info("Site %s, does not use Signals", domain)
+        LOG.info("Site %s, does not use eox_tenant signals", domain)
         return
 
-    base_settings.__setattr__("EDNX_TENANT_KEY", tenant_key)
-    base_settings.__setattr__("EDNX_TENANT_DOMAIN", domain)
-    base_settings.__setattr__("EDNX_TENANT_SETUP_TIME", datetime.now())
+    base_settings.EDNX_TENANT_KEY = tenant_key
+    base_settings.EDNX_TENANT_DOMAIN = domain
+    base_settings.EDNX_TENANT_SETUP_TIME = datetime.now()
 
     LOG.debug("PID: %s CONFIGURING THE SETTINGS OBJECT | %s", os.getpid(), tenant_key)
     for key, value in config.iteritems():
         if isinstance(value, dict):
-            merged = base_settings.__getattr__(key).copy()
+            merged = getattr(base_settings, key, {}).copy()
             merged.update(value)
-            base_settings.__setattr__(key, merged)
+            setattr(base_settings, key, merged)
             continue
-        base_settings.__setattr__(key, value)
+        setattr(base_settings, key, value)
 
 
 def _analyze_current_settings(domain):
@@ -73,7 +72,7 @@ def _analyze_current_settings(domain):
 
     has_tenant_key = False
     try:
-        current_key = base_settings.__getattr__("EDNX_TENANT_KEY")
+        current_key = base_settings.EDNX_TENANT_KEY
         has_tenant_key = True
         LOG.debug("PID: %s | The current_key: %s | the current domain: %s", os.getpid(), current_key, domain)
     except AttributeError:
@@ -84,14 +83,21 @@ def _analyze_current_settings(domain):
         if has_tenant_key and base_settings.EDNX_TENANT_DOMAIN == domain:
             must_reset = False
             can_keep = True
-        else:
-            if must_reset:
-                LOG.debug("SETTINGS WILL RESET | Reason: domain and current settings do not match")
+        elif must_reset:
+            LOG.debug("SETTINGS WILL RESET | Reason: domain and current settings do not match")
     except AttributeError:
         must_reset = True
         LOG.debug("SETTINGS WILL RESET | Reason: we could not find EDNX_TENANT_DOMAIN in the current settings object. PID: %s", os.getpid())
 
     return must_reset, can_keep
+
+
+def _perform_reset():
+    """
+    Defers to the original django.conf.settings to a new initialization
+    """
+    base_settings._setup()
+    LOG.debug("Reset on the settings object for PID: %s", os.getpid())
 
 
 def _ttl_reached():
@@ -149,9 +155,8 @@ def start_tenant(sender, environ, **kwargs):
 
     # Perform the reset
     if must_reset:
-        base_settings._setup()
+        _perform_reset()
         can_keep = False
-        LOG.debug("Reset on the settings object for PID: %s", os.getpid())
 
     if can_keep:
         return
