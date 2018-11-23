@@ -16,7 +16,7 @@ from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
 from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
 
-MICROSITE = get_microsite()
+microsite = get_microsite()  # pylint: disable=invalid-name
 
 
 class SimpleMicrositeMiddleware(object):
@@ -29,7 +29,7 @@ class SimpleMicrositeMiddleware(object):
         """
         Middleware exit point to delete cache data.
         """
-        MICROSITE.clear()
+        microsite.clear()
         return response
 
 
@@ -44,11 +44,11 @@ class MicrositeMiddleware(SimpleMicrositeMiddleware):
         Middleware entry point on every request processing. This will associate a request's domain name
         with a 'University' and any corresponding microsite configuration information
         """
-        MICROSITE.clear()
+        microsite.clear()
 
         domain = request.META.get('HTTP_HOST', None)
 
-        MICROSITE.set_by_domain(domain)
+        microsite.set_by_domain(domain)
 
         return None
 
@@ -78,14 +78,14 @@ class MicrositeCrossBrandingFilterMiddleware():
             raise Http404
 
         # If the course org is the same as the current microsite
-        org_filter = MICROSITE.get_value('course_org_filter', set([]))
+        org_filter = microsite.get_value('course_org_filter', set([]))
         if isinstance(org_filter, basestring):
             org_filter = set([org_filter])
         if course_key.org in org_filter:
             return None
 
         # If the course does not belong to an ORG defined in a microsite
-        all_orgs = MICROSITE.get_all_orgs()
+        all_orgs = microsite.get_all_orgs()
         if course_key.org not in all_orgs:
             return None
 
