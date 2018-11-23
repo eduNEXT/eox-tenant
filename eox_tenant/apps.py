@@ -16,5 +16,9 @@ class EdunextOpenedxExtensionsTenantConfig(AppConfig):
                 'common': {'relative_path': 'settings.common'},
                 'aws': {'relative_path': 'settings.aws'},
             },
+            'cms.djangoapp': {
+                'common': {'relative_path': 'settings.common'},
+                'aws': {'relative_path': 'settings.aws'},
+            },
         },
     }

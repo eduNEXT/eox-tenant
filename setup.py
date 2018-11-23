@@ -31,5 +31,8 @@ setup(
         "lms.djangoapp": [
             "eox_tenant = eox_tenant.apps:EdunextOpenedxExtensionsTenantConfig"
         ],
+        "cms.djangoapp": [
+            "eox_tenant = eox_tenant.apps:EdunextOpenedxExtensionsTenantConfig"
+        ],
     }
 )

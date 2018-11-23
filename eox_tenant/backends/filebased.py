@@ -11,15 +11,14 @@ from django.conf import settings
 # MICROSITE_TEMPLATE_BACKEND are children of microsite_configuration base backend classes,
 # so basically this is avoiding that validation to fail. Eventually we will remove this try
 # except and will import only our base backends to have less and less core dependencies
-try:
-    from microsite_configuration.backends.base import BaseMicrositeTemplateBackend
-except ImportError:
-    from .base import BaseMicrositeTemplateBackend
-from microsite_configuration.microsite import get_value as microsite_get_value  # pylint: disable=import-error
-from microsite_configuration.microsite import is_request_in_microsite  # pylint: disable=import-error
+from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_base_microsite_template_backend
+from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite_get_value as microsite_get_value
+from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_is_request_in_microsite as is_request_in_microsite
+
+BASE_MICROSITE_TEMPLATE_BACKEND = get_base_microsite_template_backend()
 
 
-class EdunextCompatibleFilebasedMicrositeTemplateBackend(BaseMicrositeTemplateBackend):
+class EdunextCompatibleFilebasedMicrositeTemplateBackend(BASE_MICROSITE_TEMPLATE_BACKEND):
     """
     Microsite backend that loads templates from filesystem using the configuration
     held before dogwood by edunext

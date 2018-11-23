@@ -16,7 +16,8 @@ import threading
 
 from django.conf import settings
 
-from util.url import strip_port_from_host  # pylint: disable=import-error
+from eox_tenant.edxapp_wrapper.get_common_util import get_strip_port_from_host as strip_port_from_host
+from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite_get_value as microsite_get_value
 
 
 # pylint: disable=unused-argument
@@ -103,13 +104,11 @@ class AbstractBaseMicrositeBackend(object):
 
 # This is the connection point between openedx and this module
 # We need to pass the class inheritance validation, and also stand alone for tests
-try:
-    from microsite_configuration.backends.base import BaseMicrositeBackend as InterfaceConnectionBackend
-except ImportError:
-    InterfaceConnectionBackend = AbstractBaseMicrositeBackend
+from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_base_microsite_backend
+INTERFACE_CONNECTION_BACKEND = get_base_microsite_backend()
 
 
-class BaseMicrositeBackend(InterfaceConnectionBackend):
+class BaseMicrositeBackend(INTERFACE_CONNECTION_BACKEND):
     """
     Base class for Microsite backends.
     """
@@ -319,8 +318,6 @@ class BaseMicrositeTemplateBackend(object):
         Returns a path (string) to a Mako template, which can either be in
         an override or will just return what is passed in which is expected to be a string
         """
-
-        from microsite_configuration.microsite import get_value as microsite_get_value  # pylint: disable=import-error
 
         microsite_template_path = microsite_get_value('template_dir', None)
         if not microsite_template_path:

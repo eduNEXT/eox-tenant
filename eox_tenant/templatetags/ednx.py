@@ -8,7 +8,9 @@ from django.templatetags.static import static
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.translation import get_language_bidi
 
-from microsite_configuration import microsite  # pylint: disable=import-error
+from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
+
+microsite = get_microsite()  # pylint: disable=invalid-name
 
 register = template.Library()  # pylint: disable=invalid-name
 

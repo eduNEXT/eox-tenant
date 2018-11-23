@@ -14,7 +14,9 @@ from django.http import Http404
 
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
-from microsite_configuration import microsite  # pylint: disable=import-error
+from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
+
+microsite = get_microsite()  # pylint: disable=invalid-name
 
 
 class SimpleMicrositeMiddleware(object):

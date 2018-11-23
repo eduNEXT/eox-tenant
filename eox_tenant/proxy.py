@@ -8,7 +8,9 @@ from openedx.conf import settings
 """
 from django.conf import settings as base_settings
 
-from microsite_configuration import microsite  # pylint: disable=import-error
+from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
+
+microsite = get_microsite()  # pylint: disable=invalid-name
 
 
 class MicrositeAwareSettings(object):
