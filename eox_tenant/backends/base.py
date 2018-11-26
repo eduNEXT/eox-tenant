@@ -285,7 +285,7 @@ class BaseMicrositeBackend(INTERFACE_CONNECTION_BACKEND):
 
         if os.path.isdir(microsites_root):
             settings.STATICFILES_DIRS.insert(0, microsites_root)
-            settings.LOCALE_PATHS = (microsites_root / 'conf/locale',) + settings.LOCALE_PATHS
+            settings.LOCALE_PATHS = [microsites_root / 'conf/locale'] + settings.LOCALE_PATHS
 
             log.info('Loading microsite path at %s', microsites_root)
         else:
