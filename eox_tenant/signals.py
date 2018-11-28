@@ -53,7 +53,10 @@ def _update_settings(domain):
     LOG.debug("PID: %s CONFIGURING THE SETTINGS OBJECT | %s", os.getpid(), tenant_key)
     for key, value in six.iteritems(config):
         if isinstance(value, dict):
-            merged = getattr(base_settings, key, {}).copy()
+            try:
+                merged = getattr(base_settings, key, {}).copy()
+            except AttributeError:
+                merged = {}
             merged.update(value)
             setattr(base_settings, key, merged)
             continue
