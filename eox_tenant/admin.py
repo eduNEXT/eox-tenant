@@ -16,11 +16,13 @@ class MicrositeAdmin(admin.ModelAdmin):
         'sitename',
         'template_dir',
         'course_org_filter',
+        'ednx_signal',
     ]
     readonly_fields = (
         'sitename',
         'template_dir',
         'course_org_filter',
+        'ednx_signal',
     )
     search_fields = ('key', 'subdomain', 'values', )
 
@@ -51,6 +53,16 @@ class MicrositeAdmin(admin.ModelAdmin):
         # pylint: disable=broad-except
         try:
             return microsite.values.get('course_org_filter', "NOT CONFIGURED")
+        except Exception as error:
+            return str(error)
+
+    def ednx_signal(self, microsite):
+        """
+        Read only method to see if the site has activated the usage of signals
+        """
+        # pylint: disable=broad-except
+        try:
+            return microsite.values.get('EDNX_USE_SIGNAL', "EMPTY")
         except Exception as error:
             return str(error)
 
