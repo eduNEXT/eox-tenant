@@ -45,7 +45,7 @@ jobs:
           command: |
             . venv/bin/activate
             coverage run --source="." manage.py test
-            coverage report --fail-under=10
+            coverage report --fail-under=30
             pycodestyle ./eox_tenant
             pylint ./eox_tenant --rcfile=./setup.cfg
 
@@ -83,6 +83,6 @@ jobs:
           command: |
             . venv/bin/activate
             coverage run --source="." --rcfile=.coveragerc manage.py test
-            coverage report --fail-under=10 --rcfile=.coveragerc
+            coverage report --fail-under=30 --rcfile=.coveragerc
             pycodestyle ./eox_tenant
             pylint ./eox_tenant --rcfile=./setup.cfg

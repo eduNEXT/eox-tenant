@@ -3,7 +3,7 @@ Django admin page for microsite model
 """
 from django.contrib import admin
 
-from .models import Microsite
+from eox_tenant.models import Redirection, Microsite
 
 
 class MicrositeAdmin(admin.ModelAdmin):
@@ -67,4 +67,17 @@ class MicrositeAdmin(admin.ModelAdmin):
             return str(error)
 
 
+class RedirectionAdmin(admin.ModelAdmin):
+    """
+    Admin view to see and edit edunext redirection objects.
+    """
+    list_display = [
+        'target',
+        'domain',
+        'scheme',
+    ]
+    search_fields = ('target', 'domain',)
+
+
 admin.site.register(Microsite, MicrositeAdmin)
+admin.site.register(Redirection, RedirectionAdmin)
