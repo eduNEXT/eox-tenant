@@ -27,5 +27,6 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
 
     if settings.SERVICE_VARIANT == "lms":
         settings.MIDDLEWARE_CLASSES += [
+            'eox_tenant.middleware.MicrositeCrossBrandingFilterMiddleware',
             'eox_tenant.middleware.RedirectionsMiddleware',
         ]
