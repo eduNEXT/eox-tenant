@@ -69,7 +69,7 @@ class MicrositeAdmin(admin.ModelAdmin):
 
 class RedirectionAdmin(admin.ModelAdmin):
     """
-    TODO: add me
+    Admin view to see and edit edunext redirection objects.
     """
     list_display = [
         'target',

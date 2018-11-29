@@ -5,10 +5,11 @@ the subdomain from prod domains to stage versions.
 import json
 import logging
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from eox_tenant.models import Microsite
-LOGGER = logging.getLogger(__name__)  # pylint: disable=no-member
+LOGGER = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -25,10 +26,11 @@ class Command(BaseCommand):
         """
         Add optional domain from the line command
         """
+        default_name_value = getattr(settings, 'CHANGE_DOMAIN_DEFAULT_SITE_NAME', '')
         parser.add_argument('suffix_domain', type=str,
-                            nargs='?', default=u"stage.edunext.co")
+                            nargs='?', default=default_name_value)
 
-    def handle(self, *args, **options):  # pylint: disable=unused-argument
+    def handle(self, *args, **options):
         """
         This method will iterate over all microsites
         objects to change microsite prod domains to a stage versions.

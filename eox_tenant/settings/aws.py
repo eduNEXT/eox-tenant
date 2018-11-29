@@ -19,10 +19,13 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         'MICROSITE_TEMPLATE_BACKEND',
         settings.MICROSITE_TEMPLATE_BACKEND
     )
-
     settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS = getattr(settings, 'ENV_TOKENS', {}).get(
         'EOX_MAX_CONFIG_OVERRIDE_SECONDS',
         settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS
+    )
+    settings.CHANGE_DOMAIN_DEFAULT_SITE_NAME = getattr(settings, 'ENV_TOKENS', {}).get(
+        'CHANGE_DOMAIN_DEFAULT_SITE_NAME',
+        settings.CHANGE_DOMAIN_DEFAULT_SITE_NAME
     )
 
     if settings.SERVICE_VARIANT == "lms":

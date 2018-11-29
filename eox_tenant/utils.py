@@ -1,15 +1,15 @@
 #!/usr/bin/python
 """
+Util function definitions.
 """
 import hashlib
-import urllib
 
 from django.core import cache
 
 try:
     cache = cache.caches['general']  # pylint: disable=invalid-name
-except Exception:
-    cache = cache.cache
+except Exception:  # pylint: disable=broad-except
+    cache = cache.cache  # pylint: disable=invalid-name
 
 
 def fasthash(string):

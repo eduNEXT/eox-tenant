@@ -18,12 +18,12 @@ from django.dispatch import receiver
 from django.http import Http404, HttpResponseNotFound, HttpResponseRedirect
 from django.utils import six
 
-from eox_tenant.models import Redirection
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
 
 from eox_tenant.edxapp_wrapper.edxmako_module import get_edxmako_module
 from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
+from eox_tenant.models import Redirection
 from eox_tenant.utils import cache, fasthash
 
 microsite = get_microsite()  # pylint: disable=invalid-name
@@ -202,7 +202,7 @@ class PathRedirectionMiddleware(object):
                     return action(request=request, key=key, values=values, path=path)
                 except Http404:  # we expect 404 to be raised
                     raise
-                except Exception, error:  # pylint: disable=broad-except
+                except Exception as error:  # pylint: disable=broad-except
                     LOG.error("The PathRedirectionMiddleware generated an error at: %s%s",
                               request.get_host(),
                               request.get_full_path())
