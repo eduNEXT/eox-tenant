@@ -95,7 +95,6 @@ class Redirection(models.Model):
         # Note to ops: The table already exists under a different name due to the migration from EOE.
         db_table = 'edunext_redirection'
 
-
     def __unicode__(self):
         return u"Redirection from {} to {}. Protocol {}. Status {}".format(
             self.domain,

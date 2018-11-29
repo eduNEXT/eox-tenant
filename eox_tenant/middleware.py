@@ -21,11 +21,11 @@ from opaque_keys.edx.keys import CourseKey
 
 from eox_tenant.edxapp_wrapper.edxmako_module import get_edxmako_module
 from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
-from eox_tenant.edxapp_wrapper.get_util_modules import (get_util_cache,
-                                                        get_util_memcache_fasthash)
+from eox_tenant.utils import cache, fasthash
 
 microsite = get_microsite()  # pylint: disable=invalid-name
 HOST_VALIDATION_RE = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{2,5})?$")
+
 
 class SimpleMicrositeMiddleware(object):
     """
@@ -117,8 +117,8 @@ class RedirectionsMiddleware(object):
         domain = request.META.get('HTTP_HOST', "")
 
         # First handle the event where a domain has a redirect target
-        cache_key = "redirect_cache." + get_util_memcache_fasthash(domain)
-        target = get_util_cache().get(cache_key)  # pylint: disable=maybe-no-member
+        cache_key = "redirect_cache." + fasthash(domain)
+        target = cache.get(cache_key)  # pylint: disable=maybe-no-member
 
         if not target:
             try:
@@ -126,7 +126,7 @@ class RedirectionsMiddleware(object):
             except Redirection.DoesNotExist:  # pylint: disable=no-member
                 target = '##none'
 
-            get_util_cache().set(  # pylint: disable=maybe-no-member
+            cache.set(  # pylint: disable=maybe-no-member
                 cache_key, target, 5 * 60
             )
 
@@ -147,9 +147,9 @@ class RedirectionsMiddleware(object):
             )
 
         # By this time, if there is no redirect, and no microsite, the domain is available
-        if (not microsite.is_request_in_microsite() and
-                settings.FEATURES.get('USE_MICROSITE_AVAILABLE_SCREEN', False) and
-                not bool(HOST_VALIDATION_RE.search(domain))):
+        if (not microsite.is_request_in_microsite()
+                and settings.FEATURES.get('USE_MICROSITE_AVAILABLE_SCREEN', False)
+                and not bool(HOST_VALIDATION_RE.search(domain))):
             return HttpResponseNotFound(get_edxmako_module().shortcuts.render_to_string('microsites/not_found.html', {
                 'domain': domain,
             }))
@@ -160,5 +160,5 @@ class RedirectionsMiddleware(object):
         """
         Clear the cached template when the model is saved
         """
-        cache_key = "redirect_cache." + get_util_memcache_fasthash(instance.domain)
-        get_util_cache().delete(cache_key)  # pylint: disable=maybe-no-member
+        cache_key = "redirect_cache." + fasthash(instance.domain)
+        cache.delete(cache_key)  # pylint: disable=maybe-no-member
