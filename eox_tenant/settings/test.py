@@ -19,3 +19,11 @@ MICROSITE_CONFIGURATION_BACKEND = 'eox_tenant.edxapp_wrapper.backends.microsite_
 TEST_DICT_OVERRIDE_TEST = {
     "key1": "Some Value"
 }
+
+
+def plugin_settings(settings):  # pylint: disable=function-redefined
+    """
+    For the platform tests, we want everything to be disabled
+    """
+    settings.FEATURES['USE_MICROSITE_AVAILABLE_SCREEN'] = False
+    settings.FEATURES['USE_REDIRECTION_MIDDLEWARE'] = False
