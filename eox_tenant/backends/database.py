@@ -1,6 +1,9 @@
 """
 Microsite backend that reads the configuration from the database
 """
+import os
+
+from django.conf import settings
 from django.utils import six
 from eox_tenant.backends.base import BaseMicrositeBackend
 from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
@@ -24,6 +27,12 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         return self._microsite_manager
 
     def has_configuration_set(self):
+        """
+        We always require a configuration to function, so we can skip the query
+        """
+        return True
+
+    def is_request_in_microsite(self):
         """
         We always require a configuration to function, so we can skip the query
         """
@@ -151,3 +160,29 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         config['site_domain'] = strip_port_from_host(domain)
         config['microsite_config_key'] = microsite_object.key
         self.current_request_configuration.data = config
+
+    def enable_microsites(self, log):
+        """
+        Configure the paths for the microsites feature
+        """
+        microsites_root = settings.MICROSITE_ROOT_DIR
+
+        if os.path.isdir(microsites_root):
+            settings.STATICFILES_DIRS.insert(0, microsites_root)
+            settings.LOCALE_PATHS = [microsites_root / 'conf/locale'] + settings.LOCALE_PATHS
+
+            log.info('Eox-tenant is loading microsite path at %s', microsites_root)
+        else:
+            log.error(
+                'Eox-tenant had an error loading %s. Directory does not exist',
+                microsites_root
+            )
+
+    def set_key_to_cache(self, key, value):
+        """
+        Stores a key value pair in a cache scoped to the thread
+        """
+        if not hasattr(self.current_request_configuration, 'cache'):
+            self.current_request_configuration.cache = {}
+
+        self.current_request_configuration.cache[key] = value
