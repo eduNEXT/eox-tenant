@@ -24,3 +24,8 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         'EOX_MAX_CONFIG_OVERRIDE_SECONDS',
         settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS
     )
+
+    if settings.SERVICE_VARIANT == "lms":
+        settings.MIDDLEWARE_CLASSES += [
+            'eox_tenant.middleware.RedirectionsMiddleware',
+        ]
