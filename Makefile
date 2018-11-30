@@ -19,7 +19,7 @@ requirements: ## install environment requirements
 
 run-test: clean ## Run test suite.
 	coverage run --source="." manage.py test
-	coverage report --fail-under=30
+	coverage report --fail-under=40
 
 run-quality-test: clean ## Run quality test.
 	pycodestyle ./eox_tenant
