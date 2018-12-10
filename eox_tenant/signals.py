@@ -146,7 +146,7 @@ def start_tenant(sender, environ, **kwargs):  # pylint: disable=unused-argument
     Signal: django.core.signals.request_started
     """
 
-    if base_settings.SERVICE_VARIANT == "cms":
+    if base_settings.SETTINGS_MODULE.startswith("cms"):
         LOG.debug("Studio does not support eox_tenant signals yet")
         return
 
