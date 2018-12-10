@@ -1,6 +1,7 @@
 """
 Common settings for eox_tenant project.
 """
+import os
 
 from .common import *   # pylint: disable=wildcard-import
 
@@ -19,6 +20,8 @@ MICROSITE_CONFIGURATION_BACKEND = 'eox_tenant.edxapp_wrapper.backends.microsite_
 TEST_DICT_OVERRIDE_TEST = {
     "key1": "Some Value"
 }
+
+SETTINGS_MODULE = os.environ.get("DJANGO_SETTINGS_MODULE")
 
 
 def plugin_settings(settings):  # pylint: disable=function-redefined

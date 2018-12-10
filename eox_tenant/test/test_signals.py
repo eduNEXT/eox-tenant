@@ -27,7 +27,7 @@ class StartTenantSignalTest(TestCase):
         The cms should return inmediatly, not even try to get the domain
         """
         environ = MagicMock()
-        with self.settings(SERVICE_VARIANT='cms'):
+        with self.settings(SETTINGS_MODULE='cms'):
             start_tenant(None, environ)
             environ.get.assert_not_called()
 
@@ -43,7 +43,7 @@ class StartTenantSignalTest(TestCase):
 
         _analyze_mock.return_value = (True, None)
 
-        with self.settings(SERVICE_VARIANT='lms'):
+        with self.settings(SETTINGS_MODULE='lms'):
             start_tenant(None, environ)
 
         _reset_mock.assert_called()
@@ -62,7 +62,7 @@ class StartTenantSignalTest(TestCase):
         _analyze_mock.return_value = (False, None)
         _ttl_mock.return_value = True
 
-        with self.settings(SERVICE_VARIANT='lms'):
+        with self.settings(SETTINGS_MODULE='lms'):
             start_tenant(None, environ)
 
         _reset_mock.assert_called()
@@ -80,7 +80,7 @@ class StartTenantSignalTest(TestCase):
 
         _analyze_mock.return_value = (False, False)
 
-        with self.settings(SERVICE_VARIANT='lms'):
+        with self.settings(SETTINGS_MODULE='lms'):
             start_tenant(None, environ)
 
         _reset_mock.assert_not_called()
@@ -99,7 +99,7 @@ class StartTenantSignalTest(TestCase):
 
         _analyze_mock.return_value = (False, True)
 
-        with self.settings(SERVICE_VARIANT='lms'):
+        with self.settings(SETTINGS_MODULE='lms'):
             start_tenant(None, environ)
 
         _reset_mock.assert_not_called()
