@@ -17,7 +17,7 @@ def get_base_microsite_template_backend():
     try:
         from microsite_configuration.backends.base import BaseMicrositeTemplateBackend
     except ImportError:
-        from eox_tenant.backends.base import BaseMicrositeTemplateBackend
+        BaseMicrositeTemplateBackend = object
     return BaseMicrositeTemplateBackend
 
 

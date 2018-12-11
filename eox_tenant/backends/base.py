@@ -20,6 +20,7 @@ from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
 from eox_tenant.edxapp_wrapper.get_microsite_configuration import (
     get_microsite_get_value as microsite_get_value,
     get_base_microsite_backend,
+    get_base_microsite_template_backend,
 )
 
 
@@ -107,10 +108,11 @@ class AbstractBaseMicrositeBackend(object):
 
 # This is the connection point between openedx and this module
 # We need to pass the class inheritance validation, and also stand alone for tests
-INTERFACE_CONNECTION_BACKEND = get_base_microsite_backend()
+MB_INTERFACE_CONNECTION_BACKEND = get_base_microsite_backend()
+TB_INTERFACE_CONNECTION_BACKEND = get_base_microsite_template_backend()
 
 
-class BaseMicrositeBackend(INTERFACE_CONNECTION_BACKEND):
+class BaseMicrositeBackend(MB_INTERFACE_CONNECTION_BACKEND):
     """
     Base class for Microsite backends.
     """
@@ -308,7 +310,7 @@ class BaseMicrositeBackend(INTERFACE_CONNECTION_BACKEND):
             settings.DEFAULT_TEMPLATE_ENGINE['DIRS'].append(microsites_root)
 
 
-class BaseMicrositeTemplateBackend(object):
+class BaseMicrositeTemplateBackend(TB_INTERFACE_CONNECTION_BACKEND):
     """
     Interface for microsite template providers. Base implementation is to use the filesystem.
     When this backend is used templates are first searched in location set in `template_dir`
