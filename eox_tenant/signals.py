@@ -146,11 +146,16 @@ def start_tenant(sender, environ, **kwargs):  # pylint: disable=unused-argument
     Signal: django.core.signals.request_started
     """
 
-    if base_settings.SETTINGS_MODULE.startswith("cms"):
+    http_host = environ.get("HTTP_HOST")
+    if not http_host:
+        LOG.warning("Could not find the host information for eox_tenant.signals")
+        return
+
+    if base_settings.SERVICE_VARIANT == "cms":
         LOG.debug("Studio does not support eox_tenant signals yet")
         return
 
-    domain = environ.get("HTTP_HOST").split(':')[0]
+    domain = http_host.split(':')[0]
 
     # Find what we need to do about the current setting and the incoming request.domain
     must_reset, can_keep = _analyze_current_settings(domain)

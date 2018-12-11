@@ -24,12 +24,13 @@ class StartTenantSignalTest(TestCase):
 
     def test_nothing_changes_studio(self):
         """
-        The cms should return inmediatly, not even try to get the domain
+        The cms should return immediately, just one call must be made it,
+        in order to get the HTTP_HOST from environ variable.
         """
         environ = MagicMock()
-        with self.settings(SETTINGS_MODULE='cms'):
+        with self.settings(SERVICE_VARIANT='cms'):
             start_tenant(None, environ)
-            environ.get.assert_not_called()
+            environ.get.assert_called_once()
 
     @patch('eox_tenant.signals._analyze_current_settings')
     @patch('eox_tenant.signals._perform_reset')
@@ -43,7 +44,7 @@ class StartTenantSignalTest(TestCase):
 
         _analyze_mock.return_value = (True, None)
 
-        with self.settings(SETTINGS_MODULE='lms'):
+        with self.settings(SERVICE_VARIANT='lms'):
             start_tenant(None, environ)
 
         _reset_mock.assert_called()
@@ -62,7 +63,7 @@ class StartTenantSignalTest(TestCase):
         _analyze_mock.return_value = (False, None)
         _ttl_mock.return_value = True
 
-        with self.settings(SETTINGS_MODULE='lms'):
+        with self.settings(SERVICE_VARIANT='lms'):
             start_tenant(None, environ)
 
         _reset_mock.assert_called()
@@ -80,7 +81,7 @@ class StartTenantSignalTest(TestCase):
 
         _analyze_mock.return_value = (False, False)
 
-        with self.settings(SETTINGS_MODULE='lms'):
+        with self.settings(SERVICE_VARIANT='lms'):
             start_tenant(None, environ)
 
         _reset_mock.assert_not_called()
@@ -99,7 +100,7 @@ class StartTenantSignalTest(TestCase):
 
         _analyze_mock.return_value = (False, True)
 
-        with self.settings(SETTINGS_MODULE='lms'):
+        with self.settings(SERVICE_VARIANT='lms'):
             start_tenant(None, environ)
 
         _reset_mock.assert_not_called()
