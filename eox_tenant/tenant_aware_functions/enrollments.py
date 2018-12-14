@@ -1,6 +1,9 @@
 """
 Microsite aware enrollments filter.
 """
+
+from django.conf import settings
+
 from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
 
 
@@ -10,8 +13,10 @@ def filter_enrollments(enrollments):
     do not belong to the current microsite
     """
 
-    # If we do not have a microsite context, there is nothing we can do
-    if not get_microsite().is_request_in_microsite():
+    test_skip = getattr(settings, "EOX_TENANT_SKIP_FILTER_FOR_TESTS", False)
+    # If test setting is true, returns the same enrollments,
+    # or if we do not have a microsite context, there is nothing we can do.
+    if test_skip or not get_microsite().is_request_in_microsite():
         for enrollment in enrollments:
             yield enrollment
         return
