@@ -32,7 +32,7 @@ class Microsite(models.Model):
         Model meta class.
         """
         # Note to ops: The table already exists under a different name due to the migration from EOE.
-        db_table = 'ednx_microsites_microsites'
+        db_table = 'ednx_microsites_microsite'
         app_label = "eox_tenant"
 
     def __unicode__(self):
