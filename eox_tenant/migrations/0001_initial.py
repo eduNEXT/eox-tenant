@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('values', jsonfield.fields.JSONField(blank=True)),
             ],
             options={
-                'db_table': 'ednx_microsites_microsites',
+                'db_table': 'ednx_microsites_microsite',
             },
         ),
     ]
