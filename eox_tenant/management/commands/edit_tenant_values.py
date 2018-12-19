@@ -7,7 +7,7 @@ from __future__ import unicode_literals
 import ast
 import logging
 
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from six.moves import input
 
 from eox_tenant.models import Microsite
@@ -106,7 +106,7 @@ class Command(BaseCommand):
             user_response = input("Continue? y/n: ")
             if user_response != 'y':
                 LOGGER.info("No tenants where modified")
-                return
+                raise CommandError("Canceled by user")
 
         for tenant in query:
             if options['delete']:
