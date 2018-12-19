@@ -78,7 +78,6 @@ class Command(BaseCommand):
             message = u"Unable to define stage url for microsite {}".format(
                 subdomain
             )
-            # pylint: disable=no-member
             LOGGER.warning(message)
-            LOGGER.error(exc.message)
+            LOGGER.error(exc.message)  # pylint: disable=no-member
         return stage_domain

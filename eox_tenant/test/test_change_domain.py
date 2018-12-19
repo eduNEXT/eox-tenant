@@ -9,7 +9,7 @@ from eox_tenant.models import Microsite
 class ChangeDomainTestCase(TestCase):
     """ This class checks the command change_domain.py"""
 
-    def setUp(self):  # pylint: disable=invalid-name
+    def setUp(self):
         """This method creates Microsite objects in database"""
 
         Microsite.objects.create(  # pylint: disable=no-member
