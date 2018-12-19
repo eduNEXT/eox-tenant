@@ -7,10 +7,13 @@ from django.conf import settings
 from django.templatetags.static import static
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.translation import get_language_bidi
-
 from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
+from eox_tenant.edxapp_wrapper.branding_api import get_branding_api
+from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_helpers
 
 microsite = get_microsite()  # pylint: disable=invalid-name
+configuration_helpers = get_configuration_helpers()
+branding_api = get_branding_api()
 
 register = template.Library()  # pylint: disable=invalid-name
 
@@ -68,3 +71,86 @@ def microsite_get_value(value, default=None):
     Django template filter that wrapps the microsite.get_value function
     """
     return microsite.get_value(value, default)
+
+
+@register.simple_tag
+def branding_api_get_logo_url(is_secure=True):
+    """
+    Branding template tag
+    """
+    return branding_api.get_logo_url(is_secure)
+
+
+@register.simple_tag
+def branding_get_configuration_url(name):
+    """
+    Branding template tag
+    """
+    return branding_api.get_configuration_url(name)
+
+
+@register.simple_tag
+def branding_get_url(name):
+    """
+    Branding template tag
+    """
+    return branding_api.get_url(name)
+
+
+@register.simple_tag
+def branding_get_base_url(is_secure):
+    """
+    Branding template tag
+    """
+    return branding_api.get_base_url(is_secure)
+
+
+@register.simple_tag
+def branding_get_tos_and_honor_code_url():
+    """
+    Branding template tag
+    """
+    return branding_api.get_tos_and_honor_code_url()
+
+
+@register.simple_tag
+def branding_get_privacy_url():
+    """
+    Branding template tag
+    """
+    return branding_api.get_privacy_url()
+
+
+@register.simple_tag
+def branding_get_about_url():
+    """
+    Branding template tag
+    """
+    return branding_api.get_about_url()
+
+
+@register.simple_tag
+def get_lms_root_url():
+    """
+    Branding template tag
+    """
+    return configuration_helpers.get_value('LMS_ROOT_URL', settings.LMS_ROOT_URL)
+
+
+@register.simple_tag
+def get_platform_name():
+    """
+    Branding template tag
+    """
+    return configuration_helpers.get_value('platform_name', settings.PLATFORM_NAME)
+
+
+@register.simple_tag
+def get_login_link():
+    """
+    Get loging link
+    """
+    if settings.FEATURES.get('ednx_custom_login_link'):
+        return settings.FEATURES.get('ednx_custom_login_link')
+    else:
+        return get_lms_root_url() + "/login"
