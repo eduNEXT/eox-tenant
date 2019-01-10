@@ -65,11 +65,12 @@ def microsite_template_path(template_name):
     return microsite.get_template_path(template_name)
 
 
-@register.filter
-def microsite_get_value(value, default=None):
+@register.simple_tag
+def microsite_get_value(value, *args, **kwargs):  # pylint: disable=unused-argument
     """
     Django template filter that wrapps the microsite.get_value function
     """
+    default = kwargs.get('default', None)
     return microsite.get_value(value, default)
 
 
