@@ -30,13 +30,7 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         """
         We always require a configuration to function, so we can skip the query
         """
-        return True
-
-    def is_request_in_microsite(self):
-        """
-        We always require a configuration to function, so we can skip the query
-        """
-        return True
+        return settings.FEATURES.get('USE_MICROSITES', False)
 
     def iterate_sites(self):
         """
