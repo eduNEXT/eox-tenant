@@ -10,6 +10,7 @@ workflows:
     jobs:
       - test-3.6
       - test-2.7
+      - test-edxapp
 jobs:
   test-3.6:
     docker:
@@ -44,7 +45,7 @@ jobs:
           name: Run tests
           command: |
             . venv/bin/activate
-            coverage run --source="." manage.py test
+            coverage run --source="." manage.py test ~/repo/eox_tenant/test
             coverage report --fail-under=51
             pycodestyle ./eox_tenant
             pylint ./eox_tenant --rcfile=./setup.cfg
@@ -82,7 +83,33 @@ jobs:
           name: Run tests
           command: |
             . venv/bin/activate
-            coverage run --source="." --rcfile=.coveragerc manage.py test
+            coverage run --source="." --rcfile=.coveragerc manage.py test ~/repo27/eox_tenant/test
             coverage report --fail-under=51 --rcfile=.coveragerc
             pycodestyle ./eox_tenant
             pylint ./eox_tenant --rcfile=./setup.cfg
+
+  test-edxapp:
+
+    docker:
+      - image: edxops/edxapp:hawthorn.master
+
+    working_directory: /edx/src/eox-tenant
+
+    steps:
+      - checkout
+      - run:
+          name: Set edx-platform
+          command: |
+            cd /edx/app/edxapp/
+            git clone -b open-release/hawthorn.master https://github.com/edx/edx-platform.git
+            . /edx/app/edxapp/venvs/edxapp/bin/activate
+            cd edx-platform
+            pip install .
+            pip install -r requirements/edx/testing.txt
+
+      - run:
+          name: Run tests
+          command: |
+            . /edx/app/edxapp/venvs/edxapp/bin/activate
+            pip install -r requirements.txt
+            python manage.py test /edx/src/eox-tenant/eox_tenant/test-edx-platform/
