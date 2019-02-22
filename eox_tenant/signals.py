@@ -25,6 +25,8 @@ import os
 from datetime import datetime
 
 import six
+
+from django.apps.config import AppConfig
 from django.conf import settings as base_settings
 
 from eox_tenant.backends.database import EdunextCompatibleDatabaseMicrositeBackend
@@ -71,8 +73,6 @@ def _repopulate_apps(apps):
     We delegate the decision to the specific tenant on the EDNX_TENANT_INSTALLED_APPS key.
     If present, the key is passed in the apps argument
     """
-    from django.apps.config import AppConfig
-
     LOG.debug("PID: %s REPOPULATING APPS | %s", os.getpid(), apps)
     for entry in apps:
         app_config = AppConfig.create(entry)
