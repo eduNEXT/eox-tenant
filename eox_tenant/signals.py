@@ -25,6 +25,8 @@ import os
 from datetime import datetime
 
 import six
+
+from django.apps.config import AppConfig
 from django.conf import settings as base_settings
 
 from eox_tenant.backends.database import EdunextCompatibleDatabaseMicrositeBackend
@@ -61,6 +63,20 @@ def _update_settings(domain):
             setattr(base_settings, key, merged)
             continue
         setattr(base_settings, key, value)
+
+
+def _repopulate_apps(apps):
+    """
+    After the initial loading of the settings, some djangoapps can override the AppConfig.ready() method
+    to alter the settings in a particular way.
+    In this case we need to run the app config again.
+    We delegate the decision to the specific tenant on the EDNX_TENANT_INSTALLED_APPS key.
+    If present, the key is passed in the apps argument
+    """
+    LOG.debug("PID: %s REPOPULATING APPS | %s", os.getpid(), apps)
+    for entry in apps:
+        app_config = AppConfig.create(entry)
+        app_config.ready()
 
 
 def _analyze_current_settings(domain):
@@ -175,6 +191,13 @@ def start_tenant(sender, environ, **kwargs):  # pylint: disable=unused-argument
 
     # Do the update
     _update_settings(domain)
+
+    # Some django apps need to be reinitialized
+    try:
+        if base_settings.EDNX_TENANT_INSTALLED_APPS:
+            _repopulate_apps(base_settings.EDNX_TENANT_INSTALLED_APPS)
+    except AttributeError:
+        pass
 
 
 def finish_tenant(sender, **kwargs):  # pylint: disable=unused-argument

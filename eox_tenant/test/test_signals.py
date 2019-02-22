@@ -14,6 +14,7 @@ from eox_tenant.signals import (
     _ttl_reached,
     _update_settings,
     _analyze_current_settings,
+    _repopulate_apps,
 )
 
 
@@ -147,6 +148,45 @@ class StartTenantSignalTest(TestCase):
 
         self.assertFalse(reset)
         self.assertTrue(keep)
+
+    @patch('eox_tenant.signals._repopulate_apps')
+    def test__repopulate_apps_not_called(self, _repopulate_mock):
+        """
+        In a tenant that does nothing to define the apps that must be reloaded nothing happens
+        """
+        environ = MagicMock()
+        environ.get.return_value = 'tenant.com'
+
+        with self.settings(SERVICE_VARIANT='lms'):
+            start_tenant(None, environ)
+
+        _repopulate_mock.assert_not_called()
+
+    @patch('eox_tenant.signals._repopulate_apps')
+    def test__repopulate_apps_called(self, _repopulate_mock):
+        """
+        A tenant that defines the EDNX_TENANT_INSTALLED_APPS calls the function
+        """
+        environ = MagicMock()
+        environ.get.return_value = 'tenant.com'
+
+        with self.settings(SERVICE_VARIANT='lms', EDNX_TENANT_INSTALLED_APPS=['fake_app']):
+            start_tenant(None, environ)
+
+        _repopulate_mock.assert_called()
+
+    @patch('eox_tenant.signals.AppConfig')
+    def test__repopulate_app(self, config_mock):
+        """
+        Calling _repopulate_apps does the calls mimicking the django registry
+        """
+        app_config_mock = MagicMock()
+        config_mock.create.return_value = app_config_mock
+
+        _repopulate_apps(["fake_app"])
+
+        config_mock.create.assert_called_with("fake_app")
+        app_config_mock.ready.assert_called()
 
 
 class SettingsOverridesTest(TestCase):
