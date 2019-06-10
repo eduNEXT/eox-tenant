@@ -24,4 +24,23 @@ class EdunextOpenedxExtensionsTenantConfig(AppConfig):
                 'aws': {'relative_path': 'settings.aws'},
             },
         },
+        'signals_config': {
+            'lms.djangoapp': {
+                'relative_path': 'signals',
+                'receivers': [
+                    {
+                        'receiver_func_name': 'start_tenant',
+                        'signal_path': 'django.core.signals.request_started',
+                    },
+                    {
+                        'receiver_func_name': 'finish_tenant',
+                        'signal_path': 'django.core.signals.request_finished',
+                    },
+                    {
+                        'receiver_func_name': 'clear_tenant',
+                        'signal_path': 'django.core.signals.got_request_exception',
+                    },
+                ],
+            }
+        },
     }
