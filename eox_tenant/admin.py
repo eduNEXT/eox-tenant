@@ -69,11 +69,11 @@ class MicrositeAdmin(admin.ModelAdmin):
 
 class TenantConfigAdmin(admin.ModelAdmin):
     """
-    Tenant config model admin
+    Tenant config model admin.
     """
     list_display = [
         'external_key',
-        'domain',
+        'domains',
         'sitename',
         'template_dir',
         'course_org_filter',
@@ -93,7 +93,7 @@ class TenantConfigAdmin(admin.ModelAdmin):
         """
         # pylint: disable=broad-except
         try:
-            return tenant_config.lms_configs.get('SITE_NAME', "NOT CONFIGURED")
+            return tenant_config.lms_configs.get("SITE_NAME", "NOT CONFIGURED")
         except Exception as error:
             return str(error)
 
@@ -103,7 +103,7 @@ class TenantConfigAdmin(admin.ModelAdmin):
         """
         # pylint: disable=broad-except
         try:
-            return tenant_config.lms_configs.get('template_dir', "NOT CONFIGURED")
+            return tenant_config.lms_configs.get("template_dir", "NOT CONFIGURED")
         except Exception as error:
             return str(error)
 
@@ -113,7 +113,7 @@ class TenantConfigAdmin(admin.ModelAdmin):
         """
         # pylint: disable=broad-except
         try:
-            return tenant_config.lms_configs.get('course_org_filter', "NOT CONFIGURED")
+            return tenant_config.lms_configs.get("course_org_filter", "NOT CONFIGURED")
         except Exception as error:
             return str(error)
 
@@ -123,11 +123,11 @@ class TenantConfigAdmin(admin.ModelAdmin):
         """
         # pylint: disable=broad-except
         try:
-            return tenant_config.lms_configs.get('EDNX_USE_SIGNAL', "EMPTY")
+            return tenant_config.lms_configs.get("EDNX_USE_SIGNAL", "EMPTY")
         except Exception as error:
             return str(error)
 
-    def domain(self, tenant_config):
+    def domains(self, tenant_config):
         """
         Read only method to calculate the domain.
         """

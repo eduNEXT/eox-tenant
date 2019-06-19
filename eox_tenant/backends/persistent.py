@@ -1,12 +1,12 @@
 """
-Site configuration backend that reads the configuration from the database
+Microsites configuration backend that reads the configuration from the database.
 """
 
 
 class CompatibleDatabaseSiteConfigBackend(object):
     """
     Backend that reads the configurations definitions from the database
-    using the custom models from edunext
+    using the custom models from edunext.
     """
 
     def get_config_by_domain(self, domain):
@@ -30,5 +30,5 @@ class CompatibleDatabaseSiteConfigBackend(object):
 
         if microsite:
             return microsite.values, microsite.key
-        else:
-            return {}, None
+
+        return {}, None
