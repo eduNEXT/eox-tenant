@@ -4,6 +4,7 @@ Common settings for eox_tenant project.
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
+from path import Path as path
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'secret-key'
@@ -40,9 +41,15 @@ def plugin_settings(settings):
         'eox_tenant.backends.filebased.EdunextCompatibleFilebasedMicrositeTemplateBackend'
     settings.MICROSITE_CONFIGURATION_BACKEND = 'eox_tenant.edxapp_wrapper.backends.microsite_configuration_h_v1'
     settings.MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT = 300
-    settings.GET_CONFIGURATION_HELPERS = 'eox_tenant.edxapp_wrapper.backends.configuration_helpers_h_v1'
     settings.GET_BRANDING_API = 'eox_tenant.edxapp_wrapper.backends.branding_api_h_v1'
+    settings.GET_CONFIGURATION_HELPERS = 'eox_tenant.edxapp_wrapper.backends.configuration_helpers_h_v1'
+    settings.GET_THEMING_HELPERS = 'eox_tenant.edxapp_wrapper.backends.theming_helpers_h_v1'
     settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS = 300
     settings.EDXMAKO_MODULE_BACKEND = 'eox_tenant.edxapp_wrapper.backends.edxmako_h_v1'
     settings.UTILS_MODULE_BACKEND = 'eox_tenant.edxapp_wrapper.backends.util_h_v1'
     settings.CHANGE_DOMAIN_DEFAULT_SITE_NAME = "stage.edunext.co"
+
+    try:
+        settings.MAKO_TEMPLATE_DIRS_BASE.insert(0, path(__file__).abspath().dirname().dirname() / 'templates')  # pylint: disable=no-value-for-parameter
+    except AttributeError:
+        pass

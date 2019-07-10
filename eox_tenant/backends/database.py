@@ -229,7 +229,7 @@ class TenantConfigCompatibleMicrositeBackend(EdunextCompatibleDatabaseMicrositeB
         candidates = self.get_key_from_cache(self.TENANT_MICROSITES_ITERATOR_KEY)
 
         if not candidates:
-            candidates = self.backend_manager.objects.all()  # pylint: disable=no-member
+            candidates = self.backend_manager.objects.all()
             self.set_key_to_cache(self.TENANT_MICROSITES_ITERATOR_KEY, candidates)
 
         for microsite in candidates:

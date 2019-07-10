@@ -32,9 +32,14 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         settings.MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT
     )
 
+    # Override the default site
+    settings.SITE_ID = getattr(settings, 'ENV_TOKENS', {}).get(
+        'SITE_ID',
+        settings.SITE_ID
+    )
+
     if settings.SERVICE_VARIANT == "lms":
         settings.MIDDLEWARE_CLASSES += [
-            'eox_tenant.middleware.RedirectionsMiddleware',
-            'eox_tenant.middleware.PathRedirectionMiddleware',
+            'eox_tenant.middleware.AvailableScreenMiddleware',
             'eox_tenant.middleware.MicrositeCrossBrandingFilterMiddleware',
         ]
