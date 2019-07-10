@@ -1,7 +1,10 @@
 """
 Django admin page for microsite model
 """
+from django import forms
 from django.contrib import admin
+from django.core.urlresolvers import reverse
+from django.db import models
 
 from eox_tenant.models import Redirection, Microsite, TenantConfig, Route
 
@@ -145,13 +148,29 @@ class RouteAdmin(admin.ModelAdmin):
     Route model admin.
     """
 
+    formfield_overrides = {
+        models.ForeignKey: {'widget': forms.TextInput},
+    }
+
     list_display = [
         "domain",
+        "config_link",
     ]
 
     search_fields = [
         "domain"
     ]
+
+    def config_link(self, route):
+        """
+        Helper method to display a link to the related config model.
+        """
+        # pylint: disable=protected-access
+        url = reverse('admin:%s_%s_change' % (route._meta.app_label, "tenantconfig"), args=[route.config.id])
+        return u'<a href="%s">%s</a>' % (url, route.config.__unicode__())
+
+    config_link.allow_tags = True
+    config_link.short_description = "Configuration"
 
 
 class RedirectionAdmin(admin.ModelAdmin):

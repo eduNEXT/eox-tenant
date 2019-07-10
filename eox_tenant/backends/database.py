@@ -270,6 +270,7 @@ class TenantConfigCompatibleMicrositeBackend(EdunextCompatibleDatabaseMicrositeB
             return None
 
         config, tenant_key = self.get_config_by_domain(domain)
+
         if config and tenant_key:
             self._set_config_from_obj(domain, config, tenant_key)
             return None
@@ -300,6 +301,7 @@ class TenantConfigCompatibleMicrositeBackend(EdunextCompatibleDatabaseMicrositeB
 
         cache_key = "org-value-{}-{}".format(org, val_name)
         cached_value = self.get_key_from_cache(cache_key)
+
         if cached_value:
             return cached_value
 
