@@ -29,8 +29,7 @@ import six
 from django.apps.config import AppConfig
 from django.conf import settings as base_settings
 
-from eox_tenant.backends.persistent import CompatibleDatabaseSiteConfigBackend
-
+from eox_tenant.backends.database import TenantConfigCompatibleMicrositeBackend
 
 LOG = logging.getLogger(__name__)
 
@@ -143,7 +142,7 @@ def _get_tenant_config(domain):
     Using the model directly introduces a circular dependency.
     That is why we go through the MicrositeBacked implementation.
     """
-    backend = CompatibleDatabaseSiteConfigBackend()
+    backend = TenantConfigCompatibleMicrositeBackend()
     return backend.get_config_by_domain(domain)
 
 
