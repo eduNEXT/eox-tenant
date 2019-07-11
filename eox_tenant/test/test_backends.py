@@ -4,8 +4,10 @@ Module for backends tests.
 """
 from django.test import TestCase
 
-from eox_tenant.backends.database import EdunextCompatibleDatabaseMicrositeBackend
-from eox_tenant.backends.persistent import CompatibleDatabaseSiteConfigBackend
+from eox_tenant.backends.database import (
+    EdunextCompatibleDatabaseMicrositeBackend,
+    TenantConfigCompatibleMicrositeBackend,
+)
 
 
 class BackendsTest(TestCase):
@@ -17,7 +19,7 @@ class BackendsTest(TestCase):
         """
         Test get configurations.
         """
-        backend = CompatibleDatabaseSiteConfigBackend()
+        backend = TenantConfigCompatibleMicrositeBackend()
         backend.get_config_by_domain("example.domain")
 
     def test_get_config_for_microsite(self):

@@ -35,7 +35,7 @@ def plugin_settings(settings):
     More info: https://github.com/edx/edx-platform/blob/master/openedx/core/djangoapps/plugins/README.rst
     """
     # Plugin settings.
-    settings.MICROSITE_BACKEND = 'eox_tenant.backends.database.EdunextCompatibleDatabaseMicrositeBackend'
+    settings.MICROSITE_BACKEND = 'eox_tenant.backends.database.TenantConfigCompatibleMicrositeBackend'
     settings.MICROSITE_TEMPLATE_BACKEND = \
         'eox_tenant.backends.filebased.EdunextCompatibleFilebasedMicrositeTemplateBackend'
     settings.MICROSITE_CONFIGURATION_BACKEND = 'eox_tenant.edxapp_wrapper.backends.microsite_configuration_h_v1'

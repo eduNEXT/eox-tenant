@@ -180,3 +180,157 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
             self.current_request_configuration.cache = {}
 
         self.current_request_configuration.cache[key] = value
+
+
+class TenantConfigCompatibleMicrositeBackend(EdunextCompatibleDatabaseMicrositeBackend):
+    """
+    Backend that reads the configurations definitions from the database
+    using the custom models.
+    """
+
+    _backend_manager = None
+    TENANT_MICROSITES_ITERATOR_KEY = "tenant-microsites-iterator"
+
+    @property
+    def backend_manager(self):
+        """
+        Return eox_tenant microsite manager.
+        """
+        if not self._backend_manager:
+            from eox_tenant.models import TenantConfig
+            self._backend_manager = TenantConfig
+        return self._backend_manager
+
+    def iterate_sites_with_tenant(self):
+        """
+        Return all the microsites from the database storing the results in the current request to avoid
+        quering the DB multiple times in the same request.
+        """
+
+        candidates = self.get_key_from_cache(self.TENANT_MICROSITES_ITERATOR_KEY)
+
+        if not candidates:
+            candidates = self.backend_manager.objects.all()  # pylint: disable=no-member
+            self.set_key_to_cache(self.TENANT_MICROSITES_ITERATOR_KEY, candidates)
+
+        for microsite in candidates:
+            yield microsite
+
+    def get_config_by_domain(self, domain):
+        """
+        Get the correct set of site configurations.
+        """
+        from eox_tenant.models import TenantConfig
+        configurations, external_key = TenantConfig.get_configs_for_domain(domain)
+
+        if not (configurations and external_key):
+            configurations, external_key = self._get_microsite_config_by_domain(domain)
+
+        return configurations, external_key
+
+    def _get_microsite_config_by_domain(self, domain):
+        """
+        Return the configuration and key available for a given domain.
+        """
+        from eox_tenant.models import Microsite
+        microsite = Microsite.get_microsite_for_domain(domain)
+
+        if microsite:
+            return microsite.values, microsite.key
+
+        return {}, None
+
+    def get_all_orgs(self):
+        """
+        Return a set of orgs that are considered within all microsites.
+        This can be used, for example, to do filtering.
+        """
+        org_filter_set = super(TenantConfigCompatibleMicrositeBackend, self).get_all_orgs()
+
+        # Get the orgs in the tenant config db model
+        for microsite in self.iterate_sites_with_tenant():
+            current = microsite.lms_configs
+            org_filter = current.get('course_org_filter')
+
+            if org_filter and isinstance(org_filter, list):
+                for org in org_filter:
+                    org_filter_set.add(org)
+            elif org_filter:
+                org_filter_set.add(org_filter)
+
+        return org_filter_set
+
+    def set_config_by_domain(self, domain):
+        """
+        For a given request domain, find a match in our microsite configuration
+        and then assign it to the thread local in order to make it available
+        to the complete Django request processing.
+        """
+        if not self.has_configuration_set() or not domain:
+            return None
+
+        config, tenant_key = self.get_config_by_domain(domain)
+
+        if config and tenant_key:
+            self._set_config_from_obj(domain, config, tenant_key)
+            return None
+
+        # If required, delegate to the old microsite backend method.
+        return super(TenantConfigCompatibleMicrositeBackend, self).set_config_by_domain(domain)
+
+    def get_all_config(self):
+        """
+        This returns all configuration for all microsites.
+        """
+        config = super(TenantConfigCompatibleMicrositeBackend, self).get_all_config()
+
+        # Apply also tenant configs (temporary compat layer).
+        for microsite in self.iterate_sites_with_tenant():
+            config[microsite.external_key] = microsite.lms_configs
+
+        return config
+
+    def get_value_for_org(self, org, val_name, default=None):
+        """
+        Returns a configuration value for a microsite which has an org_filter that matches
+        what is passed in.
+        """
+
+        if not self.has_configuration_set():
+            return default
+
+        cache_key = "org-value-{}-{}".format(org, val_name)
+        cached_value = self.get_key_from_cache(cache_key)
+
+        if cached_value:
+            return cached_value
+
+        # Filter at the db
+        for microsite in self.iterate_sites_with_tenant():
+            current = microsite.lms_configs
+            org_filter = current.get('course_org_filter')
+
+            if org_filter:
+                if isinstance(org_filter, six.string_types):
+                    org_filter = set([org_filter])
+                if org in org_filter:
+                    result = current.get(val_name, default)
+                    self.set_key_to_cache(cache_key, result)
+                    return result
+
+        # If required, delegate to the old microsite backend method.
+        return super(TenantConfigCompatibleMicrositeBackend, self).get_value_for_org(
+            org,
+            val_name,
+            default,
+        )
+
+    def _set_config_from_obj(self, domain, config, key):
+        """
+        Helper internal method to actually find the microsite configuration.
+        """
+        config = config
+        config['subdomain'] = strip_port_from_host(domain)
+        config['site_domain'] = strip_port_from_host(domain)
+        config['microsite_config_key'] = key
+        self.current_request_configuration.data = config
