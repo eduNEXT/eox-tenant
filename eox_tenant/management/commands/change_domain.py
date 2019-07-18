@@ -68,8 +68,11 @@ class Command(BaseCommand):
         my-microsite-domain-{suffix_stage_domain}
         """
 
+        pre_formatted = "{}-{}"
+        if self.suffix_stage_domain.startswith("."):
+            pre_formatted = "{}{}"
         try:
-            stage_domain = "{}-{}".format(
+            stage_domain = pre_formatted.format(
                 subdomain.replace('.', '-'),
                 self.suffix_stage_domain
             )

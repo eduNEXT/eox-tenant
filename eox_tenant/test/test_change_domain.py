@@ -24,3 +24,13 @@ class ChangeDomainTestCase(TestCase):
             subdomain="first-test-prod-edunext-co-stage.edunext.co").first()
         self.assertIsNone(prod)
         self.assertIsNotNone(stage)
+
+    def test_domain_can_change_with_point(self):
+        """Subdomain has been changed by the command"""
+        call_command('change_domain', suffix_domain=".stage.edunext.co")
+        prod = Microsite.objects.filter(  # pylint: disable=no-member
+            subdomain="first.test.prod.edunext.co").first()
+        stage = Microsite.objects.filter(  # pylint: disable=no-member
+            subdomain="first-test-prod-edunext-co.stage.edunext.co").first()
+        self.assertIsNone(prod)
+        self.assertIsNotNone(stage)
