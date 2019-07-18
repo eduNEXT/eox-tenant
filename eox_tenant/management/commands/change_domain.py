@@ -6,6 +6,7 @@ import json
 import logging
 
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 
 from eox_tenant.models import Microsite
@@ -38,6 +39,7 @@ class Command(BaseCommand):
 
         self.suffix_stage_domain = options['suffix_domain']
 
+        # Changing microsites objects
         for microsite in Microsite.objects.all():  # pylint: disable=no-member
 
             # Don't bother on changing anything if the suffix is correct
@@ -62,14 +64,31 @@ class Command(BaseCommand):
             microsite.values = json.loads(modified_configs_string)
             microsite.save()
 
+        # Changing django sites objects
+        for site in Site.objects.all():
+            if site.domain.endswith(self.suffix_stage_domain):
+                continue
+
+            stage_domain = self.change_subdomain(site.domain)
+
+            if not stage_domain:
+                continue
+
+            site.domain = stage_domain
+            site.name = stage_domain
+            site.save()
+
     def change_subdomain(self, subdomain):
         """
         Transforming the domain to format
         my-microsite-domain-{suffix_stage_domain}
         """
 
+        pre_formatted = "{}-{}"
+        if self.suffix_stage_domain.startswith("."):
+            pre_formatted = "{}{}"
         try:
-            stage_domain = "{}-{}".format(
+            stage_domain = pre_formatted.format(
                 subdomain.replace('.', '-'),
                 self.suffix_stage_domain
             )

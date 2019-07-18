@@ -13,6 +13,13 @@ class SettingsClass(object):
 SETTINGS = SettingsClass()
 plugin_settings(SETTINGS)
 vars().update(SETTINGS.__dict__)
+INSTALLED_APPS = vars().get("INSTALLED_APPS", [])
+TEST_INSTALLED_APPS = [
+    "django.contrib.sites",
+]
+for app in TEST_INSTALLED_APPS:
+    if app not in INSTALLED_APPS:
+        INSTALLED_APPS.append(app)
 
 MICROSITE_CONFIGURATION_BACKEND = 'eox_tenant.edxapp_wrapper.backends.microsite_configuration_test_v1'
 
