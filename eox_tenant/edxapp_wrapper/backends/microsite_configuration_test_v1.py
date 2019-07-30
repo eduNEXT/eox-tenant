@@ -23,7 +23,10 @@ def get_base_microsite_template_backend():
 
 def get_microsite():
     """ Backend to get microsite. """
-    from microsite_configuration import microsite  # pylint: disable=import-error
+    try:
+        from microsite_configuration import microsite  # pylint: disable=import-error
+    except ImportError:
+        microsite = object
     return microsite
 
 
