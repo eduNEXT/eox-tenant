@@ -3,10 +3,15 @@ Microsite backend that reads the configuration from the database
 """
 import os
 
+from django.core.cache import cache
 from django.conf import settings
 from django.utils import six
+
 from eox_tenant.backends.base import BaseMicrositeBackend
 from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
+
+MICROSITES_ALL_ORGS_CACHE_KEY = 'microsites.all_orgs_list'
+MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT = 300  # In seconds
 
 
 class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
@@ -129,6 +134,11 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         This returns a set of orgs that are considered within all microsites.
         This can be used, for example, to do filtering
         """
+        # Check the cache first
+        org_filter_set = cache.get(MICROSITES_ALL_ORGS_CACHE_KEY)
+        if org_filter_set:
+            return org_filter_set
+
         org_filter_set = set()
         if not self.has_configuration_set():
             return org_filter_set
@@ -143,6 +153,11 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
             elif org_filter:
                 org_filter_set.add(org_filter)
 
+        cache.set(
+            MICROSITES_ALL_ORGS_CACHE_KEY,
+            org_filter_set,
+            MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT
+        )
         return org_filter_set
 
     def _set_microsite_config_from_obj(self, subdomain, domain, microsite_object):
