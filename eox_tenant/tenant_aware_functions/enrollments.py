@@ -22,18 +22,23 @@ def filter_enrollments(enrollments):
         return
 
     orgs_to_include = get_microsite().get_value('course_org_filter')
-    orgs_to_exclude = get_microsite().get_all_orgs()
+    orgs_to_exclude = []
 
-    if orgs_to_include:
-        # Make sure we dont exclude one of the included orgs, when the data is contradictory
-        orgs_to_exclude = [x for x in orgs_to_exclude if x not in orgs_to_include]
+    # Make sure we have a list
+    if orgs_to_include and not isinstance(orgs_to_include, list):
+        orgs_to_include = [orgs_to_include]
+
+    if not orgs_to_include:
+        # Making orgs_to_include an empty iterable
+        orgs_to_include = []
+        orgs_to_exclude = get_microsite().get_all_orgs()
 
     for enrollment in enrollments:
 
         org = enrollment.course_id.org
 
         # Filter out anything that is not attributed to the inclusion rule.
-        if orgs_to_include and org not in orgs_to_include:
+        if org not in orgs_to_include:
             continue
 
         # Conversely, filter out any enrollments with courses attributed to exclusion rule.
