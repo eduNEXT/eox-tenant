@@ -39,6 +39,7 @@ def plugin_settings(settings):
     settings.MICROSITE_TEMPLATE_BACKEND = \
         'eox_tenant.backends.filebased.EdunextCompatibleFilebasedMicrositeTemplateBackend'
     settings.MICROSITE_CONFIGURATION_BACKEND = 'eox_tenant.edxapp_wrapper.backends.microsite_configuration_h_v1'
+    settings.MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT = 300
     settings.GET_CONFIGURATION_HELPERS = 'eox_tenant.edxapp_wrapper.backends.configuration_helpers_h_v1'
     settings.GET_BRANDING_API = 'eox_tenant.edxapp_wrapper.backends.branding_api_h_v1'
     settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS = 300
