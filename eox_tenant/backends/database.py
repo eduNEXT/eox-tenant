@@ -11,7 +11,11 @@ from eox_tenant.backends.base import BaseMicrositeBackend
 from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
 
 MICROSITES_ALL_ORGS_CACHE_KEY = 'microsites.all_orgs_list'
-MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT = 300  # In seconds
+MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT = getattr(
+    settings,
+    'MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT',
+    300
+)
 
 
 class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
