@@ -27,6 +27,10 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         'CHANGE_DOMAIN_DEFAULT_SITE_NAME',
         settings.CHANGE_DOMAIN_DEFAULT_SITE_NAME
     )
+    settings.MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT = getattr(settings, 'ENV_TOKENS', {}).get(
+        'MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT',
+        settings.MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT
+    )
 
     if settings.SERVICE_VARIANT == "lms":
         settings.MIDDLEWARE_CLASSES += [
