@@ -6,7 +6,7 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.db import models
 
-from eox_tenant.models import Redirection, Microsite, TenantConfig, Route
+from eox_tenant.models import Microsite, TenantConfig, Route
 
 
 class MicrositeAdmin(admin.ModelAdmin):
@@ -173,19 +173,6 @@ class RouteAdmin(admin.ModelAdmin):
     config_link.short_description = "Configuration"
 
 
-class RedirectionAdmin(admin.ModelAdmin):
-    """
-    Admin view to see and edit edunext redirection objects.
-    """
-    list_display = [
-        'target',
-        'domain',
-        'scheme',
-    ]
-    search_fields = ('target', 'domain',)
-
-
 admin.site.register(Microsite, MicrositeAdmin)
 admin.site.register(TenantConfig, TenantConfigAdmin)
 admin.site.register(Route, RouteAdmin)
-admin.site.register(Redirection, RedirectionAdmin)
