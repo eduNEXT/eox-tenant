@@ -4,6 +4,8 @@ Settings for eox_tenant project meant to be called on the edx-platform/*/envs/aw
 
 from .common import *  # pylint: disable=wildcard-import
 
+EDX_AUTH_BACKEND = 'openedx.core.djangoapps.oauth_dispatch.dot_overrides.backends.EdxRateLimitedAllowAllUsersModelBackend'  # pylint: disable=line-too-long
+
 
 def plugin_settings(settings):  # pylint: disable=function-redefined
     """
@@ -31,6 +33,10 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         'MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT',
         settings.MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT
     )
+    settings.EOX_TENANT_EDX_AUTH_BACKEND = getattr(settings, 'ENV_TOKENS', {}).get(
+        'EOX_TENANT_EDX_AUTH_BACKEND',
+        settings.EOX_TENANT_EDX_AUTH_BACKEND
+    )
 
     # Override the default site
     settings.SITE_ID = getattr(settings, 'ENV_TOKENS', {}).get(
@@ -43,3 +49,8 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
             'eox_tenant.middleware.AvailableScreenMiddleware',
             'eox_tenant.middleware.MicrositeCrossBrandingFilterMiddleware',
         ]
+
+        if EDX_AUTH_BACKEND in settings.AUTHENTICATION_BACKENDS:
+            settings.AUTHENTICATION_BACKENDS.remove(EDX_AUTH_BACKEND)
+
+        settings.AUTHENTICATION_BACKENDS.append('eox_tenant.auth.TenantAwareAuthBackend')
