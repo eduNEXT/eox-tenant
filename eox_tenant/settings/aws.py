@@ -27,6 +27,10 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         'CHANGE_DOMAIN_DEFAULT_SITE_NAME',
         settings.CHANGE_DOMAIN_DEFAULT_SITE_NAME
     )
+    settings.EOX_TENANT_EDX_AUTH_BACKEND = getattr(settings, 'ENV_TOKENS', {}).get(
+        'EOX_TENANT_EDX_AUTH_BACKEND',
+        settings.EOX_TENANT_EDX_AUTH_BACKEND
+    )
 
     # Override the default site
     settings.SITE_ID = getattr(settings, 'ENV_TOKENS', {}).get(
@@ -39,3 +43,4 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
             'eox_tenant.middleware.AvailableScreenMiddleware',
             'eox_tenant.middleware.MicrositeCrossBrandingFilterMiddleware',
         ]
+        settings.AUTHENTICATION_BACKENDS = ['eox_tenant.auth.EdnxAuthBackend'] + list(settings.AUTHENTICATION_BACKENDS)
