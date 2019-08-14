@@ -24,7 +24,7 @@ def favicon_path(default=getattr(settings, 'FAVICON_PATH', 'images/favicon.ico')
     Django template tag that outputs the configured favicon:
     {% favicon_path %}
     """
-    path = microsite.get_value('favicon_path', default)
+    path = configuration_helpers.get_value('favicon_path', default)
     return path if path.startswith("http") else staticfiles_storage.url(path)
 
 
@@ -34,14 +34,13 @@ def microsite_css_overrides_file():
     Django template tag that outputs the css import for a:
     {% microsite_css_overrides_file %}
     """
-    file_path = microsite.get_value('css_overrides_file', None)
     if get_language_bidi():
-        file_path = microsite.get_value(
+        file_path = configuration_helpers.get_value(
             'css_overrides_file_rtl',
-            microsite.get_value('css_overrides_file')
+            configuration_helpers.get_value('css_overrides_file')
         )
     else:
-        file_path = microsite.get_value('css_overrides_file')
+        file_path = configuration_helpers.get_value('css_overrides_file')
 
     if file_path is not None:
         return "<link href='{}' rel='stylesheet' type='text/css'>".format(static(file_path))
@@ -71,7 +70,7 @@ def microsite_get_value(value, *args, **kwargs):  # pylint: disable=unused-argum
     Django template filter that wrapps the microsite.get_value function
     """
     default = kwargs.get('default', None)
-    return microsite.get_value(value, default)
+    return configuration_helpers.get_value(value, default)
 
 
 @register.simple_tag
