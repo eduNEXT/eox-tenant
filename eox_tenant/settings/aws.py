@@ -5,6 +5,7 @@ Settings for eox_tenant project meant to be called on the edx-platform/*/envs/aw
 from .common import *  # pylint: disable=wildcard-import
 
 EDX_AUTH_BACKEND = 'openedx.core.djangoapps.oauth_dispatch.dot_overrides.backends.EdxRateLimitedAllowAllUsersModelBackend'  # pylint: disable=line-too-long
+EOX_TENANT_AUTH_BACKEND = 'eox_tenant.auth.TenantAwareAuthBackend'
 
 
 def plugin_settings(settings):  # pylint: disable=function-redefined
@@ -50,7 +51,4 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
             'eox_tenant.middleware.MicrositeCrossBrandingFilterMiddleware',
         ]
 
-        if EDX_AUTH_BACKEND in settings.AUTHENTICATION_BACKENDS:
-            settings.AUTHENTICATION_BACKENDS.remove(EDX_AUTH_BACKEND)
-
-        settings.AUTHENTICATION_BACKENDS.append('eox_tenant.auth.TenantAwareAuthBackend')
+        settings.AUTHENTICATION_BACKENDS = [EOX_TENANT_AUTH_BACKEND if (backend == EDX_AUTH_BACKEND) else backend for backend in settings.AUTHENTICATION_BACKENDS]  # pylint: disable=line-too-long
