@@ -52,3 +52,8 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         ]
 
         settings.AUTHENTICATION_BACKENDS = [EOX_TENANT_AUTH_BACKEND if (backend == EDX_AUTH_BACKEND) else backend for backend in settings.AUTHENTICATION_BACKENDS]  # pylint: disable=line-too-long
+
+    if settings.SERVICE_VARIANT == "cms":
+        settings.MIDDLEWARE_CLASSES += [
+            'eox_tenant.middleware.MicrositeMiddleware'
+        ]
