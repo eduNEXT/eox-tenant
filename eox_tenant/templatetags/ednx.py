@@ -10,10 +10,12 @@ from django.utils.translation import get_language_bidi
 from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
 from eox_tenant.edxapp_wrapper.branding_api import get_branding_api
 from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_helpers
+from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
 
 microsite = get_microsite()  # pylint: disable=invalid-name
 configuration_helpers = get_configuration_helpers()
 branding_api = get_branding_api()
+theming_helpers = get_theming_helpers()
 
 register = template.Library()  # pylint: disable=invalid-name
 
@@ -33,6 +35,7 @@ def microsite_css_overrides_file():
     """
     Django template tag that outputs the css import for a:
     {% microsite_css_overrides_file %}
+    DEPRECATED: use tenant_css_overrides_file tag instead
     """
     if get_language_bidi():
         file_path = configuration_helpers.get_value(
@@ -52,6 +55,7 @@ def microsite_css_overrides_file():
 def microsite_rtl_tag():
     """
     Django template tag that outputs the direction string for rtl support
+    DEPRECATED: use tenant_rtl_tag tag instead
     """
     return 'rtl' if get_language_bidi() else 'ltr'
 
@@ -60,14 +64,16 @@ def microsite_rtl_tag():
 def microsite_template_path(template_name):
     """
     Django template filter to apply template overriding to microsites
+    DEPRECATED: use tenant_template_path filter instead
     """
-    return microsite.get_template_path(template_name)
+    return theming_helpers.get_template_path(template_name)
 
 
 @register.simple_tag
 def microsite_get_value(value, *args, **kwargs):  # pylint: disable=unused-argument
     """
-    Django template filter that wrapps the microsite.get_value function
+    Django template filter that wraps the configuration_helpers.get_value function
+    DEPRECATED: use tenant_get_value tag instead
     """
     default = kwargs.get('default', None)
     return configuration_helpers.get_value(value, default)
@@ -154,3 +160,48 @@ def get_login_link():
         return settings.FEATURES.get('ednx_custom_login_link')
     else:
         return get_lms_root_url() + "/login"
+
+
+@register.simple_tag(name="tenant_css_overrides_file")
+def tenant_css_overrides_file():
+    """
+    Django template tag that outputs the css import for a:
+    {% tenant_css_overrides_file %}
+    """
+    if get_language_bidi():
+        file_path = configuration_helpers.get_value(
+            'css_overrides_file_rtl',
+            configuration_helpers.get_value('css_overrides_file')
+        )
+    else:
+        file_path = configuration_helpers.get_value('css_overrides_file')
+
+    if file_path is not None:
+        return "<link href='{}' rel='stylesheet' type='text/css'>".format(static(file_path))
+    else:
+        return ""
+
+
+@register.simple_tag(name="tenant_rtl")
+def tenant_rtl_tag():
+    """
+    Django template tag that outputs the direction string for rtl support
+    """
+    return 'rtl' if get_language_bidi() else 'ltr'
+
+
+@register.filter
+def tenant_template_path(template_name):
+    """
+    Django template filter to apply template overriding to microsites
+    """
+    return theming_helpers.get_template_path(template_name)
+
+
+@register.simple_tag
+def tenant_get_value(value, *args, **kwargs):  # pylint: disable=unused-argument
+    """
+    Django template filter that wraps the configuration_helpers.get_value function
+    """
+    default = kwargs.get('default', None)
+    return configuration_helpers.get_value(value, default)
