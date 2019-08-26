@@ -38,6 +38,10 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         'EOX_TENANT_EDX_AUTH_BACKEND',
         settings.EOX_TENANT_EDX_AUTH_BACKEND
     )
+    settings.EOX_TENANT_USERS_BACKEND = getattr(settings, 'ENV_TOKENS', {}).get(
+        'EOX_TENANT_USERS_BACKEND',
+        settings.EOX_TENANT_USERS_BACKEND
+    )
 
     # Override the default site
     settings.SITE_ID = getattr(settings, 'ENV_TOKENS', {}).get(
