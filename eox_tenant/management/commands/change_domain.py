@@ -10,6 +10,7 @@ from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 
 from eox_tenant.models import Microsite
+from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
 from eox_tenant.edxapp_wrapper.users import get_user_signup_source
 
 LOGGER = logging.getLogger(__name__)
@@ -100,13 +101,14 @@ class Command(BaseCommand):
         Transforming the domain to format
         my-microsite-domain-{suffix_stage_domain}
         """
+        domain = strip_port_from_host(subdomain)
 
         pre_formatted = "{}-{}"
         if self.suffix_stage_domain.startswith("."):
             pre_formatted = "{}{}"
         try:
             stage_domain = pre_formatted.format(
-                subdomain.replace('.', '-'),
+                domain.replace('.', '-'),
                 self.suffix_stage_domain
             )
         except TypeError as exc:
