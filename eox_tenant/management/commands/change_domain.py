@@ -10,11 +10,13 @@ from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 
 from eox_tenant.models import Microsite
+from eox_tenant.edxapp_wrapper.users import get_user_signup_source
+
 LOGGER = logging.getLogger(__name__)
+UserSignupSource = get_user_signup_source()
 
 
 class Command(BaseCommand):
-
     """
     This class contains the methods to change
     microsite prod domains to a stage versions.
@@ -30,10 +32,12 @@ class Command(BaseCommand):
         default_name_value = getattr(settings, 'CHANGE_DOMAIN_DEFAULT_SITE_NAME', '')
         parser.add_argument('suffix_domain', type=str,
                             nargs='?', default=default_name_value)
+        parser.add_argument('--signupsources', action="store_true",
+                            dest='signupsources', default=False)
 
     def handle(self, *args, **options):
         """
-        This method will iterate over all microsites
+        This method will iterate over all microsites, sites and signupsources
         objects to change microsite prod domains to a stage versions.
         """
 
@@ -77,6 +81,19 @@ class Command(BaseCommand):
             site.domain = stage_domain
             site.name = stage_domain
             site.save()
+
+        if options['signupsources']:
+            for signupsource in UserSignupSource.objects.all():
+                if signupsource.site.endswith(self.suffix_stage_domain):
+                    continue
+
+                stage_domain = self.change_subdomain(signupsource.site)
+
+                if not stage_domain:
+                    continue
+
+                signupsource.site = stage_domain
+                signupsource.save()
 
     def change_subdomain(self, subdomain):
         """
