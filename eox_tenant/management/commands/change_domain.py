@@ -48,7 +48,10 @@ class Command(BaseCommand):
         for microsite in Microsite.objects.all():  # pylint: disable=no-member
 
             # Don't bother on changing anything if the suffix is correct
-            if microsite.subdomain.endswith(self.suffix_stage_domain):
+
+            domain = strip_port_from_host(microsite.subdomain)
+
+            if domain.endswith(self.suffix_stage_domain):
                 continue
 
             stage_domain = self.change_subdomain(microsite.subdomain)
@@ -71,7 +74,10 @@ class Command(BaseCommand):
 
         # Changing django sites objects
         for site in Site.objects.all():
-            if site.domain.endswith(self.suffix_stage_domain):
+
+            domain = strip_port_from_host(site.domain)
+
+            if domain.endswith(self.suffix_stage_domain):
                 continue
 
             stage_domain = self.change_subdomain(site.domain)
@@ -85,7 +91,10 @@ class Command(BaseCommand):
 
         if options['signupsources']:
             for signupsource in UserSignupSource.objects.all():
-                if signupsource.site.endswith(self.suffix_stage_domain):
+
+                domain = strip_port_from_host(signupsource.site)
+
+                if domain.endswith(self.suffix_stage_domain):
                     continue
 
                 stage_domain = self.change_subdomain(signupsource.site)
@@ -102,6 +111,9 @@ class Command(BaseCommand):
         my-microsite-domain-{suffix_stage_domain}
         """
         domain = strip_port_from_host(subdomain)
+        port = None
+        if ':' in subdomain:
+            port = subdomain.split(':')[1]
 
         pre_formatted = "{}-{}"
         if self.suffix_stage_domain.startswith("."):
@@ -111,6 +123,8 @@ class Command(BaseCommand):
                 domain.replace('.', '-'),
                 self.suffix_stage_domain
             )
+            if port:
+                stage_domain += ':' + port
         except TypeError as exc:
             stage_domain = ""
             message = u"Unable to define stage url for microsite {}".format(
