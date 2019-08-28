@@ -22,7 +22,7 @@ class ChangeDomainTestCase(TestCase):
             name="second.test.prod.edunext.co")
 
         usersignup_source = mock.MagicMock()
-        usersignup_source.site = 'first.test.prod.edunext.co'
+        usersignup_source.site = 'first.test.prod.edunext.co:8000'
 
         self.usersignupsource = usersignup_source
 
@@ -47,7 +47,7 @@ class ChangeDomainTestCase(TestCase):
         self.assertIsNone(prod_site)
         self.assertIsNotNone(stage_site)
 
-        self.assertEqual(self.usersignupsource.site, 'first-test-prod-edunext-co-stage.edunext.co')
+        self.assertEqual(self.usersignupsource.site, 'first-test-prod-edunext-co-stage.edunext.co:8000')
 
     def test_domain_can_change_with_point(self):
         """Subdomain has been changed by the command"""

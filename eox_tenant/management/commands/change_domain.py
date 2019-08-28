@@ -10,6 +10,7 @@ from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 
 from eox_tenant.models import Microsite
+from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
 from eox_tenant.edxapp_wrapper.users import get_user_signup_source
 
 LOGGER = logging.getLogger(__name__)
@@ -47,7 +48,10 @@ class Command(BaseCommand):
         for microsite in Microsite.objects.all():  # pylint: disable=no-member
 
             # Don't bother on changing anything if the suffix is correct
-            if microsite.subdomain.endswith(self.suffix_stage_domain):
+
+            domain = strip_port_from_host(microsite.subdomain)
+
+            if domain.endswith(self.suffix_stage_domain):
                 continue
 
             stage_domain = self.change_subdomain(microsite.subdomain)
@@ -70,7 +74,10 @@ class Command(BaseCommand):
 
         # Changing django sites objects
         for site in Site.objects.all():
-            if site.domain.endswith(self.suffix_stage_domain):
+
+            domain = strip_port_from_host(site.domain)
+
+            if domain.endswith(self.suffix_stage_domain):
                 continue
 
             stage_domain = self.change_subdomain(site.domain)
@@ -84,7 +91,10 @@ class Command(BaseCommand):
 
         if options['signupsources']:
             for signupsource in UserSignupSource.objects.all():
-                if signupsource.site.endswith(self.suffix_stage_domain):
+
+                domain = strip_port_from_host(signupsource.site)
+
+                if domain.endswith(self.suffix_stage_domain):
                     continue
 
                 stage_domain = self.change_subdomain(signupsource.site)
@@ -100,15 +110,21 @@ class Command(BaseCommand):
         Transforming the domain to format
         my-microsite-domain-{suffix_stage_domain}
         """
+        domain = strip_port_from_host(subdomain)
+        port = None
+        if ':' in subdomain:
+            port = subdomain.split(':')[1]
 
         pre_formatted = "{}-{}"
         if self.suffix_stage_domain.startswith("."):
             pre_formatted = "{}{}"
         try:
             stage_domain = pre_formatted.format(
-                subdomain.replace('.', '-'),
+                domain.replace('.', '-'),
                 self.suffix_stage_domain
             )
+            if port:
+                stage_domain += ':' + port
         except TypeError as exc:
             stage_domain = ""
             message = u"Unable to define stage url for microsite {}".format(
