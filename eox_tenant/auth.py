@@ -52,7 +52,7 @@ class TenantAwareAuthBackend(EdxAuthBackend):
 
         is_authorized = False
         for source in sources:
-            if any(re.match(pattern + "$", source.site) for pattern in authorized_sources):
+            if any(re.match(pattern + "$", source.site, re.IGNORECASE) for pattern in authorized_sources):
                 is_authorized = True
 
         email = getattr(user, 'email', None)
@@ -75,7 +75,7 @@ class TenantAwareAuthBackend(EdxAuthBackend):
             else:
                 AUDIT_LOG.warning(
                     u"User `%s` tried to login in site `%s`, the permission "
-                    "should have beed denied based on the signup sources.",
+                    "should have been denied based on the signup sources.",
                     loggable_id,
                     current_domain,
                 )

@@ -143,3 +143,31 @@ class TenantAwareAuthBackendTest(TestCase):
 
         with self.assertRaises(Exception):
             auth_backend.user_can_authenticate_on_tenant(self.user)
+
+    @override_settings(
+        REGISTRATION_EMAIL_PATTERNS_ALLOWED=None,
+        FEATURES={
+            'EDNX_ENABLE_STRICT_LOGIN': True
+        })
+    @mock.patch('eox_tenant.edxapp_wrapper.auth.get_edx_auth_failed')
+    @mock.patch('eox_tenant.edxapp_wrapper.auth.get_edx_auth_backend')
+    def test_authentication_with_signupsource_is_case_insensitive(self, edx_auth_backend_mock, edx_auth_failed_mock):
+        """
+        Test if the backend to authenticate a user with signupsource is ignoring case
+        """
+        edx_auth_backend_mock.return_value = object
+        edx_auth_failed_mock.return_value = Exception
+
+        from eox_tenant.auth import TenantAwareAuthBackend
+
+        request = self.request_factory.get('/login')
+
+        http_host = 'VALID.domain.org'
+        request.META['HTTP_HOST'] = http_host
+
+        auth_backend = TenantAwareAuthBackend()
+        auth_backend.request = request
+
+        user_can_authenticate_on_tenant = auth_backend.user_can_authenticate_on_tenant(self.user)
+
+        self.assertTrue(user_can_authenticate_on_tenant)
