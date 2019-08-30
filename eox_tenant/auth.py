@@ -52,7 +52,7 @@ class TenantAwareAuthBackend(EdxAuthBackend):
 
         is_authorized = False
         for source in sources:
-            if any(re.match(pattern + "$", source.site) for pattern in authorized_sources):
+            if any(re.match(pattern + "$", source.site, re.IGNORECASE) for pattern in authorized_sources):
                 is_authorized = True
 
         email = getattr(user, 'email', None)
