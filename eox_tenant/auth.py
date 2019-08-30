@@ -75,7 +75,7 @@ class TenantAwareAuthBackend(EdxAuthBackend):
             else:
                 AUDIT_LOG.warning(
                     u"User `%s` tried to login in site `%s`, the permission "
-                    "should have beed denied based on the signup sources.",
+                    "should have been denied based on the signup sources.",
                     loggable_id,
                     current_domain,
                 )
