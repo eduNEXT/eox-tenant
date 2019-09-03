@@ -35,11 +35,6 @@ class TenantAwareAuthBackendTest(TestCase):
 
         self.user.usersignupsource_set = usersignup_source_set
 
-    @override_settings(
-        REGISTRATION_EMAIL_PATTERNS_ALLOWED=None,
-        FEATURES={
-            'EDNX_ENABLE_STRICT_LOGIN': True
-        })
     @mock.patch('eox_tenant.edxapp_wrapper.auth.get_edx_auth_failed')
     @mock.patch('eox_tenant.edxapp_wrapper.auth.get_edx_auth_backend')
     @mock.patch('eox_tenant.test_utils.test_theming_helpers.get_current_request')
@@ -70,6 +65,26 @@ class TenantAwareAuthBackendTest(TestCase):
         self.assertTrue(user_can_authenticate_on_tenant)
         edx_get_current_request_mock.assert_not_called()
         self.user.user_permissions.clear()
+
+    @mock.patch('eox_tenant.edxapp_wrapper.auth.get_edx_auth_failed')
+    @mock.patch('eox_tenant.edxapp_wrapper.auth.get_edx_auth_backend')
+    @mock.patch('eox_tenant.test_utils.test_theming_helpers.get_current_request')
+    def test_authentication_outside_request_scope(self, edx_get_current_request_mock,
+                                                  edx_auth_backend_mock, edx_auth_failed_mock):
+        """
+        Test if the user can authenticate in a domain where the user has signupsource
+        """
+        edx_auth_backend_mock.return_value = object
+        edx_auth_failed_mock.return_value = Exception
+
+        edx_get_current_request_mock.return_value = None
+
+        from eox_tenant.auth import TenantAwareAuthBackend
+
+        auth_backend = TenantAwareAuthBackend()
+
+        user_can_authenticate_on_tenant = auth_backend.user_can_authenticate_on_tenant(self.user)
+        self.assertTrue(user_can_authenticate_on_tenant)
 
     @override_settings(
         REGISTRATION_EMAIL_PATTERNS_ALLOWED=None,

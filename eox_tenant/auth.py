@@ -51,6 +51,10 @@ class TenantAwareAuthBackend(EdxAuthBackend):
             return True
 
         request = theming_helpers.get_current_request()
+        # If this is not executed in the scope of a request, just allow the authentication
+        if not request:
+            return True
+
         current_domain = request.META.get("HTTP_HOST")
 
         authorized_sources = getattr(settings, 'EDNX_ACCOUNT_REGISTRATION_SOURCES', [current_domain])
