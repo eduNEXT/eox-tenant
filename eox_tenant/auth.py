@@ -11,41 +11,47 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext as _
 
 from eox_tenant.edxapp_wrapper.auth import get_edx_auth_backend, get_edx_auth_failed
+from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
+from eox_tenant.permissions import LOGIN_ALL_TENANTS_PERMISSION_NAME
 
 AuthFailedError = get_edx_auth_failed()
 AUDIT_LOG = logging.getLogger("audit")
 EdxAuthBackend = get_edx_auth_backend()
 UserModel = get_user_model()
+theming_helpers = get_theming_helpers()
 
 
 class TenantAwareAuthBackend(EdxAuthBackend):
     """
     Authentication Backend class which will check if the user has a signupsource in the requested site.
     """
-    def authenticate(self, request, **kwargs):
-        """
-        Override default method to store the request which is being used by the
-        user_can_authenticate_on_tenant method.
-        """
-        self.request = request  # pylint: disable=attribute-defined-outside-init
-        return super(TenantAwareAuthBackend, self).authenticate(
-            request=request, **kwargs
-        )
-
     def user_can_authenticate(self, user):
         """
         Override user_can_authenticate method with the logic to be tenant aware.
         """
-        if not settings.FEATURES.get("EDNX_TENANT_AWARE_AUTH", False):
-            return super(TenantAwareAuthBackend, self).user_can_authenticate(user)
+        # List storing validations applied
+        validations = []
+        # Run the default validation from the parent class and add it to the validations list
+        user_can_authenticate = super(TenantAwareAuthBackend, self).user_can_authenticate(user)
+        validations.append(user_can_authenticate)
+        if settings.FEATURES.get("EDNX_TENANT_AWARE_AUTH", False):
+            # Only perform our validation if the corresponding setting is activated
+            can_auth_on_tenant = self.user_can_authenticate_on_tenant(user)
+            validations.append(can_auth_on_tenant)
 
-        return self.user_can_authenticate_on_tenant(user)
+        # All validations must return True
+        return all(validations)
 
     def user_can_authenticate_on_tenant(self, user):
         """
         Prevent users that signed up on a different tenant site to login in this site.
         """
-        current_domain = self.request.META.get("HTTP_HOST")
+        # Check if the user has a permission to login to all tenants
+        if user.has_perm(LOGIN_ALL_TENANTS_PERMISSION_NAME):
+            return True
+
+        request = theming_helpers.get_current_request()
+        current_domain = request.META.get("HTTP_HOST")
 
         authorized_sources = getattr(settings, 'EDNX_ACCOUNT_REGISTRATION_SOURCES', [current_domain])
         sources = user.usersignupsource_set.all()

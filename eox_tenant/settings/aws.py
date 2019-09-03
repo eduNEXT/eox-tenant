@@ -42,6 +42,10 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         'EOX_TENANT_USERS_BACKEND',
         settings.EOX_TENANT_USERS_BACKEND
     )
+    settings.EOX_TENANT_LOAD_PERMISSIONS = getattr(settings, 'ENV_TOKENS', {}).get(
+        'EOX_TENANT_LOAD_PERMISSIONS',
+        settings.EOX_TENANT_LOAD_PERMISSIONS
+    )
 
     # Override the default site
     settings.SITE_ID = getattr(settings, 'ENV_TOKENS', {}).get(

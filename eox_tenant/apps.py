@@ -44,3 +44,10 @@ class EdunextOpenedxExtensionsTenantConfig(AppConfig):
             }
         },
     }
+
+    def ready(self):
+        """
+        Method to perform actions after apps registry is ended
+        """
+        from eox_tenant.permissions import load_permissions
+        load_permissions()

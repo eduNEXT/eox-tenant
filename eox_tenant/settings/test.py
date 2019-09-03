@@ -44,3 +44,4 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     settings.FEATURES['USE_MICROSITE_AVAILABLE_SCREEN'] = False
     settings.FEATURES['USE_REDIRECTION_MIDDLEWARE'] = False
     settings.EOX_TENANT_SKIP_FILTER_FOR_TESTS = True
+    settings.EOX_TENANT_LOAD_PERMISSIONS = False
