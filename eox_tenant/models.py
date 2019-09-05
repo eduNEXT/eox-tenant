@@ -187,7 +187,8 @@ class Route(models.Model):
 
 class EdnxCourseEnrollmentManager(CourseEnrollmentManager):
     """
-    Custom manager for CourseEnrollment with Table-level filter methods.
+    Custom manager for CourseEnrollment to filter course enrollments
+    by the organization they belong to.
     """
     def get_queryset(self):
         """
