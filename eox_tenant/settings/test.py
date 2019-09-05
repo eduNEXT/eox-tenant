@@ -26,6 +26,7 @@ for app in TEST_INSTALLED_APPS:
 MICROSITE_CONFIGURATION_BACKEND = 'eox_tenant.edxapp_wrapper.backends.microsite_configuration_test_v1'
 GET_CONFIGURATION_HELPERS = 'eox_tenant.edxapp_wrapper.backends.configuration_helpers_test_v1'
 GET_THEMING_HELPERS = 'eox_tenant.edxapp_wrapper.backends.theming_helpers_test_v1'
+EOX_TENANT_ENROLLMENTS_BACKEND = 'eox_tenant.edxapp_wrapper.backends.enrollments_test_v1'
 
 COURSE_KEY_PATTERN = r'(?P<course_key_string>[^/+]+(/|\+)[^/+]+(/|\+)[^/?]+)'
 COURSE_ID_PATTERN = COURSE_KEY_PATTERN.replace('course_key_string', 'course_id')
@@ -36,6 +37,7 @@ TEST_DICT_OVERRIDE_TEST = {
 
 EOX_TENANT_SKIP_FILTER_FOR_TESTS = False
 EOX_TENANT_LOAD_PERMISSIONS = True
+EOX_TENANT_CHANGE_ENROLLMENT_MANAGER = False
 
 FEATURES = {}
 FEATURES['USE_MICROSITE_AVAILABLE_SCREEN'] = False
@@ -53,3 +55,4 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     settings.FEATURES['USE_REDIRECTION_MIDDLEWARE'] = False
     settings.EOX_TENANT_SKIP_FILTER_FOR_TESTS = False
     settings.EOX_TENANT_LOAD_PERMISSIONS = True
+    settings.EOX_TENANT_CHANGE_ENROLLMENT_MANAGER = False
