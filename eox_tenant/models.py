@@ -11,6 +11,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from jsonfield.fields import JSONField
 
+from eox_tenant.edxapp_wrapper.enrollments import get_enrollments_model_manager
+from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_helpers
+
+CourseEnrollmentManager = get_enrollments_model_manager()
+configuration_helpers = get_configuration_helpers()  # pylint: disable=invalid-name
 
 class Microsite(models.Model):
     """
@@ -177,3 +182,24 @@ class Route(models.Model):
         Model meta class.
         """
         app_label = "eox_tenant"
+
+class EdnxCourseEnrollmentManager(CourseEnrollmentManager):
+    """
+    Custom manager for CourseEnrollment with Table-level filter methods.
+    """
+    def get_queryset(self):
+
+        orgs_to_include = configuration_helpers.get_value('course_org_filter')
+        orgs_to_exclude = []
+
+        # Make sure we have a list
+        if orgs_to_include and not isinstance(orgs_to_include, list):
+            orgs_to_include = [orgs_to_include]
+
+        if not orgs_to_include:
+            # Making orgs_to_include an empty iterable
+            orgs_to_include = []
+            orgs_to_exclude = configuration_helpers.get_all_orgs()
+            return super(CourseEnrollmentManager, self).get_queryset().exclude(course_id__org__in=orgs_to_exclude)
+        
+        return super(CourseEnrollmentManager, self).get_queryset().filter(course_id__org__in=orgs_to_include)

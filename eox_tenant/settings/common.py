@@ -51,6 +51,8 @@ def plugin_settings(settings):
     settings.UTILS_MODULE_BACKEND = 'eox_tenant.edxapp_wrapper.backends.util_h_v1'
     settings.CHANGE_DOMAIN_DEFAULT_SITE_NAME = "stage.edunext.co"
     settings.EOX_TENANT_LOAD_PERMISSIONS = True
+    settings.EOX_TENANT_ENROLLMENTS_BACKEND = 'eox_tenant.edxapp_wrapper.backends.enrollments_h_v1'
+    settings.EOX_TENANT_CHANGE_ENROLLMENT_MANAGER = True
 
     try:
         settings.MAKO_TEMPLATE_DIRS_BASE.insert(0, path(__file__).abspath().dirname().dirname() / 'templates')  # pylint: disable=no-value-for-parameter

@@ -2,7 +2,7 @@
 File configuration for eox-tenant.
 """
 from django.apps import AppConfig
-
+from django.conf import settings as base_settings
 
 class EdunextOpenedxExtensionsTenantConfig(AppConfig):
     """
@@ -51,3 +51,9 @@ class EdunextOpenedxExtensionsTenantConfig(AppConfig):
         """
         from eox_tenant.permissions import load_permissions
         load_permissions()
+
+        if base_settings.EOX_TENANT_CHANGE_ENROLLMENT_MANAGER:
+            from eox_tenant.edxapp_wrapper.enrollments import get_enrollments_model
+            from eox_tenant.models import EdnxCourseEnrollmentManager
+            enrollments = get_enrollments_model()
+            enrollments.objects = EdnxCourseEnrollmentManager()
