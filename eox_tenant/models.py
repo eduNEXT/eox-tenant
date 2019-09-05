@@ -17,6 +17,7 @@ from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_he
 CourseEnrollmentManager = get_enrollments_model_manager()
 configuration_helpers = get_configuration_helpers()  # pylint: disable=invalid-name
 
+
 class Microsite(models.Model):
     """
     This is where the information about the microsite gets stored to the db.
@@ -183,12 +184,16 @@ class Route(models.Model):
         """
         app_label = "eox_tenant"
 
+
 class EdnxCourseEnrollmentManager(CourseEnrollmentManager):
     """
     Custom manager for CourseEnrollment with Table-level filter methods.
     """
     def get_queryset(self):
-
+        """
+        This method overrides the custom CourseEnrollment manager behavior to filter
+        enrollments based on the current tenant org
+        """
         orgs_to_include = configuration_helpers.get_value('course_org_filter')
         orgs_to_exclude = []
 
@@ -200,6 +205,10 @@ class EdnxCourseEnrollmentManager(CourseEnrollmentManager):
             # Making orgs_to_include an empty iterable
             orgs_to_include = []
             orgs_to_exclude = configuration_helpers.get_all_orgs()
-            return super(CourseEnrollmentManager, self).get_queryset().exclude(course_id__org__in=orgs_to_exclude)
-        
-        return super(CourseEnrollmentManager, self).get_queryset().filter(course_id__org__in=orgs_to_include)
+            return super(EdnxCourseEnrollmentManager, self).get_queryset().exclude(
+                course_id__org__in=orgs_to_exclude
+            )
+
+        return super(EdnxCourseEnrollmentManager, self).get_queryset().filter(
+            course_id__org__in=orgs_to_include
+        )

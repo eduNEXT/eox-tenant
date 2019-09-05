@@ -9,6 +9,7 @@ def get_enrollments_model(*args, **kwargs):
     backend = import_module(backend_function)
     return backend.get_enrollments_model(*args, **kwargs)
 
+
 def get_enrollments_model_manager(*args, **kwargs):
     """ Get BaseMicrositeBackend. """
     backend_function = settings.EOX_TENANT_ENROLLMENTS_BACKEND
