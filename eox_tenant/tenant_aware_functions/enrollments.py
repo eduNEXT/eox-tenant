@@ -4,7 +4,11 @@ Microsite aware enrollments filter.
 
 from django.conf import settings
 
-from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
+from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_helpers
+from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
+
+theming_helpers = get_theming_helpers()
+configuration_helpers = get_configuration_helpers()
 
 
 def filter_enrollments(enrollments):
@@ -16,12 +20,12 @@ def filter_enrollments(enrollments):
     test_skip = getattr(settings, "EOX_TENANT_SKIP_FILTER_FOR_TESTS", False)
     # If test setting is true, returns the same enrollments,
     # or if we do not have a microsite context, there is nothing we can do.
-    if test_skip or not get_microsite().is_request_in_microsite():
+    if test_skip or not theming_helpers.is_request_in_themed_site():
         for enrollment in enrollments:
             yield enrollment
         return
 
-    orgs_to_include = get_microsite().get_value('course_org_filter')
+    orgs_to_include = configuration_helpers.get_value('course_org_filter', None)
     orgs_to_exclude = []
 
     # Make sure we have a list
@@ -31,7 +35,7 @@ def filter_enrollments(enrollments):
     if not orgs_to_include:
         # Making orgs_to_include an empty iterable
         orgs_to_include = []
-        orgs_to_exclude = get_microsite().get_all_orgs()
+        orgs_to_exclude = configuration_helpers.get_all_orgs()
 
     for enrollment in enrollments:
 
