@@ -14,7 +14,6 @@ class ChangeDomainTestCase(TestCase):
 
     def setUp(self):
         """This method creates Microsite objects in database"""
-
         Microsite.objects.create(  # pylint: disable=no-member
             subdomain="first.test.prod.edunext.co")
         Site.objects.create(  # pylint: disable=no-member
@@ -64,3 +63,26 @@ class ChangeDomainTestCase(TestCase):
             domain="second-test-prod-edunext-co.stage.edunext.co").first()
         self.assertIsNone(prod_site)
         self.assertIsNotNone(stage_site)
+
+    def test_ecommerce_urls_can_change(self):
+        """Ecommerce urls has been changed by the command"""
+        values = {
+            "ECOMMERCE_PUBLIC_URL_ROOT": "https://ecommerce.url/",
+            "ECOMMERCE_API_URL": "https://ecommerce.url/api/v1/",
+        }
+        prod = Microsite.objects.filter(  # pylint: disable=no-member
+            subdomain="first.test.prod.edunext.co").first()
+        prod.values = values
+        prod.save()
+        call_command(
+            'change_domain',
+            suffix_domain=".stage.edunext.co",
+            suffix_ecommerce_domain=".stage-compl1.edunext.co"
+        )
+        stage = Microsite.objects.filter(  # pylint: disable=no-member
+            subdomain="first-test-prod-edunext-co.stage.edunext.co").first()
+        ecommerce_public_url_root = stage.values['ECOMMERCE_PUBLIC_URL_ROOT']
+        ecommerce_api_url = stage.values['ECOMMERCE_API_URL']
+
+        self.assertEqual(ecommerce_public_url_root, 'https://ecommerce-url.stage-compl1.edunext.co/')
+        self.assertEqual(ecommerce_api_url, 'https://ecommerce-url.stage-compl1.edunext.co/api/v1/')
