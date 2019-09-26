@@ -34,10 +34,10 @@ class TenantAwareAuthBackend(EdxAuthBackend):
         # Run the default validation from the parent class and add it to the validations list
         user_can_authenticate = super(TenantAwareAuthBackend, self).user_can_authenticate(user)
         validations.append(user_can_authenticate)
-        if settings.FEATURES.get("EDNX_TENANT_AWARE_AUTH", False):
-            # Only perform our validation if the corresponding setting is activated
-            can_auth_on_tenant = self.user_can_authenticate_on_tenant(user)
-            validations.append(can_auth_on_tenant)
+
+        # Perform the custom auth-on-tenant validation
+        can_auth_on_tenant = self.user_can_authenticate_on_tenant(user)
+        validations.append(can_auth_on_tenant)
 
         # All validations must return True
         return all(validations)
@@ -76,6 +76,9 @@ class TenantAwareAuthBackend(EdxAuthBackend):
         if not is_authorized:
             loggable_id = user.id if user else "<unknown>"
             if settings.FEATURES.get('EDNX_ENABLE_STRICT_LOGIN', False):
+                # Only if the EDNX_ENABLE_STRICT_LOGIN feature flag is active, an exception is raised when
+                # the user is not authorized to login to the current tenant. The exception error message is
+                # displayed on the standard login page
                 AUDIT_LOG.warning(
                     u"User `%s` tried to login in site `%s`, but was denied permission based on the signup sources.",
                     loggable_id,
