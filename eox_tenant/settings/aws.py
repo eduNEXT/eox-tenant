@@ -46,6 +46,10 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         'EOX_TENANT_LOAD_PERMISSIONS',
         settings.EOX_TENANT_LOAD_PERMISSIONS
     )
+    settings.EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES = getattr(settings, 'ENV_TOKENS', {}).get(
+        'EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES',
+        settings.EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES
+    )
 
     # Override the default site
     settings.SITE_ID = getattr(settings, 'ENV_TOKENS', {}).get(
@@ -54,10 +58,11 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     )
 
     if settings.SERVICE_VARIANT == "lms":
-        settings.MIDDLEWARE_CLASSES += [
-            'eox_tenant.middleware.AvailableScreenMiddleware',
-            'eox_tenant.middleware.MicrositeCrossBrandingFilterMiddleware',
-        ]
+        if settings.EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES:
+            settings.MIDDLEWARE_CLASSES += [
+                'eox_tenant.middleware.AvailableScreenMiddleware',
+                'eox_tenant.middleware.MicrositeCrossBrandingFilterMiddleware',
+            ]
 
         settings.AUTHENTICATION_BACKENDS = [EOX_TENANT_AUTH_BACKEND if (backend == EDX_AUTH_BACKEND) else backend for backend in settings.AUTHENTICATION_BACKENDS]  # pylint: disable=line-too-long
 
