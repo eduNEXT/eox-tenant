@@ -7,9 +7,6 @@ from django.conf import settings
 from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_helpers
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
 
-theming_helpers = get_theming_helpers()
-configuration_helpers = get_configuration_helpers()
-
 
 def filter_enrollments(enrollments):
     """
@@ -17,6 +14,7 @@ def filter_enrollments(enrollments):
     do not belong to the current microsite
     """
 
+    theming_helpers = get_theming_helpers()
     test_skip = getattr(settings, "EOX_TENANT_SKIP_FILTER_FOR_TESTS", False)
     # If test setting is true, returns the same enrollments,
     # or if we do not have a microsite context, there is nothing we can do.
@@ -25,6 +23,7 @@ def filter_enrollments(enrollments):
             yield enrollment
         return
 
+    configuration_helpers = get_configuration_helpers()
     orgs_to_include = configuration_helpers.get_value('course_org_filter', None)
     orgs_to_exclude = []
 

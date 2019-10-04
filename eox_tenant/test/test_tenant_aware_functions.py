@@ -30,21 +30,23 @@ class TenantAwareFunctionsTestCase(TestCase):
         result = filter_enrollments(self.enrolls)
         self.assertEqual(len(list(result)), 4)
 
-    @mock.patch('eox_tenant.tenant_aware_functions.enrollments.theming_helpers')
-    def test_filter_enrollments_not_request_in_microsite(self, theming_helpers_mock):
+    @mock.patch('eox_tenant.tenant_aware_functions.enrollments.get_theming_helpers')
+    def test_filter_enrollments_not_request_in_microsite(self, get_theming_helpers_mock):
         """
         Test the case when the request is not in a microsite (filter is not applied)
         """
+        theming_helpers_mock = mock.MagicMock()
         theming_helpers_mock.is_request_in_themed_site.return_value = False
+        get_theming_helpers_mock.return_value = theming_helpers_mock
 
         result = filter_enrollments(self.enrolls)
         self.assertEqual(len(list(result)), 4)
 
         theming_helpers_mock.is_request_in_themed_site.assert_called_once()
 
-    @mock.patch('eox_tenant.tenant_aware_functions.enrollments.theming_helpers')
-    @mock.patch('eox_tenant.tenant_aware_functions.enrollments.configuration_helpers')
-    def test_filter_enrollments_function(self, conf_helpers_mock, theming_helpers_mock):
+    @mock.patch('eox_tenant.tenant_aware_functions.enrollments.get_theming_helpers')
+    @mock.patch('eox_tenant.tenant_aware_functions.enrollments.get_configuration_helpers')
+    def test_filter_enrollments_function(self, get_conf_helpers_mock, get_theming_helpers_mock):
         """
         Test that the filter works properly
         """
@@ -58,9 +60,13 @@ class TenantAwareFunctionsTestCase(TestCase):
             """
             return results_get_value.get(key, default)
 
+        conf_helpers_mock = mock.MagicMock()
+        theming_helpers_mock = mock.MagicMock()
         conf_helpers_mock.get_value.side_effect = side_effect_get_value
-
         theming_helpers_mock.is_request_in_themed_site.return_value = True
+
+        get_conf_helpers_mock.return_value = conf_helpers_mock
+        get_theming_helpers_mock.return_value = theming_helpers_mock
 
         result = filter_enrollments(self.enrolls)
         list_result = list(result)
@@ -71,9 +77,9 @@ class TenantAwareFunctionsTestCase(TestCase):
         theming_helpers_mock.is_request_in_themed_site.assert_called_once()
         conf_helpers_mock.get_value.assert_called_once()
 
-    @mock.patch('eox_tenant.tenant_aware_functions.enrollments.theming_helpers')
-    @mock.patch('eox_tenant.tenant_aware_functions.enrollments.configuration_helpers')
-    def test_filter_enrollments_no_org_filter(self, conf_helpers_mock, theming_helpers_mock):
+    @mock.patch('eox_tenant.tenant_aware_functions.enrollments.get_theming_helpers')
+    @mock.patch('eox_tenant.tenant_aware_functions.enrollments.get_configuration_helpers')
+    def test_filter_enrollments_no_org_filter(self, get_conf_helpers_mock, get_theming_helpers_mock):
         """
         Test the case when the microsite does not have a course_org_filter
         """
@@ -85,11 +91,14 @@ class TenantAwareFunctionsTestCase(TestCase):
             """
             return results_get_value.get(key, default)
 
+        conf_helpers_mock = mock.MagicMock()
+        theming_helpers_mock = mock.MagicMock()
         conf_helpers_mock.get_value.side_effect = side_effect_get_value
-
         theming_helpers_mock.is_request_in_themed_site.return_value = True
-
         conf_helpers_mock.get_all_orgs.return_value = ['org1', 'org2', 'org3', 'org3']
+
+        get_conf_helpers_mock.return_value = conf_helpers_mock
+        get_theming_helpers_mock.return_value = theming_helpers_mock
 
         result = filter_enrollments(self.enrolls)
         self.assertEqual(len(list(result)), 0)
