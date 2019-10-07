@@ -6,6 +6,7 @@ from .common import *  # pylint: disable=wildcard-import
 
 EDX_AUTH_BACKEND = 'openedx.core.djangoapps.oauth_dispatch.dot_overrides.backends.EdxRateLimitedAllowAllUsersModelBackend'  # pylint: disable=line-too-long
 EOX_TENANT_AUTH_BACKEND = 'eox_tenant.auth.TenantAwareAuthBackend'
+EDX_CMS_PRE_MICROSITE_MIDDLEWARE = 'openedx.core.djangoapps.header_control.middleware.HeaderControlMiddleware'
 
 
 def plugin_settings(settings):  # pylint: disable=function-redefined
@@ -67,6 +68,13 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         settings.AUTHENTICATION_BACKENDS = [EOX_TENANT_AUTH_BACKEND if (backend == EDX_AUTH_BACKEND) else backend for backend in settings.AUTHENTICATION_BACKENDS]  # pylint: disable=line-too-long
 
     if settings.SERVICE_VARIANT == "cms":
-        settings.MIDDLEWARE_CLASSES += [
-            'eox_tenant.middleware.MicrositeMiddleware'
-        ]
+        # Inserting the  microsite middleware in cms on the desired position
+        if EDX_CMS_PRE_MICROSITE_MIDDLEWARE in settings.MIDDLEWARE_CLASSES:
+            settings.MIDDLEWARE_CLASSES.insert(
+                settings.MIDDLEWARE_CLASSES.index(EDX_CMS_PRE_MICROSITE_MIDDLEWARE) + 1,
+                'eox_tenant.middleware.MicrositeMiddleware'
+            )
+        else:
+            settings.MIDDLEWARE_CLASSES += [
+                'eox_tenant.middleware.MicrositeMiddleware'
+            ]
