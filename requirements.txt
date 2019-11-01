@@ -8,7 +8,7 @@ astroid==1.6.5            # via pylint
 backports.functools-lru-cache==1.5  # via astroid, pylint
 configparser==3.5.0       # via pylint
 coverage==4.5.1
-django==1.11.15
+django==1.11.23
 edx-opaque-keys==0.4.4
 enum34==1.1.6             # via astroid
 funcsigs==1.0.2           # via mock
