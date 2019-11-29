@@ -217,3 +217,57 @@ def clear_tenant(sender, request, **kwargs):  # pylint: disable=unused-argument
     Signal: django.core.signals.got_request_exception
     """
     pass
+
+
+def debug_sender(sender, *args, **kwargs):  # pylint: disable=unused-argument
+    """
+    This function should terminate the tenant specific changes when the request fails unexpectedly
+    """
+    print("===================debug_sender===================")
+
+    headers = kwargs.get('headers')
+    headers['eox_tenant_sender'] = 'site1.localhost:18000'
+    headers['X-Forwarded-For'] = 'CRITICAL_PIECE_OF_INFO'
+
+
+from celery.contrib import rdb
+
+
+def debug_receiver(sender, *args, **kwargs):  # pylint: disable=unused-argument
+    """
+    This function should terminate the tenant specific changes when the request fails unexpectedly
+    """
+
+    print("==================debug_receiver====================")
+    headers = sender.request.get('headers', {})
+
+
+    http_host = headers.get('eox_tenant_sender')
+
+
+
+    domain = http_host.split(':')[0]
+
+    # Find what we need to do about the current setting and the incoming request.domain
+    must_reset, can_keep = _analyze_current_settings(domain)
+
+    # Reset minimum once every so often
+    must_reset = _ttl_reached() or must_reset
+
+    # Perform the reset
+    if must_reset:
+        _perform_reset()
+        can_keep = False
+
+    if can_keep:
+        return
+
+    # Do the update
+    _update_settings(domain)
+
+    # Some django apps need to be reinitialized
+    try:
+        if base_settings.EDNX_TENANT_INSTALLED_APPS:
+            _repopulate_apps(base_settings.EDNX_TENANT_INSTALLED_APPS)
+    except AttributeError:
+        pass
