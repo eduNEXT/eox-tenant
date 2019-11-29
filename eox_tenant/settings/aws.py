@@ -51,7 +51,10 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         'EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES',
         settings.EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES
     )
-
+    settings.EOX_TENANT_ASYNC_TASKS_HANDLER_DICT = getattr(settings, 'ENV_TOKENS', {}).get(
+        'EOX_TENANT_ASYNC_TASKS_HANDLER_DICT',
+        settings.EOX_TENANT_ASYNC_TASKS_HANDLER_DICT
+    )
     # Override the default site
     settings.SITE_ID = getattr(settings, 'ENV_TOKENS', {}).get(
         'SITE_ID',

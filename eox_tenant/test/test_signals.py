@@ -6,6 +6,7 @@ from __future__ import print_function, unicode_literals
 
 from datetime import datetime, timedelta
 
+from django.contrib.sites.models import Site
 from django.test import TestCase
 from mock import MagicMock, patch
 
@@ -15,6 +16,8 @@ from eox_tenant.signals import (
     _update_settings,
     _analyze_current_settings,
     _repopulate_apps,
+    tenant_context_addition,
+    start_async_tenant,
 )
 
 
@@ -162,13 +165,18 @@ class StartTenantSignalTest(TestCase):
 
         _repopulate_mock.assert_not_called()
 
+    @patch('eox_tenant.signals._get_tenant_config')
     @patch('eox_tenant.signals._repopulate_apps')
-    def test__repopulate_apps_called(self, _repopulate_mock):
+    def test__repopulate_apps_called(self, _repopulate_mock, _get_config_mock):
         """
         A tenant that defines the EDNX_TENANT_INSTALLED_APPS calls the function
         """
         environ = MagicMock()
         environ.get.return_value = 'tenant.com'
+        config = {
+            "EDNX_USE_SIGNAL": True,
+        }
+        _get_config_mock.return_value = config, "tenant-key"
 
         with self.settings(SERVICE_VARIANT='lms', EDNX_TENANT_INSTALLED_APPS=['fake_app']):
             start_tenant(None, environ)
@@ -283,3 +291,101 @@ class SettingsOverridesTest(TestCase):
 
         self.assertEqual(settings.TEST_DICT_OVERRIDE_TEST.get("key1"), "Some Value")
         self.assertEqual(settings.TEST_DICT_OVERRIDE_TEST.get("key2"), "My value")
+
+
+class CeleryReceiverCLISyncTests(TestCase):
+    """
+    Testing the celery signals generated outside of a request in a sync process.
+    """
+
+    def setUp(self):
+        """ setup """
+        for number in range(3):
+            Site.objects.create(  # pylint: disable=no-member
+                domain="tenant{number}.com".format(number=number),
+                name="tenant{number}.com".format(number=number)
+            )
+
+    def test_unknown_task(self):
+        """
+        When the task is unknown the hostname should be None.
+        """
+        headers = {}
+        body = {}
+        tenant_context_addition("uknown_task", headers=headers, body=body)
+
+        self.assertIsNone(headers['eox_tenant_sender'])
+
+    @patch('eox_tenant.async_utils.AsyncTaskHandler.get_host_from_siteid')
+    def test_send_recurring_nudge(self, _get_host_mock):
+        """
+        When the task is called the method get_host_from_siteid should be called.
+        """
+        headers = {}
+        body = {}
+
+        with self.settings():
+            tenant_context_addition(
+                "openedx.core.djangoapps.schedules.tasks.ScheduleRecurringNudge",
+                headers=headers,
+                body=body,
+            )
+
+        _get_host_mock.assert_called()
+
+
+class CeleryReceiverSyncTests(TestCase):
+    """
+    Testing the celery receivers that run in a sync process
+    """
+
+    def setUp(self):
+        """ setup """
+        for number in range(3):
+            Site.objects.create(  # pylint: disable=no-member
+                domain="tenant{number}.com".format(number=number),
+                name="tenant{number}.com".format(number=number)
+            )
+
+    def test_sync_process_with_tenant(self):
+        """
+        When the task is called from a sync proccess it is used the value of the 'host' key in the request dict.
+        """
+        headers = {}
+        body = {}
+        with self.settings(EDNX_TENANT_DOMAIN="some.tenant.com"):
+            tenant_context_addition("some.task", headers=headers, body=body)
+
+        self.assertEqual(headers['eox_tenant_sender'], 'some.tenant.com')
+
+
+class CeleryReceiverAsyncTests(TestCase):
+    """
+    Testing the signal handling in the async process.
+    """
+
+    @patch('eox_tenant.signals._update_settings')
+    def test_start_async_tenant(self, _update_mock):
+        """
+        Test function used to handle signal in the async process
+        """
+        sender = MagicMock()
+        headers = {"eox_tenant_sender": "some.tenant.com"}
+        sender.request = {"headers": headers}
+        start_async_tenant(sender)
+
+        _update_mock.assert_called_with("some.tenant.com")
+
+    @patch('eox_tenant.signals._perform_reset')
+    @patch('eox_tenant.signals._update_settings')
+    def test_start_async_tenant_with_null_header(self, _update_mock, _reset_mock):
+        """
+        Test function used to handle signal in the async process.
+        """
+        sender = MagicMock()
+        headers = None
+        sender.request = {"headers": headers}
+        start_async_tenant(sender)
+
+        _reset_mock.assert_called()
+        _update_mock.assert_not_called()
