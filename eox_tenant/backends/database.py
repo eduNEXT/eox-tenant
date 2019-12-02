@@ -1,8 +1,6 @@
 """
 Microsite backend that reads the configuration from the database
 """
-import os
-
 from django.core.cache import cache
 from django.conf import settings
 from django.utils import six
@@ -173,23 +171,6 @@ class EdunextCompatibleDatabaseMicrositeBackend(BaseMicrositeBackend):
         config['site_domain'] = strip_port_from_host(domain)
         config['microsite_config_key'] = microsite_object.key
         self.current_request_configuration.data = config
-
-    def enable_microsites(self, log):
-        """
-        Configure the paths for the microsites feature
-        """
-        microsites_root = settings.MICROSITE_ROOT_DIR
-
-        if os.path.isdir(microsites_root):
-            settings.STATICFILES_DIRS.insert(0, microsites_root)
-            settings.LOCALE_PATHS = [microsites_root / 'conf/locale'] + settings.LOCALE_PATHS
-
-            log.info('Eox-tenant is loading microsite path at %s', microsites_root)
-        else:
-            log.error(
-                'Eox-tenant had an error loading %s. Directory does not exist',
-                microsites_root
-            )
 
     def set_key_to_cache(self, key, value):
         """
