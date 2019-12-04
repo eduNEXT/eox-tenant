@@ -63,16 +63,3 @@ class MicrositeConfiguratonTest(TestCase):
 
         import_mock.assert_called()
         backend.assert_called()
-
-    @patch('eox_tenant.edxapp_wrapper.get_microsite_configuration.import_module')
-    def test_imported_module_is_used_at_microsite_get_value(self, import_mock):
-        """
-        Testing the backend is imported and used
-        """
-        backend = Mock()
-        import_mock.side_effect = backend
-
-        get_microsite_configuration.get_microsite_get_value()
-
-        import_mock.assert_called()
-        backend.assert_called()
