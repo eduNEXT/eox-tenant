@@ -19,48 +19,12 @@ from opaque_keys.edx.keys import CourseKey
 
 from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_helpers
 from eox_tenant.edxapp_wrapper.edxmako_module import get_edxmako_module
-from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
 
-microsite = get_microsite()  # pylint: disable=invalid-name
 configuration_helper = get_configuration_helpers()  # pylint: disable=invalid-name
 theming_helper = get_theming_helpers()
 HOST_VALIDATION_RE = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{2,5})?$")
 LOG = logging.getLogger(__name__)
-
-
-class SimpleMicrositeMiddleware(object):
-    """
-    Middleware class which will clear any data from the microsite module on exit
-    """
-
-    # pylint: disable=unused-argument
-    def process_response(self, request, response):
-        """
-        Middleware exit point to delete cache data.
-        """
-        microsite.clear()
-        return response
-
-
-class MicrositeMiddleware(SimpleMicrositeMiddleware):
-    """
-    Middleware class which will bind configuration information regarding 'microsites' on a per request basis.
-    The actual configuration information is taken from Django settings information
-    """
-
-    def process_request(self, request):
-        """
-        Middleware entry point on every request processing. This will associate a request's domain name
-        with a 'University' and any corresponding microsite configuration information
-        """
-        microsite.clear()
-
-        domain = request.META.get('HTTP_HOST', None)
-
-        microsite.set_by_domain(domain)
-
-        return None
 
 
 class MicrositeCrossBrandingFilterMiddleware():

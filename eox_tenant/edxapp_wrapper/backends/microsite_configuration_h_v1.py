@@ -34,9 +34,3 @@ def get_base_microsite_template_backend():
 def get_is_request_in_microsite():
     """ Backend to get is_request_in_microsite. """
     return is_request_in_microsite
-
-
-def get_microsite():
-    """ Backend to get microsite. """
-    from microsite_configuration import microsite  # pylint: disable=import-error
-    return microsite

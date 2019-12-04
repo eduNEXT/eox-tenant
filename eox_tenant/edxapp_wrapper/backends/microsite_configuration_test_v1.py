@@ -20,15 +20,6 @@ def get_base_microsite_template_backend():
     return BaseMicrositeTemplateBackend
 
 
-def get_microsite():
-    """ Backend to get microsite. """
-    try:
-        from microsite_configuration import microsite  # pylint: disable=import-error
-    except ImportError:
-        microsite = object
-    return microsite
-
-
 def get_microsite_get_value(*args, **kwargs):
     """ Backend to get get_value. """
     from microsite_configuration.microsite import get_value  # pylint: disable=import-error

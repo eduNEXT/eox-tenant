@@ -29,10 +29,3 @@ def get_is_request_in_microsite(*args, **kwargs):
     backend_function = settings.MICROSITE_CONFIGURATION_BACKEND
     backend = import_module(backend_function)
     return backend.get_is_request_in_microsite(*args, **kwargs)
-
-
-def get_microsite(*args, **kwargs):
-    """ Get microsite. """
-    backend_function = settings.MICROSITE_CONFIGURATION_BACKEND
-    backend = import_module(backend_function)
-    return backend.get_microsite(*args, **kwargs)
