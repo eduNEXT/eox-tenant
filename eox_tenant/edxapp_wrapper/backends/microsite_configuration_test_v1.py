@@ -11,15 +11,6 @@ def get_base_microsite_backend():
     return InterfaceConnectionBackend
 
 
-def get_base_microsite_template_backend():
-    """ Backend to get BaseMicrositeTemplateBackend. """
-    try:
-        from microsite_configuration.backends.base import BaseMicrositeTemplateBackend
-    except ImportError:
-        BaseMicrositeTemplateBackend = object
-    return BaseMicrositeTemplateBackend
-
-
 def get_microsite_get_value(*args, **kwargs):
     """ Backend to get get_value. """
     from microsite_configuration.microsite import get_value  # pylint: disable=import-error

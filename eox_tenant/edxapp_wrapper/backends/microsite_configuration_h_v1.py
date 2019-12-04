@@ -22,15 +22,6 @@ def get_microsite_get_value(*args, **kwargs):
     return get_value(*args, **kwargs)
 
 
-def get_base_microsite_template_backend():
-    """ Backend to get BaseMicrositeTemplateBackend. """
-    try:
-        from microsite_configuration.backends.base import BaseMicrositeTemplateBackend
-    except ImportError:
-        BaseMicrositeTemplateBackend = object
-    return BaseMicrositeTemplateBackend
-
-
 def get_is_request_in_microsite():
     """ Backend to get is_request_in_microsite. """
     return is_request_in_microsite
