@@ -23,7 +23,6 @@ for app in TEST_INSTALLED_APPS:
     if app not in INSTALLED_APPS:
         INSTALLED_APPS.append(app)
 
-MICROSITE_CONFIGURATION_BACKEND = 'eox_tenant.edxapp_wrapper.backends.microsite_configuration_test_v1'
 GET_CONFIGURATION_HELPERS = 'eox_tenant.edxapp_wrapper.backends.configuration_helpers_test_v1'
 GET_THEMING_HELPERS = 'eox_tenant.edxapp_wrapper.backends.theming_helpers_test_v1'
 
