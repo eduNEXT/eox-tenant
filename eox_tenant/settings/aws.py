@@ -15,14 +15,6 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     More info: https://github.com/edx/edx-platform/blob/master/openedx/core/djangoapps/plugins/README.rst
     """
     # Backend settings.
-    settings.MICROSITE_BACKEND = getattr(settings, 'ENV_TOKENS', {}).get(
-        'MICROSITE_BACKEND',
-        settings.MICROSITE_BACKEND
-    )
-    settings.MICROSITE_TEMPLATE_BACKEND = getattr(settings, 'ENV_TOKENS', {}).get(
-        'MICROSITE_TEMPLATE_BACKEND',
-        settings.MICROSITE_TEMPLATE_BACKEND
-    )
     settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS = getattr(settings, 'ENV_TOKENS', {}).get(
         'EOX_MAX_CONFIG_OVERRIDE_SECONDS',
         settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS
@@ -69,15 +61,3 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
             ]
 
         settings.AUTHENTICATION_BACKENDS = [EOX_TENANT_AUTH_BACKEND if (backend == EDX_AUTH_BACKEND) else backend for backend in settings.AUTHENTICATION_BACKENDS]  # pylint: disable=line-too-long
-
-    if settings.SERVICE_VARIANT == "cms":
-        # Inserting the  microsite middleware in cms on the desired position
-        if EDX_CMS_PRE_MICROSITE_MIDDLEWARE in settings.MIDDLEWARE_CLASSES:
-            settings.MIDDLEWARE_CLASSES.insert(
-                settings.MIDDLEWARE_CLASSES.index(EDX_CMS_PRE_MICROSITE_MIDDLEWARE) + 1,
-                'eox_tenant.middleware.MicrositeMiddleware'
-            )
-        else:
-            settings.MIDDLEWARE_CLASSES += [
-                'eox_tenant.middleware.MicrositeMiddleware'
-            ]

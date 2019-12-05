@@ -7,12 +7,10 @@ from django.conf import settings
 from django.templatetags.static import static
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.translation import get_language_bidi
-from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
 from eox_tenant.edxapp_wrapper.branding_api import get_branding_api
 from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_helpers
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
 
-microsite = get_microsite()  # pylint: disable=invalid-name
 configuration_helpers = get_configuration_helpers()
 branding_api = get_branding_api()
 theming_helpers = get_theming_helpers()

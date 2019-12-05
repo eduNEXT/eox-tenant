@@ -5,7 +5,6 @@ Contains the base classes for microsite backends.
 
 AbstractBaseMicrositeBackend is Abstract Base Class for the microsite configuration backend.
 BaseMicrositeBackend is Base Class for microsite configuration backend.
-BaseMicrositeTemplateBackend is Base Class for the microsite template backend.
 """
 
 from __future__ import absolute_import
@@ -17,11 +16,6 @@ import threading
 from django.conf import settings
 
 from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
-from eox_tenant.edxapp_wrapper.get_microsite_configuration import (
-    get_microsite_get_value as microsite_get_value,
-    get_base_microsite_backend,
-    get_base_microsite_template_backend,
-)
 
 
 # pylint: disable=unused-argument
@@ -106,13 +100,7 @@ class AbstractBaseMicrositeBackend(object):
         raise NotImplementedError()
 
 
-# This is the connection point between openedx and this module
-# We need to pass the class inheritance validation, and also stand alone for tests
-MB_INTERFACE_CONNECTION_BACKEND = get_base_microsite_backend()
-TB_INTERFACE_CONNECTION_BACKEND = get_base_microsite_template_backend()
-
-
-class BaseMicrositeBackend(MB_INTERFACE_CONNECTION_BACKEND):
+class BaseMicrositeBackend(AbstractBaseMicrositeBackend):
     """
     Base class for Microsite backends.
     """
@@ -308,45 +296,3 @@ class BaseMicrositeBackend(MB_INTERFACE_CONNECTION_BACKEND):
             # 68312bdd2dac932b95c5720b3e7e42d0f788c8f0
             settings.MAKO_TEMPLATES['main'].insert(0, microsites_root)
             settings.DEFAULT_TEMPLATE_ENGINE['DIRS'].append(microsites_root)
-
-
-class BaseMicrositeTemplateBackend(TB_INTERFACE_CONNECTION_BACKEND):
-    """
-    Interface for microsite template providers. Base implementation is to use the filesystem.
-    When this backend is used templates are first searched in location set in `template_dir`
-    configuration of microsite on filesystem.
-    """
-
-    def get_template_path(self, template_path, **kwargs):
-        """
-        Returns a path (string) to a Mako template, which can either be in
-        an override or will just return what is passed in which is expected to be a string
-        """
-
-        microsite_template_path = microsite_get_value('template_dir', None)
-        if not microsite_template_path:
-            microsite_template_path = '/'.join([
-                settings.MICROSITE_ROOT_DIR,
-                microsite_get_value('microsite_config_key', 'default'),
-                'templates',
-            ])
-
-        relative_path = template_path[1:] if template_path.startswith('/') else template_path
-        search_path = os.path.join(microsite_template_path, relative_path)
-        if os.path.isfile(search_path):
-            path = '/{0}/templates/{1}'.format(
-                microsite_get_value('microsite_config_key'),
-                relative_path
-            )
-            return path
-        else:
-            return template_path
-
-    def get_template(self, uri):
-        """
-        Returns the actual template for the microsite with the specified URI,
-        default implementation returns None, which means that the caller framework
-        should use default behavior
-        """
-
-        return
