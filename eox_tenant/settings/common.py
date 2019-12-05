@@ -36,7 +36,6 @@ def plugin_settings(settings):
     More info: https://github.com/edx/edx-platform/blob/master/openedx/core/djangoapps/plugins/README.rst
     """
     # Plugin settings.
-    settings.MICROSITE_BACKEND = 'eox_tenant.backends.database.TenantConfigCompatibleMicrositeBackend'
     settings.MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT = 300
     settings.GET_BRANDING_API = 'eox_tenant.edxapp_wrapper.backends.branding_api_h_v1'
     settings.GET_CONFIGURATION_HELPERS = 'eox_tenant.edxapp_wrapper.backends.configuration_helpers_h_v1'

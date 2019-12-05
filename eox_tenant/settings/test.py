@@ -45,7 +45,6 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     """
     For the platform tests, we want everything to be disabled
     """
-    settings.MICROSITE_BACKEND = 'eox_tenant.backends.base.BaseMicrositeBackend'
     settings.FEATURES['USE_MICROSITE_AVAILABLE_SCREEN'] = False
     settings.FEATURES['USE_REDIRECTION_MIDDLEWARE'] = False
     settings.GET_CONFIGURATION_HELPERS = 'eox_tenant.edxapp_wrapper.backends.configuration_helpers_test_v1'
