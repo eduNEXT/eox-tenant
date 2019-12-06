@@ -17,11 +17,13 @@ from django.utils import six
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
 
-from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_helpers
 from eox_tenant.edxapp_wrapper.edxmako_module import get_edxmako_module
+from eox_tenant.edxapp_wrapper.site_configuration_module import get_configuration_helpers, get_site_configuration_models
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
+from eox_tenant.models import TenantConfigCompatibleSiteConfigurationProxyModel
 
 configuration_helper = get_configuration_helpers()  # pylint: disable=invalid-name
+SiteConfigurationModels = get_site_configuration_models()
 theming_helper = get_theming_helpers()
 HOST_VALIDATION_RE = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{2,5})?$")
 LOG = logging.getLogger(__name__)
@@ -90,3 +92,16 @@ class AvailableScreenMiddleware(object):
                     {'domain': domain, }
                 )
             )
+
+
+class MonkeyPatchMiddleware(object):
+    """
+    This middleware allows to do monkey patch to the model SiteConfiguration from
+    <openedx.core.djangoapps.site_configuration.models>.
+    """
+
+    def process_request(self, request):  # pylint: disable=unused-argument
+        """
+        Override the model SiteConfiguration with TenantConfigCompatibleSiteConfigurationProxyModel.
+        """
+        SiteConfigurationModels.SiteConfiguration = TenantConfigCompatibleSiteConfigurationProxyModel

@@ -23,9 +23,9 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         'CHANGE_DOMAIN_DEFAULT_SITE_NAME',
         settings.CHANGE_DOMAIN_DEFAULT_SITE_NAME
     )
-    settings.MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT = getattr(settings, 'ENV_TOKENS', {}).get(
-        'MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT',
-        settings.MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT
+    settings.EOX_TENANT_CACHE_KEY_TIMEOUT = getattr(settings, 'ENV_TOKENS', {}).get(
+        'EOX_TENANT_CACHE_KEY_TIMEOUT',
+        settings.EOX_TENANT_CACHE_KEY_TIMEOUT
     )
     settings.EOX_TENANT_EDX_AUTH_BACKEND = getattr(settings, 'ENV_TOKENS', {}).get(
         'EOX_TENANT_EDX_AUTH_BACKEND',
@@ -44,11 +44,18 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         settings.EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES
     )
 
+    settings.USE_EOX_TENANT = getattr(settings, 'ENV_TOKENS', {}).get(
+        'USE_EOX_TENANT',
+        settings.USE_EOX_TENANT
+    )
+
     # Override the default site
     settings.SITE_ID = getattr(settings, 'ENV_TOKENS', {}).get(
         'SITE_ID',
         settings.SITE_ID
     )
+
+    settings.MIDDLEWARE_CLASSES += ['eox_tenant.middleware.MonkeyPatchMiddleware']
 
     if settings.SERVICE_VARIANT == "lms":
         if settings.EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES:

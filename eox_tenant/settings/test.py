@@ -23,7 +23,7 @@ for app in TEST_INSTALLED_APPS:
     if app not in INSTALLED_APPS:
         INSTALLED_APPS.append(app)
 
-GET_CONFIGURATION_HELPERS = 'eox_tenant.edxapp_wrapper.backends.configuration_helpers_test_v1'
+GET_SITE_CONFIGURATION_MODULE = 'eox_tenant.edxapp_wrapper.backends.site_configuration_module_test_v1'
 GET_THEMING_HELPERS = 'eox_tenant.edxapp_wrapper.backends.theming_helpers_test_v1'
 
 COURSE_KEY_PATTERN = r'(?P<course_key_string>[^/+]+(/|\+)[^/+]+(/|\+)[^/?]+)'
@@ -47,7 +47,7 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     """
     settings.FEATURES['USE_MICROSITE_AVAILABLE_SCREEN'] = False
     settings.FEATURES['USE_REDIRECTION_MIDDLEWARE'] = False
-    settings.GET_CONFIGURATION_HELPERS = 'eox_tenant.edxapp_wrapper.backends.configuration_helpers_test_v1'
+    settings.GET_SITE_CONFIGURATION_MODULE = 'eox_tenant.edxapp_wrapper.backends.site_configuration_module_test_v1'
     settings.GET_THEMING_HELPERS = 'eox_tenant.edxapp_wrapper.backends.theming_helpers_test_v1'
     settings.EOX_TENANT_SKIP_FILTER_FOR_TESTS = True
     settings.EOX_TENANT_LOAD_PERMISSIONS = False
