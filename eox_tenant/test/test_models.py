@@ -2,6 +2,7 @@
 """
 TODO: add me
 """
+from __future__ import absolute_import
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
@@ -108,7 +109,7 @@ class TenantConfigCompatibleSiteConfigurationProxyModelTest(TestCase):
         """
         Test to get an specific value for a given org.
         """
-        self.assertEquals(
+        self.assertEqual(
             TenantConfigCompatibleSiteConfigurationProxyModel.get_value_for_org(
                 org="test1-org",
                 val_name="value-test",
@@ -117,7 +118,7 @@ class TenantConfigCompatibleSiteConfigurationProxyModelTest(TestCase):
             "Hello-World3",
         )
 
-        self.assertEquals(
+        self.assertEqual(
             TenantConfigCompatibleSiteConfigurationProxyModel.get_value_for_org(
                 org="test3-org",
                 val_name="value-test",
@@ -126,7 +127,7 @@ class TenantConfigCompatibleSiteConfigurationProxyModelTest(TestCase):
             "Hello-World2",
         )
 
-        self.assertEquals(
+        self.assertEqual(
             TenantConfigCompatibleSiteConfigurationProxyModel.get_value_for_org(
                 org="test4-org",
                 val_name="value-test",
@@ -141,7 +142,7 @@ class TenantConfigCompatibleSiteConfigurationProxyModelTest(TestCase):
         """
         configurations, external_key = TenantConfigCompatibleSiteConfigurationProxyModel.get_config_by_domain("domain1")
 
-        self.assertEquals(external_key, "tenant-key2")
+        self.assertEqual(external_key, "tenant-key2")
         self.assertDictEqual(
             configurations,
             {
@@ -152,13 +153,13 @@ class TenantConfigCompatibleSiteConfigurationProxyModelTest(TestCase):
 
         configurations, external_key = TenantConfigCompatibleSiteConfigurationProxyModel.get_config_by_domain("domain2")
 
-        self.assertEquals(external_key, None)
+        self.assertEqual(external_key, None)
         self.assertDictEqual(configurations, {})
 
         configurations, external_key = \
             TenantConfigCompatibleSiteConfigurationProxyModel.get_config_by_domain("first.test.prod.edunext")
 
-        self.assertEquals(external_key, "test_fake_key")
+        self.assertEqual(external_key, "test_fake_key")
         self.assertDictEqual(
             configurations,
             {
@@ -174,7 +175,7 @@ class TenantConfigCompatibleSiteConfigurationProxyModelTest(TestCase):
         configurations, external_key = \
             TenantConfigCompatibleSiteConfigurationProxyModel.get_microsite_config_by_domain("first.test.prod.edunext")
 
-        self.assertEquals(external_key, "test_fake_key")
+        self.assertEqual(external_key, "test_fake_key")
         self.assertDictEqual(
             configurations,
             {
@@ -186,5 +187,5 @@ class TenantConfigCompatibleSiteConfigurationProxyModelTest(TestCase):
         configurations, external_key = \
             TenantConfigCompatibleSiteConfigurationProxyModel.get_microsite_config_by_domain("fake-domain")
 
-        self.assertEquals(external_key, None)
+        self.assertEqual(external_key, None)
         self.assertDictEqual(configurations, {})
