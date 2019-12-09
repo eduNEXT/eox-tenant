@@ -12,3 +12,10 @@ class test_theming_helpers(object):
         Test method
         """
         return object
+
+
+class TestSiteConfigurationModels(object):
+    """
+    Test class for theming helpers
+    """
+    SiteConfiguration = object

@@ -1,5 +1,5 @@
 """ Backend test abstraction. """
-import mock
+from eox_tenant.test_utils import TestSiteConfigurationModels
 
 
 def get_configuration_helpers():
@@ -13,9 +13,4 @@ def get_configuration_helpers():
 
 def get_site_configuration_models():
     """ Backend to get the configuration helper. """
-    try:
-        models = mock.MagicMock()
-        models.SiteConfiguration = object
-    except ImportError:
-        models = object
-    return models
+    return TestSiteConfigurationModels()
