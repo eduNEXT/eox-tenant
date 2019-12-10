@@ -94,6 +94,18 @@ class AvailableScreenMiddleware(object):
             )
 
 
+class OverrideSiteConfigurationMiddleware(object):
+    """
+    Middleware class that allows to override the SiteConfiguration object asociated to the Site.
+    """
+
+    def process_request(self, request):
+        """
+        Get a new SiteConfiguration object with the django settings and override the previous site.configuration.
+        """
+        request.site.configuration = TenantConfigCompatibleSiteConfigurationProxyModel.create_site_configuration()
+
+
 class MonkeyPatchMiddleware(object):
     """
     This middleware allows to do monkey patch to the model SiteConfiguration from
@@ -102,6 +114,6 @@ class MonkeyPatchMiddleware(object):
 
     def process_request(self, request):  # pylint: disable=unused-argument
         """
-        Override the model SiteConfiguration with TenantConfigCompatibleSiteConfigurationProxyModel.
+        Override the SiteConfiguration model with TenantConfigCompatibleSiteConfigurationProxyModel.
         """
         SiteConfigurationModels.SiteConfiguration = TenantConfigCompatibleSiteConfigurationProxyModel

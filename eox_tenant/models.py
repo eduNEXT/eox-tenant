@@ -205,6 +205,17 @@ class TenantConfigCompatibleSiteConfigurationProxyModel(SiteConfigurationModels.
         proxy = True
 
     @classmethod
+    def create_site_configuration(cls):
+        """
+        Create a fake TenantConfigCompatibleSiteConfigurationProxyModel object in order to use
+        the settings as SiteConfiguration values.
+        """
+        return cls(
+            enabled=cls.has_configuration_set(),
+            values=settings.__dict__["_wrapped"].__dict__,
+        )
+
+    @classmethod
     def get_all_orgs(cls):
         """
         This returns a set of orgs that are considered within all microsites and TenantConfig.
@@ -225,7 +236,7 @@ class TenantConfigCompatibleSiteConfigurationProxyModel(SiteConfigurationModels.
         for config in chain(tenant_config, microsite_config):
             try:
                 current = json.loads(config[0])
-                org_filter = current.get('course_org_filter', {})
+                org_filter = current.get("course_org_filter", {})
             except IndexError:
                 continue
 
@@ -285,7 +296,7 @@ class TenantConfigCompatibleSiteConfigurationProxyModel(SiteConfigurationModels.
         for config in chain(tenant_config, microsite_config):
             try:
                 current = json.loads(config[0])
-                org_filter = current.get('course_org_filter', {})
+                org_filter = current.get("course_org_filter", {})
             except IndexError:
                 continue
 

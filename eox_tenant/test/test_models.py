@@ -189,3 +189,20 @@ class TenantConfigCompatibleSiteConfigurationProxyModelTest(TestCase):
 
         self.assertEqual(external_key, None)
         self.assertDictEqual(configurations, {})
+
+    def test_create_site_configuration(self):
+        """
+        Test that a new TenantConfigCompatibleSiteConfigurationProxyModel instance is created with
+        the current settings.
+        """
+        with self.settings(USE_EOX_TENANT=False, EDNX_USE_SIGNAL=False):
+            site_configuration = TenantConfigCompatibleSiteConfigurationProxyModel.create_site_configuration()
+            self.assertFalse(site_configuration.enabled)
+            self.assertFalse(site_configuration.values.get("USE_EOX_TENANT"))
+            self.assertFalse(site_configuration.values.get("EDNX_USE_SIGNAL"))
+
+        with self.settings(USE_EOX_TENANT=True, EDNX_USE_SIGNAL=True):
+            site_configuration = TenantConfigCompatibleSiteConfigurationProxyModel.create_site_configuration()
+            self.assertTrue(site_configuration.enabled)
+            self.assertTrue(site_configuration.values.get("USE_EOX_TENANT"))
+            self.assertTrue(site_configuration.values.get("EDNX_USE_SIGNAL"))

@@ -55,7 +55,10 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         settings.SITE_ID
     )
 
-    settings.MIDDLEWARE_CLASSES += ['eox_tenant.middleware.MonkeyPatchMiddleware']
+    settings.MIDDLEWARE_CLASSES += [
+        'eox_tenant.middleware.OverrideSiteConfigurationMiddleware',
+        'eox_tenant.middleware.MonkeyPatchMiddleware',
+    ]
 
     if settings.SERVICE_VARIANT == "lms":
         if settings.EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES:
