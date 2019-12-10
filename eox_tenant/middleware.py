@@ -103,7 +103,8 @@ class OverrideSiteConfigurationMiddleware(object):
         """
         Get a new SiteConfiguration object with the django settings and override the previous site.configuration.
         """
-        request.site.configuration = TenantConfigCompatibleSiteConfigurationProxyModel.create_site_configuration()
+        # request.site.configuration = TenantConfigCompatibleSiteConfigurationProxyModel.create_site_configuration()
+        pass
 
 
 class MonkeyPatchMiddleware(object):
@@ -116,4 +117,5 @@ class MonkeyPatchMiddleware(object):
         """
         Override the SiteConfiguration model with TenantConfigCompatibleSiteConfigurationProxyModel.
         """
-        SiteConfigurationModels.SiteConfiguration = TenantConfigCompatibleSiteConfigurationProxyModel
+        # SiteConfigurationModels.SiteConfiguration = TenantConfigCompatibleSiteConfigurationProxyModel
+        pass
