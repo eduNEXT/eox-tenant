@@ -16,7 +16,7 @@ from jsonfield.fields import JSONField
 
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
 
-SiteConfigurationModels = get_site_configuration_models()
+SiteConfigurationModel = get_site_configuration_models().SiteConfiguration
 TENANT_ALL_ORGS_CACHE_KEY = "tenant.all_orgs_list"
 EOX_TENANT_CACHE_KEY_TIMEOUT = getattr(
     settings,
@@ -193,7 +193,45 @@ class Route(models.Model):
         app_label = "eox_tenant"
 
 
-class TenantConfigCompatibleSiteConfigurationProxyModel(SiteConfigurationModels.SiteConfiguration):
+
+class TenantConfigProxy(SiteConfigurationModel):
+    class Meta:
+        """ Set as a proxy model. """
+        proxy = True
+
+    def __unicode__(self):
+        key = getattr(settings, 'EDNX_TENANT_KEY', 'No tenant is active at the moment')
+        return u'<Tenant proxy as site_configuration: {}>'.format(key)
+
+    @property
+    def enabled(self):
+        if getattr(settings, 'EDNX_TENANT_KEY', None):
+            return True
+        return False
+
+    @enabled.setter
+    def enabled(self, value):
+        """
+        We ignore the setter since this is a read proxy.
+        """
+        pass
+
+    def save(self, *args, **kwargs):
+        pass
+
+    def get_value(self, name, default=None):
+        """
+        Return Configuration value from the Tenant loaded in the settings object as if this was a SiteConfiguration class.
+        """
+        try:
+            return getattr(settings, name, default)
+        except AttributeError as error:
+            logger.exception('Invalid data at the TenantConfigProxy get_value. \n [%s]', error)
+        return default
+
+
+
+class TenantConfigCompatibleSiteConfigurationProxyModel(SiteConfigurationModel):
     """
     This a is Proxy model for SiteConfiguration from <openedx.core.djangoapps.site_configuration.models>.
     This allows to add or override methods using as base the SiteConfiguration model.
@@ -249,30 +287,6 @@ class TenantConfigCompatibleSiteConfigurationProxyModel(SiteConfigurationModels.
         cls.set_key_to_cache(TENANT_ALL_ORGS_CACHE_KEY, org_filter_set)
 
         return org_filter_set
-
-    @classmethod
-    def get_config_by_domain(cls, domain):
-        """
-        Get the correct set of site configurations.
-        """
-        configurations, external_key = TenantConfig.get_configs_for_domain(domain)
-
-        if not (configurations and external_key):
-            configurations, external_key = cls.get_microsite_config_by_domain(domain)
-
-        return configurations, external_key
-
-    @classmethod
-    def get_microsite_config_by_domain(cls, domain):
-        """
-        Return the configuration and key available for a given domain.
-        """
-        microsite = Microsite.get_microsite_for_domain(domain)
-
-        if microsite:
-            return microsite.values, microsite.key
-
-        return {}, None
 
     @classmethod
     def get_value_for_org(cls, org, val_name, default=None):

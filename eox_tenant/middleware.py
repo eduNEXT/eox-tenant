@@ -20,7 +20,7 @@ from opaque_keys.edx.keys import CourseKey
 from eox_tenant.edxapp_wrapper.edxmako_module import get_edxmako_module
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_configuration_helpers, get_site_configuration_models
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
-from eox_tenant.models import TenantConfigCompatibleSiteConfigurationProxyModel
+from eox_tenant.models import TenantConfigCompatibleSiteConfigurationProxyModel, TenantConfigProxy
 
 configuration_helper = get_configuration_helpers()  # pylint: disable=invalid-name
 SiteConfigurationModels = get_site_configuration_models()
@@ -104,6 +104,7 @@ class OverrideSiteConfigurationMiddleware(object):
         Get a new SiteConfiguration object with the django settings and override the previous site.configuration.
         """
         # request.site.configuration = TenantConfigCompatibleSiteConfigurationProxyModel.create_site_configuration()
+        request.site.configuration = TenantConfigProxy()
         pass
 
 
