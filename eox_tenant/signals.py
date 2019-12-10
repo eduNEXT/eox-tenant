@@ -29,7 +29,9 @@ import six
 from django.apps.config import AppConfig
 from django.conf import settings as base_settings
 
-from eox_tenant.models import TenantConfigCompatibleSiteConfigurationProxyModel
+from eox_tenant.models import TenantConfig, Microsite
+
+# from eox_tenant.models import TenantConfigCompatibleSiteConfigurationProxyModel
 
 LOG = logging.getLogger(__name__)
 
@@ -141,8 +143,27 @@ def _get_tenant_config(domain):
 
     Using the model directly introduces a circular dependency.
     That is why we go through the MicrositeBacked implementation.
+
+
+    FMO: Aquí solo hacemos la selección. Puede ser que esto lo deleguemos a alguna otra clase pero no tiene que ser la del microsite
     """
-    return TenantConfigCompatibleSiteConfigurationProxyModel.get_config_by_domain(domain)
+    configurations, external_key = TenantConfig.get_configs_for_domain(domain)
+
+    if not (configurations and external_key):
+
+        microsite = Microsite.get_microsite_for_domain(domain)
+
+        if microsite:
+            configurations = microsite.values
+            external_key = microsite.key
+        else:
+            configurations = {}
+            external_key = None
+
+    return configurations, external_key
+    # return TenantConfigCompatibleSiteConfigurationProxyModel.get_config_by_domain(domain)
+
+
 
 
 def start_tenant(sender, environ, **kwargs):  # pylint: disable=unused-argument
