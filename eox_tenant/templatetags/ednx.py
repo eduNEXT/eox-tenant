@@ -8,7 +8,7 @@ from django.templatetags.static import static
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.translation import get_language_bidi
 from eox_tenant.edxapp_wrapper.branding_api import get_branding_api
-from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_helpers
+from eox_tenant.edxapp_wrapper.site_configuration_module import get_configuration_helpers
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
 
 configuration_helpers = get_configuration_helpers()

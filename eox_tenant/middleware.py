@@ -11,15 +11,18 @@ import logging
 import re
 
 from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404, HttpResponseNotFound
 from django.utils import six
+from django.utils.deprecation import MiddlewareMixin
 
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
 
-from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_helpers
 from eox_tenant.edxapp_wrapper.edxmako_module import get_edxmako_module
+from eox_tenant.edxapp_wrapper.site_configuration_module import get_configuration_helpers
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
+from eox_tenant.monkey_patch.monkey_patch_proxys import TenantSiteConfigProxy
 
 configuration_helper = get_configuration_helpers()  # pylint: disable=invalid-name
 theming_helper = get_theming_helpers()
@@ -90,3 +93,17 @@ class AvailableScreenMiddleware(object):
                     {'domain': domain, }
                 )
             )
+
+
+class EoxTenantCurrentSiteMiddleware(MiddlewareMixin):
+    """
+    Middleware class that define the site and its configuration.
+    """
+
+    def process_request(self, request):
+        """
+        Get the current site for a given request a set the configuration.
+        """
+        site = get_current_site(request)
+        site.configuration = TenantSiteConfigProxy()
+        request.site = site

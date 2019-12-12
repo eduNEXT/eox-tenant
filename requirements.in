@@ -7,3 +7,4 @@ pylint==1.9.3
 pycodestyle==2.4.0
 mock==2.0.0
 path.py==8.2.1
+django-crum==0.7.3

@@ -36,9 +36,9 @@ def plugin_settings(settings):
     More info: https://github.com/edx/edx-platform/blob/master/openedx/core/djangoapps/plugins/README.rst
     """
     # Plugin settings.
-    settings.MICROSITES_ALL_ORGS_CACHE_KEY_TIMEOUT = 300
+    settings.EOX_TENANT_CACHE_KEY_TIMEOUT = 300
     settings.GET_BRANDING_API = 'eox_tenant.edxapp_wrapper.backends.branding_api_h_v1'
-    settings.GET_CONFIGURATION_HELPERS = 'eox_tenant.edxapp_wrapper.backends.configuration_helpers_h_v1'
+    settings.GET_SITE_CONFIGURATION_MODULE = 'eox_tenant.edxapp_wrapper.backends.site_configuration_module_i_v1'
     settings.GET_THEMING_HELPERS = 'eox_tenant.edxapp_wrapper.backends.theming_helpers_h_v1'
     settings.EOX_TENANT_EDX_AUTH_BACKEND = "eox_tenant.edxapp_wrapper.backends.edx_auth_i_v1"
     settings.EOX_TENANT_USERS_BACKEND = 'eox_tenant.edxapp_wrapper.backends.users_i_v1'
@@ -48,6 +48,7 @@ def plugin_settings(settings):
     settings.CHANGE_DOMAIN_DEFAULT_SITE_NAME = "stage.edunext.co"
     settings.EOX_TENANT_LOAD_PERMISSIONS = True
     settings.EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES = False
+    settings.USE_EOX_TENANT = True
 
     settings.EOX_TENANT_ASYNC_TASKS_HANDLER_DICT = {
         "openedx.core.djangoapps.schedules.tasks.ScheduleRecurringNudge": "get_host_from_siteid",

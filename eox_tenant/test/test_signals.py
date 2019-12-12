@@ -209,7 +209,7 @@ class SettingsOverridesTest(TestCase):
         from django.conf import settings
         settings._setup()  # pylint: disable=protected-access
 
-    @patch('eox_tenant.signals._get_tenant_config')
+    @patch('eox_tenant.signals.get_tenant_config_by_domain')
     def test_udpate_settings_mark(self, _get_config_mock):
         """
         Settings must only be updated if EDNX_USE_SIGNAL is present
@@ -224,7 +224,7 @@ class SettingsOverridesTest(TestCase):
         with self.assertRaises(AttributeError):
             settings.EDNX_TENANT_KEY  # pylint: disable=pointless-statement
 
-    @patch('eox_tenant.signals._get_tenant_config')
+    @patch('eox_tenant.signals.get_tenant_config_by_domain')
     def test_udpate_settings(self, _get_config_mock):
         """
         Settings must only be updated if EDNX_USE_SIGNAL is present
@@ -239,7 +239,7 @@ class SettingsOverridesTest(TestCase):
 
         settings.EDNX_TENANT_KEY  # pylint: disable=pointless-statement
 
-    @patch('eox_tenant.signals._get_tenant_config')
+    @patch('eox_tenant.signals.get_tenant_config_by_domain')
     def test_udpate_settings_with_property(self, _get_config_mock):
         """
         Settings must only be updated if EDNX_USE_SIGNAL is present
@@ -255,7 +255,7 @@ class SettingsOverridesTest(TestCase):
 
         self.assertEqual(settings.TEST_PROPERTY, "My value")
 
-    @patch('eox_tenant.signals._get_tenant_config')
+    @patch('eox_tenant.signals.get_tenant_config_by_domain')
     def test_udpate_settings_with_dict(self, _get_config_mock):
         """
         Settings must only be updated if EDNX_USE_SIGNAL is present
@@ -273,7 +273,7 @@ class SettingsOverridesTest(TestCase):
 
         self.assertEqual(settings.TEST_DICT.get("TEST_PROPERTY"), "My value")
 
-    @patch('eox_tenant.signals._get_tenant_config')
+    @patch('eox_tenant.signals.get_tenant_config_by_domain')
     def test_udpate_settings_with_existing_dict(self, _get_config_mock):
         """
         Settings must only be updated if EDNX_USE_SIGNAL is present

@@ -4,12 +4,14 @@ TODO: add me
 """
 import mock
 
+from django.contrib.sites.models import Site
 from django.test import TestCase, RequestFactory, override_settings
 from django.http import Http404
 
 from eox_tenant.middleware import (
     MicrositeCrossBrandingFilterMiddleware,
     AvailableScreenMiddleware,
+    EoxTenantCurrentSiteMiddleware,
 )
 
 
@@ -118,3 +120,34 @@ class AvailableScreenMiddlewareTest(TestCase):
         theming_helper_mock.is_request_in_themed_site.assert_called_once()
         http_resp_not_found_mock.assert_called_once()
         self.assertEqual(result, 'redirect_response')
+
+
+class EoxTenantCurrentSiteMiddlewareTest(TestCase):
+    """
+    Test EoxTenantCurrentSiteMiddleware.
+    """
+
+    def setUp(self):
+        """ Setup. """
+        self.request_factory = RequestFactory(SERVER_NAME='test-domain.com')
+        self.middleware_instance = EoxTenantCurrentSiteMiddleware()
+
+        Site.objects.create(
+            domain='test-domain.com',
+            name='test-site',
+        )
+
+    @mock.patch('eox_tenant.middleware.TenantSiteConfigProxy')
+    def test_override_site_configuration(self, create_site_mock):
+        """
+        Test that the Site object has the right configuration.
+        """
+        with self.settings(ALLOWED_HOSTS=['test-domain.com']):
+            request = self.request_factory.get('custom/path/')
+            new_configuration = 'new_configuration'
+            create_site_mock.return_value = new_configuration
+
+            self.middleware_instance.process_request(request)
+
+            create_site_mock.assert_called_once()
+            self.assertEqual(request.site.configuration, new_configuration)  # pylint: disable=no-member

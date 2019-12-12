@@ -1,4 +1,5 @@
 """ Backend test abstraction. """
+from eox_tenant.test_utils import TestSiteConfigurationModels
 
 
 def get_configuration_helpers():
@@ -8,3 +9,8 @@ def get_configuration_helpers():
     except ImportError:
         configuration_helpers = object
     return configuration_helpers
+
+
+def get_site_configuration_models():
+    """ Backend to get the configuration helper. """
+    return TestSiteConfigurationModels()

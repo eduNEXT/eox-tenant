@@ -6,7 +6,7 @@ from django.test import TestCase
 from mock import patch, Mock
 
 from eox_tenant.edxapp_wrapper import (
-    configuration_helpers,
+    site_configuration_module,
     get_common_util,
 )
 
@@ -16,7 +16,7 @@ class ConfigurationHelpersTest(TestCase):
     Making sure that the configuration_helpers backend works
     """
 
-    @patch('eox_tenant.edxapp_wrapper.configuration_helpers.import_module')
+    @patch('eox_tenant.edxapp_wrapper.site_configuration_module.import_module')
     def test_imported_module_is_used(self, import_mock):
         """
         Testing the backend is imported and used
@@ -24,7 +24,7 @@ class ConfigurationHelpersTest(TestCase):
         backend = Mock()
         import_mock.side_effect = backend
 
-        configuration_helpers.get_configuration_helpers()
+        site_configuration_module.get_configuration_helpers()
 
         import_mock.assert_called()
         backend.assert_called()
