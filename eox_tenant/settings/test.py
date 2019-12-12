@@ -41,6 +41,8 @@ FEATURES = {}
 FEATURES['USE_MICROSITE_AVAILABLE_SCREEN'] = False
 FEATURES['USE_REDIRECTION_MIDDLEWARE'] = False
 
+SITE_ID = 1
+
 
 def plugin_settings(settings):  # pylint: disable=function-redefined
     """

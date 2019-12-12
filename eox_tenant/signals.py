@@ -23,13 +23,13 @@ from __future__ import print_function, unicode_literals
 import logging
 import os
 from datetime import datetime
-
 import six
 
 from django.apps.config import AppConfig
 from django.conf import settings as base_settings
 
 from eox_tenant.backends.database import TenantConfigCompatibleMicrositeBackend
+from eox_tenant.async_utils import AsyncTaskHandler
 
 LOG = logging.getLogger(__name__)
 
@@ -63,6 +63,13 @@ def _update_settings(domain):
             continue
         setattr(base_settings, key, value)
 
+    # Some django apps need to be reinitialized
+    try:
+        if base_settings.EDNX_TENANT_INSTALLED_APPS:
+            _repopulate_apps(base_settings.EDNX_TENANT_INSTALLED_APPS)
+    except AttributeError:
+        pass
+
 
 def _repopulate_apps(apps):
     """
@@ -76,6 +83,20 @@ def _repopulate_apps(apps):
     for entry in apps:
         app_config = AppConfig.create(entry)
         app_config.ready()
+
+
+def can_keep_settings(domain):
+    """
+    Find what we need to do about the current setting and the incoming request.domain
+    and Reset settings if needed.
+    """
+    must_reset, can_keep = _analyze_current_settings(domain)
+
+    if _ttl_reached() or must_reset:  # Perform the reset
+        _perform_reset()
+        can_keep = False
+
+    return can_keep
 
 
 def _analyze_current_settings(domain):
@@ -174,29 +195,11 @@ def start_tenant(sender, environ, **kwargs):  # pylint: disable=unused-argument
 
     domain = http_host.split(':')[0]
 
-    # Find what we need to do about the current setting and the incoming request.domain
-    must_reset, can_keep = _analyze_current_settings(domain)
-
-    # Reset minimum once every so often
-    must_reset = _ttl_reached() or must_reset
-
-    # Perform the reset
-    if must_reset:
-        _perform_reset()
-        can_keep = False
-
-    if can_keep:
+    if can_keep_settings(domain):
         return
 
     # Do the update
     _update_settings(domain)
-
-    # Some django apps need to be reinitialized
-    try:
-        if base_settings.EDNX_TENANT_INSTALLED_APPS:
-            _repopulate_apps(base_settings.EDNX_TENANT_INSTALLED_APPS)
-    except AttributeError:
-        pass
 
 
 def finish_tenant(sender, **kwargs):  # pylint: disable=unused-argument
@@ -217,3 +220,39 @@ def clear_tenant(sender, request, **kwargs):  # pylint: disable=unused-argument
     Signal: django.core.signals.got_request_exception
     """
     pass
+
+
+def tenant_context_addition(sender, body, headers, *args, **kwargs):  # pylint: disable=unused-argument
+    """
+    Receiver used to add context to the async process about the tenant associated to the task that need to be done.
+
+    Dispatched before a celery task is published. Note that this is executed in the process sending the task.
+    See:
+        https://celery.readthedocs.io/en/latest/userguide/signals.html#before-task-publish
+    """
+    get_host_func = AsyncTaskHandler().get_host_from_task(sender)
+    headers['eox_tenant_sender'] = get_host_func(body)
+
+
+def start_async_tenant(sender, *args, **kwargs):  # pylint: disable=unused-argument
+    """
+    Receiver that runs on the async process to update the settings accordingly to the tenant.
+    Dispatched before a task is executed.
+    See:
+       https://celery.readthedocs.io/en/latest/userguide/signals.html#task-prerun
+    """
+    headers = sender.request.get('headers') or {}
+    http_host = headers.get('eox_tenant_sender')
+
+    if not http_host:  # Reset settings in case of no tenant.
+        LOG.warning("Could not find the host information for eox_tenant.signals. ")
+        _perform_reset()
+        return
+
+    domain = http_host
+
+    if can_keep_settings(domain):
+        return
+
+    # Do the update
+    _update_settings(domain)

@@ -40,6 +40,14 @@ class EdunextOpenedxExtensionsTenantConfig(AppConfig):
                         'receiver_func_name': 'clear_tenant',
                         'signal_path': 'django.core.signals.got_request_exception',
                     },
+                    {
+                        'receiver_func_name': 'tenant_context_addition',
+                        'signal_path': 'celery.signals.before_task_publish',
+                    },
+                    {
+                        'receiver_func_name': 'start_async_tenant',
+                        'signal_path': 'celery.signals.task_prerun',
+                    },
                 ],
             }
         },
