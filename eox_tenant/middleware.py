@@ -22,7 +22,7 @@ from opaque_keys.edx.keys import CourseKey
 from eox_tenant.edxapp_wrapper.edxmako_module import get_edxmako_module
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_configuration_helpers
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
-from eox_tenant.monkey_patch.monkey_patch_proxys import TenantSiteConfigProxy
+from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy
 
 configuration_helper = get_configuration_helpers()  # pylint: disable=invalid-name
 theming_helper = get_theming_helpers()
@@ -95,9 +95,14 @@ class AvailableScreenMiddleware(object):
             )
 
 
-class EoxTenantCurrentSiteMiddleware(MiddlewareMixin):
+class CurrentSiteMiddleware(MiddlewareMixin):
     """
-    Middleware class that define the site and its configuration.
+    Middleware class that defines the site and its configuration.
+
+    This is a replacement of  <django.contrib.sites.middleware.CurrentSiteMiddleware>
+    that uses as configuration the model TenantSiteConfigProxy.
+
+    Original middleware info in https://docs.djangoproject.com/en/1.11/_modules/django/contrib/sites/middleware/
     """
 
     def process_request(self, request):

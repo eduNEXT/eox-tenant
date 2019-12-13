@@ -6,21 +6,9 @@ that would have been used in the settings.
 import collections
 import json
 
-from django.conf import settings
 from django.db import connection, models
 from django.utils.translation import ugettext_lazy as _
 from jsonfield.fields import JSONField
-
-from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
-
-SiteConfigurationModels = get_site_configuration_models()
-TENANT_ALL_ORGS_CACHE_KEY = "tenant.all_orgs_list"
-EOX_TENANT_CACHE_KEY_TIMEOUT = getattr(
-    settings,
-    "EOX_TENANT__CACHE_KEY_TIMEOUT",
-    300
-)
-TENANT_MICROSITES_ITERATOR_KEY = "tenant-microsites-iterator"
 
 
 class Microsite(models.Model):

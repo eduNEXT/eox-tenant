@@ -58,8 +58,8 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         settings.SITE_ID
     )
 
-    if DJANGO_CURRENT_SITE_MIDDLEWARE in settings.MIDDLEWARE_CLASSES:
-        settings.MIDDLEWARE_CLASSES[settings.MIDDLEWARE_CLASSES.index(DJANGO_CURRENT_SITE_MIDDLEWARE)] = 'eox_tenant.middleware.EoxTenantCurrentSiteMiddleware'  # pylint: disable=line-too-long
+    if DJANGO_CURRENT_SITE_MIDDLEWARE in settings.MIDDLEWARE_CLASSES and getattr(settings, 'USE_EOX_TENANT', False):
+        settings.MIDDLEWARE_CLASSES[settings.MIDDLEWARE_CLASSES.index(DJANGO_CURRENT_SITE_MIDDLEWARE)] = 'eox_tenant.middleware.CurrentSiteMiddleware'  # pylint: disable=line-too-long
 
     if settings.SERVICE_VARIANT == "lms":
         if settings.EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES:

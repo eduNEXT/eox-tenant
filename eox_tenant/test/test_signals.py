@@ -165,7 +165,7 @@ class StartTenantSignalTest(TestCase):
 
         _repopulate_mock.assert_not_called()
 
-    @patch('eox_tenant.signals._get_tenant_config')
+    @patch('eox_tenant.signals.get_tenant_config_by_domain')
     @patch('eox_tenant.signals._repopulate_apps')
     def test__repopulate_apps_called(self, _repopulate_mock, _get_config_mock):
         """

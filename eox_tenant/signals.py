@@ -28,7 +28,6 @@ import six
 from django.apps.config import AppConfig
 from django.conf import settings as base_settings
 
-from eox_tenant.backends.database import TenantConfigCompatibleMicrositeBackend
 from eox_tenant.async_utils import AsyncTaskHandler
 from eox_tenant.receivers_helpers import get_tenant_config_by_domain
 

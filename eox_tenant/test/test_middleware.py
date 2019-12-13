@@ -11,7 +11,7 @@ from django.http import Http404
 from eox_tenant.middleware import (
     MicrositeCrossBrandingFilterMiddleware,
     AvailableScreenMiddleware,
-    EoxTenantCurrentSiteMiddleware,
+    CurrentSiteMiddleware,
 )
 
 
@@ -122,15 +122,15 @@ class AvailableScreenMiddlewareTest(TestCase):
         self.assertEqual(result, 'redirect_response')
 
 
-class EoxTenantCurrentSiteMiddlewareTest(TestCase):
+class CurrentSiteMiddlewareTest(TestCase):
     """
-    Test EoxTenantCurrentSiteMiddleware.
+    Test eox-tenant CurrentSiteMiddleware.
     """
 
     def setUp(self):
         """ Setup. """
         self.request_factory = RequestFactory(SERVER_NAME='test-domain.com')
-        self.middleware_instance = EoxTenantCurrentSiteMiddleware()
+        self.middleware_instance = CurrentSiteMiddleware()
 
         Site.objects.create(
             domain='test-domain.com',

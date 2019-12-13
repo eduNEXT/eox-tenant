@@ -1,10 +1,10 @@
 """
-Test file to store the monkey_patch test module.
+Test file to store the tenant_wise test module.
 """
 from __future__ import absolute_import
 from django.test import TestCase
 
-from eox_tenant.monkey_patch.monkey_patch_proxys import TenantSiteConfigProxy
+from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy
 from eox_tenant.models import Microsite, TenantConfig
 
 
@@ -105,14 +105,14 @@ class TenantSiteConfigProxyTest(TestCase):
         Test that a new TenantSiteConfigProxy instance is created with
         the current settings.
         """
-        with self.settings(USE_EOX_TENANT=False, EDNX_USE_SIGNAL=False):
+        with self.settings(EDNX_USE_SIGNAL=False):
             site_configuration = TenantSiteConfigProxy()
             self.assertFalse(site_configuration.enabled)
-            self.assertFalse(site_configuration.get_value("USE_EOX_TENANT"))
+            self.assertFalse(site_configuration.get_value("EDNX_TENANT_KEY"))
             self.assertFalse(site_configuration.get_value("EDNX_USE_SIGNAL"))
 
-        with self.settings(USE_EOX_TENANT=True, EDNX_USE_SIGNAL=True):
+        with self.settings(EDNX_TENANT_KEY="test-key", EDNX_USE_SIGNAL=True):
             site_configuration = TenantSiteConfigProxy()
             self.assertTrue(site_configuration.enabled)
-            self.assertTrue(site_configuration.get_value("USE_EOX_TENANT"))
+            self.assertTrue(site_configuration.get_value("EDNX_TENANT_KEY"))
             self.assertTrue(site_configuration.get_value("EDNX_USE_SIGNAL"))

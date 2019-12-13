@@ -1,6 +1,7 @@
 """
 Common utilities for use along signals file.
 """
+from django.conf import settings
 
 from eox_tenant.models import TenantConfig, Microsite
 
@@ -15,35 +16,19 @@ def get_tenant_config_by_domain(domain):
     **Returns**
         configurations: dict
         external_key: String
-
-        **Example**
-
-            configuration = {
-                "EDNX_USE_SIGNAL":True,
-                "ENABLE_MKTG_SITE":True,
-                "LMS_ROOT_URL":"http://courses.www.localhost:18000/",
-                "SESSION_COOKIE_DOMAIN":".www.localhost",
-                "SITE_NAME":"courses.www.localhost:18000",
-                "MKTG_URLS":{
-                    "ABOUT":"about",
-                    "BLOG":"",
-                }
-                ...
-            }
-
-            external_key = "this_is_my_key"
     """
+    if not getattr(settings, 'USE_EOX_TENANT', False):
+        return {}, None
+
     configurations, external_key = TenantConfig.get_configs_for_domain(domain)
 
-    if not (configurations and external_key):
+    if configurations and external_key:
+        return configurations, external_key
 
-        microsite = Microsite.get_microsite_for_domain(domain)
+    microsite = Microsite.get_microsite_for_domain(domain)
 
-        if microsite:
-            configurations = microsite.values
-            external_key = microsite.key
-        else:
-            configurations = {}
-            external_key = None
+    if microsite:
+        configurations = microsite.values
+        external_key = microsite.key
 
     return configurations, external_key

@@ -1,5 +1,5 @@
 """
-Monkey patch proxys that allows to override the platform models.
+Tenant wise proxies that allows to override the platform models.
 """
 import logging
 import json
@@ -35,15 +35,17 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         proxy = True
 
     def __unicode__(self):
-        key = getattr(settings, "USE_EOX_TENANT", "No tenant is active at the moment")
+        key = getattr(settings, "EDNX_TENANT_KEY", "No tenant is active at the moment")
         return u"<Tenant proxy as site_configuration: {}>".format(key)
 
     @property
     def enabled(self):
         """
-        Return the value of USE_EOX_TENANT to activate site_configurations.
+        Return True if EDNX_TENANT_KEY is in the current settings.
         """
-        return getattr(settings, "USE_EOX_TENANT", False)
+        if getattr(settings, 'EDNX_TENANT_KEY', None):
+            return True
+        return False
 
     @enabled.setter
     def enabled(self, value):
