@@ -59,3 +59,6 @@ class EdunextOpenedxExtensionsTenantConfig(AppConfig):
         """
         from eox_tenant.permissions import load_permissions
         load_permissions()
+
+        from eox_tenant.tenant_wise import load_tenant_wise_overrides
+        load_tenant_wise_overrides()

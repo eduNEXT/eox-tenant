@@ -6,9 +6,8 @@ that would have been used in the settings.
 import collections
 import json
 
-from django.db import models, connection
+from django.db import connection, models
 from django.utils.translation import ugettext_lazy as _
-
 from jsonfield.fields import JSONField
 
 

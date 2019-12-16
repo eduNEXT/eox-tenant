@@ -122,11 +122,12 @@ class TenantAwareAuthBackendTest(TestCase):
         FEATURES={
             'EDNX_ENABLE_STRICT_LOGIN': True
         })
+    @mock.patch('crum.get_current_request')
     @mock.patch('eox_tenant.edxapp_wrapper.auth.get_edx_auth_failed')
     @mock.patch('eox_tenant.edxapp_wrapper.auth.get_edx_auth_backend')
     @mock.patch('eox_tenant.test_utils.test_theming_helpers.get_current_request')
     def test_authentication_without_signupsource(self, edx_get_current_request_mock,
-                                                 edx_auth_backend_mock, edx_auth_failed_mock):
+                                                 edx_auth_backend_mock, edx_auth_failed_mock, crum_mock):
         """
         Test if the user can authenticate in a domain where the user does not have signupsource
         """
@@ -139,6 +140,7 @@ class TenantAwareAuthBackendTest(TestCase):
         request.META['HTTP_HOST'] = http_host
 
         edx_get_current_request_mock.return_value = request
+        crum_mock.return_value = request
 
         from eox_tenant.auth import TenantAwareAuthBackend
 
@@ -187,11 +189,12 @@ class TenantAwareAuthBackendTest(TestCase):
         FEATURES={
             'EDNX_ENABLE_STRICT_LOGIN': True
         })
+    @mock.patch('crum.get_current_request')
     @mock.patch('eox_tenant.edxapp_wrapper.auth.get_edx_auth_failed')
     @mock.patch('eox_tenant.edxapp_wrapper.auth.get_edx_auth_backend')
     @mock.patch('eox_tenant.test_utils.test_theming_helpers.get_current_request')
     def test_authentication_without_allowed_patterns(self, edx_get_current_request_mock,
-                                                     edx_auth_backend_mock, edx_auth_failed_mock):
+                                                     edx_auth_backend_mock, edx_auth_failed_mock, crum_mock):
         """
         Test if the user can authenticate using an email that does not match with the allowed patterns
         """
@@ -204,6 +207,7 @@ class TenantAwareAuthBackendTest(TestCase):
         request.META['HTTP_HOST'] = http_host
 
         edx_get_current_request_mock.return_value = request
+        crum_mock.return_value = request
 
         from eox_tenant.auth import TenantAwareAuthBackend
 

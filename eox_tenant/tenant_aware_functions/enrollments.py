@@ -4,7 +4,7 @@ Microsite aware enrollments filter.
 
 from django.conf import settings
 
-from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_helpers
+from eox_tenant.edxapp_wrapper.site_configuration_module import get_configuration_helpers
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
 
 

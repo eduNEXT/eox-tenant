@@ -23,8 +23,7 @@ for app in TEST_INSTALLED_APPS:
     if app not in INSTALLED_APPS:
         INSTALLED_APPS.append(app)
 
-MICROSITE_CONFIGURATION_BACKEND = 'eox_tenant.edxapp_wrapper.backends.microsite_configuration_test_v1'
-GET_CONFIGURATION_HELPERS = 'eox_tenant.edxapp_wrapper.backends.configuration_helpers_test_v1'
+GET_SITE_CONFIGURATION_MODULE = 'eox_tenant.edxapp_wrapper.backends.site_configuration_module_test_v1'
 GET_THEMING_HELPERS = 'eox_tenant.edxapp_wrapper.backends.theming_helpers_test_v1'
 
 COURSE_KEY_PATTERN = r'(?P<course_key_string>[^/+]+(/|\+)[^/+]+(/|\+)[^/?]+)'
@@ -40,6 +39,7 @@ EOX_TENANT_LOAD_PERMISSIONS = True
 FEATURES = {}
 FEATURES['USE_MICROSITE_AVAILABLE_SCREEN'] = False
 FEATURES['USE_REDIRECTION_MIDDLEWARE'] = False
+USE_EOX_TENANT = True
 
 SITE_ID = 1
 
@@ -48,12 +48,9 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     """
     For the platform tests, we want everything to be disabled
     """
-    settings.MICROSITE_BACKEND = 'eox_tenant.backends.base.BaseMicrositeBackend'
-    settings.MICROSITE_TEMPLATE_BACKEND = \
-        'eox_tenant.backends.base.BaseMicrositeTemplateBackend'
     settings.FEATURES['USE_MICROSITE_AVAILABLE_SCREEN'] = False
     settings.FEATURES['USE_REDIRECTION_MIDDLEWARE'] = False
-    settings.GET_CONFIGURATION_HELPERS = 'eox_tenant.edxapp_wrapper.backends.configuration_helpers_test_v1'
+    settings.GET_SITE_CONFIGURATION_MODULE = 'eox_tenant.edxapp_wrapper.backends.site_configuration_module_test_v1'
     settings.GET_THEMING_HELPERS = 'eox_tenant.edxapp_wrapper.backends.theming_helpers_test_v1'
     settings.EOX_TENANT_SKIP_FILTER_FOR_TESTS = True
     settings.EOX_TENANT_LOAD_PERMISSIONS = False

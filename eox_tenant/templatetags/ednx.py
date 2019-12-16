@@ -2,17 +2,17 @@
 Template tags and helper functions for displaying breadcrumbs in page titles
 based on the current micro site.
 """
+import warnings
+
 from django import template
 from django.conf import settings
 from django.templatetags.static import static
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.utils.translation import get_language_bidi
-from eox_tenant.edxapp_wrapper.get_microsite_configuration import get_microsite
 from eox_tenant.edxapp_wrapper.branding_api import get_branding_api
-from eox_tenant.edxapp_wrapper.configuration_helpers import get_configuration_helpers
+from eox_tenant.edxapp_wrapper.site_configuration_module import get_configuration_helpers
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
 
-microsite = get_microsite()  # pylint: disable=invalid-name
 configuration_helpers = get_configuration_helpers()
 branding_api = get_branding_api()
 theming_helpers = get_theming_helpers()
@@ -37,6 +37,11 @@ def microsite_css_overrides_file():
     {% microsite_css_overrides_file %}
     DEPRECATED: use tenant_css_overrides_file tag instead
     """
+    warnings.warn(
+        "microsite_css_overrides_file, use tenant_css_overrides_file tag instead.",
+        DeprecationWarning
+    )
+
     if get_language_bidi():
         file_path = configuration_helpers.get_value(
             'css_overrides_file_rtl',
@@ -57,6 +62,11 @@ def microsite_rtl_tag():
     Django template tag that outputs the direction string for rtl support
     DEPRECATED: use tenant_rtl_tag tag instead
     """
+    warnings.warn(
+        "microsite_rtl_tag, use tenant_rtl_tag tag instead.",
+        DeprecationWarning
+    )
+
     return 'rtl' if get_language_bidi() else 'ltr'
 
 
@@ -66,6 +76,11 @@ def microsite_template_path(template_name):
     Django template filter to apply template overriding to microsites
     DEPRECATED: use tenant_template_path filter instead
     """
+    warnings.warn(
+        "microsite_template_path, use tenant_template_path filter instead.",
+        DeprecationWarning
+    )
+
     return theming_helpers.get_template_path(template_name)
 
 
@@ -75,6 +90,11 @@ def microsite_get_value(value, *args, **kwargs):  # pylint: disable=unused-argum
     Django template filter that wraps the configuration_helpers.get_value function
     DEPRECATED: use tenant_get_value tag instead
     """
+    warnings.warn(
+        "microsite_get_value, use tenant_get_value tag instead.",
+        DeprecationWarning
+    )
+
     default = kwargs.get('default', None)
     return configuration_helpers.get_value(value, default)
 

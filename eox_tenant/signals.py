@@ -28,8 +28,8 @@ import six
 from django.apps.config import AppConfig
 from django.conf import settings as base_settings
 
-from eox_tenant.backends.database import TenantConfigCompatibleMicrositeBackend
 from eox_tenant.async_utils import AsyncTaskHandler
+from eox_tenant.receivers_helpers import get_tenant_config_by_domain
 
 LOG = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ def _update_settings(domain):
     """
     Perform the override procedure on the settings object
     """
-    config, tenant_key = _get_tenant_config(domain)
+    config, tenant_key = get_tenant_config_by_domain(domain)
 
     if not config.get("EDNX_USE_SIGNAL"):
         LOG.info("Site %s, does not use eox_tenant signals", domain)
@@ -154,17 +154,6 @@ def _ttl_reached():
         pass
 
     return False
-
-
-def _get_tenant_config(domain):
-    """
-    Reach for the configuration for a given domain
-
-    Using the model directly introduces a circular dependency.
-    That is why we go through the MicrositeBacked implementation.
-    """
-    backend = TenantConfigCompatibleMicrositeBackend()
-    return backend.get_config_by_domain(domain)
 
 
 def start_tenant(sender, environ, **kwargs):  # pylint: disable=unused-argument
