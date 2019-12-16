@@ -1,18 +1,21 @@
 """
 Tenant wise proxies that allows to override the platform models.
 """
-import logging
 import json
+import logging
 from itertools import chain
 
 import six
 from django.conf import settings
 from django.core.cache import cache
+from django.db import models
 
+from eox_tenant.edxapp_wrapper.certificates_module import get_certificates_models
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
-from eox_tenant.models import TenantConfig, Microsite
+from eox_tenant.models import Microsite, TenantConfig
 
 SiteConfigurationModels = get_site_configuration_models()
+CertificatesModels = get_certificates_models()
 TENANT_ALL_ORGS_CACHE_KEY = "tenant.all_orgs_list"
 EOX_TENANT_CACHE_KEY_TIMEOUT = getattr(
     settings,
@@ -160,3 +163,62 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
             value,
             EOX_TENANT_CACHE_KEY_TIMEOUT
         )
+
+
+class TenantCertificateManager(models.Manager):
+    """
+    Custom Manager Class that allows to override the get_queryset
+    method in order to filter the results by org.
+    """
+
+    def get_queryset(self):
+        """
+        Call parent method and filter the certificates by org.
+        """
+        generated_certificates = super(TenantCertificateManager, self).get_queryset()
+        excluded_courses = [
+            certificate.course_id
+            for certificate in generated_certificates
+            if certificate.course_id.org not in getattr(settings, "course_org_filter", [])
+        ]
+        return generated_certificates.exclude(course_id__in=excluded_courses)
+
+
+class TenantEligibleCertificateManager(TenantCertificateManager):
+    """
+    A manager for `GeneratedCertificate` models that automatically
+    filters out ineligible certs.
+
+    This class is very similar to <lms.djangoapps.certificates.models.EligibleCertificateManager>
+    and the purpose is the same but the parent class is different.
+    """
+
+    def get_queryset(self):
+        """
+        Return a queryset for `GeneratedCertificate` models, filtering out
+        ineligible certificates.
+        """
+        certificates_statuses = CertificatesModels.CertificateStatuses
+        return super(TenantEligibleCertificateManager, self).get_queryset().exclude(
+            status__in=(certificates_statuses.audit_passing, certificates_statuses.audit_notpassing)
+        )
+
+
+class TenantGeneratedCertificateProxy(CertificatesModels.GeneratedCertificate):
+    """
+    Proxy model for <lms.djangoapps.certificates.models.GeneratedCertificate>.
+
+    The purpose of this is to override the GeneratedCertificate managers.
+    More information in https://docs.djangoproject.com/en/3.0/topics/db/models/#proxy-models
+    """
+
+    eligible_certificates = TenantEligibleCertificateManager()
+    objects = TenantCertificateManager()
+
+    class Meta:
+        """ Set as a proxy model. """
+        proxy = True
+
+    def __unicode__(self):
+        key = getattr(settings, "EDNX_TENANT_KEY", "No tenant is active at the moment")
+        return u"<Tenant proxy as GeneratedCertificate: {}>".format(key)

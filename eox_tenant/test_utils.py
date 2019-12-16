@@ -1,6 +1,34 @@
 """
 Utils to run tests
 """
+from django.db import models
+from django_fake_model import models as fake
+
+
+class CourseFakeModel(fake.FakeModel):
+    """
+    Fake Model for course.
+    """
+
+    org = models.CharField(max_length=400)
+
+
+class CertificatesFakeModel(fake.FakeModel):
+    """
+    Fake Model for certificates.
+    """
+
+    course_id = models.ForeignKey(CourseFakeModel)
+    status = models.CharField(max_length=32, default='unavailable')
+
+
+class TestCertificateStatuses(object):
+    """
+    Test Enum for certificate statuses
+    """
+    generating = 'generating'
+    audit_passing = 'audit_passing'
+    audit_notpassing = 'audit_notpassing'
 
 
 class test_theming_helpers(object):
@@ -20,3 +48,12 @@ class TestSiteConfigurationModels(object):
     """
 
     SiteConfiguration = object
+
+
+class TestCertificatesModels(object):
+    """
+    Test class for SiteConfigurationModels.
+    """
+
+    GeneratedCertificate = CertificatesFakeModel
+    CertificateStatuses = TestCertificateStatuses

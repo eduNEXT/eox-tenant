@@ -9,6 +9,7 @@ backports.functools-lru-cache==1.5  # via astroid, pylint
 configparser==3.5.0       # via pylint
 coverage==4.5.1
 django-crum==0.7.3
+django-fake-model==0.1.4
 django==1.11.23
 edx-opaque-keys==0.4.4
 enum34==1.1.6             # via astroid
