@@ -26,16 +26,6 @@ class StartTenantSignalTest(TestCase):
     Testing the signal sent at the start of every request
     """
 
-    def test_nothing_changes_studio(self):
-        """
-        The cms should return immediately, just one call must be made it,
-        in order to get the HTTP_HOST from environ variable.
-        """
-        environ = MagicMock()
-        with self.settings(SERVICE_VARIANT='cms'):
-            start_tenant(None, environ)
-            environ.get.assert_called_once()
-
     @patch('eox_tenant.signals._analyze_current_settings')
     @patch('eox_tenant.signals._perform_reset')
     @patch('eox_tenant.signals._update_settings')
