@@ -23,6 +23,7 @@ for app in TEST_INSTALLED_APPS:
     if app not in INSTALLED_APPS:
         INSTALLED_APPS.append(app)
 
+GET_CERTIFICATES_MODULE = 'eox_tenant.edxapp_wrapper.backends.certificates_module_test_v1'
 GET_SITE_CONFIGURATION_MODULE = 'eox_tenant.edxapp_wrapper.backends.site_configuration_module_test_v1'
 GET_THEMING_HELPERS = 'eox_tenant.edxapp_wrapper.backends.theming_helpers_test_v1'
 

@@ -4,8 +4,9 @@ Test file to store the tenant_wise test module.
 from __future__ import absolute_import
 from django.test import TestCase
 
-from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy
+from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy, TenantGeneratedCertificateProxy
 from eox_tenant.models import Microsite, TenantConfig
+from eox_tenant.test_utils import CertificatesFakeModel, CourseFakeModel, TestCertificateStatuses
 
 
 class TenantSiteConfigProxyTest(TestCase):
@@ -116,3 +117,42 @@ class TenantSiteConfigProxyTest(TestCase):
             self.assertTrue(site_configuration.enabled)
             self.assertTrue(site_configuration.get_value("EDNX_TENANT_KEY"))
             self.assertTrue(site_configuration.get_value("EDNX_USE_SIGNAL"))
+
+
+@CourseFakeModel.fake_me
+@CertificatesFakeModel.fake_me
+class TenantGeneratedCertificateProxyTest(TestCase):
+    """
+    Test TenantGeneratedCertificateProxy.
+    """
+
+    def test_certificates_managers(self):
+        """
+        This verifies that all the returned objects are filtered by org.
+        """
+        TenantGeneratedCertificateProxy.objects.create(
+            course_id=CourseFakeModel.objects.create(org="test-org"),  # pylint: disable=no-member
+            status=TestCertificateStatuses.generating
+        )
+
+        TenantGeneratedCertificateProxy.objects.create(
+            course_id=CourseFakeModel.objects.create(org="test-org1"),  # pylint: disable=no-member
+            status=TestCertificateStatuses.audit_notpassing
+        )
+
+        TenantGeneratedCertificateProxy.objects.create(
+            course_id=CourseFakeModel.objects.create(org="test-org"),  # pylint: disable=no-member
+            status=TestCertificateStatuses.audit_passing
+        )
+
+        with self.settings(course_org_filter=["test-org1"]):
+            generated_certificates = TenantGeneratedCertificateProxy.objects.all()
+            self.assertEqual(len(generated_certificates), 1)
+            generated_certificates = TenantGeneratedCertificateProxy.eligible_certificates.all()
+            self.assertEqual(len(generated_certificates), 0)
+
+        with self.settings(course_org_filter=["test-org"]):
+            generated_certificates = TenantGeneratedCertificateProxy.objects.all()
+            self.assertEqual(len(generated_certificates), 2)
+            generated_certificates = TenantGeneratedCertificateProxy.eligible_certificates.all()
+            self.assertEqual(len(generated_certificates), 1)
