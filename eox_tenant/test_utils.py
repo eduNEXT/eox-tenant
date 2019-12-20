@@ -2,24 +2,28 @@
 Utils to run tests
 """
 from django.db import models
-from django_fake_model import models as fake
 
+try:
+    from django_fake_model import models as fake
 
-class CourseFakeModel(fake.FakeModel):
-    """
-    Fake Model for course.
-    """
+    class CourseFakeModel(fake.FakeModel):
+        """
+        Fake Model for course.
+        """
 
-    org = models.CharField(max_length=400)
+        org = models.CharField(max_length=400)
 
+    class CertificatesFakeModel(fake.FakeModel):
+        """
+        Fake Model for certificates.
+        """
 
-class CertificatesFakeModel(fake.FakeModel):
-    """
-    Fake Model for certificates.
-    """
+        course_id = models.ForeignKey(CourseFakeModel)
+        status = models.CharField(max_length=32, default='unavailable')
 
-    course_id = models.ForeignKey(CourseFakeModel)
-    status = models.CharField(max_length=32, default='unavailable')
+except ImportError:
+    CourseFakeModel = object
+    CertificatesFakeModel = object
 
 
 class TestCertificateStatuses(object):

@@ -223,6 +223,9 @@ def start_async_tenant(sender, *args, **kwargs):  # pylint: disable=unused-argum
     See:
        https://celery.readthedocs.io/en/latest/userguide/signals.html#task-prerun
     """
+    if not getattr(base_settings, "USE_EOX_TENANT", False):
+        return
+
     headers = sender.request.get('headers') or {}
     http_host = headers.get('eox_tenant_sender')
 
