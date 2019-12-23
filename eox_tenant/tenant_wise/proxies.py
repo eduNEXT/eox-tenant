@@ -90,14 +90,14 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         if not cls.has_configuration_set():
             return org_filter_set
 
-        tenant_config = TenantConfig.objects.values_list("lms_configs")
-        microsite_config = Microsite.objects.values_list("values")  # pylint: disable=no-member
+        tenant_config = TenantConfig.objects.values_list("lms_configs", flat=True)
+        microsite_config = Microsite.objects.values_list("values", flat=True)  # pylint: disable=no-member
 
         for config in chain(tenant_config, microsite_config):
             try:
-                current = json.loads(config[0])
+                current = json.loads(config)
                 org_filter = current.get("course_org_filter", {})
-            except IndexError:
+            except AttributeError:
                 continue
 
             if org_filter and isinstance(org_filter, list):
@@ -128,14 +128,14 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
 
         result = None
         source = "lms_configs" if getattr(settings, "SERVICE_VARIANT", "lms") == "lms" else "studio_configs"
-        tenant_config = TenantConfig.objects.values_list(source)
-        microsite_config = Microsite.objects.values_list("values")  # pylint: disable=no-member
+        tenant_config = TenantConfig.objects.values_list(source, flat=True)
+        microsite_config = Microsite.objects.values_list("values", flat=True)  # pylint: disable=no-member
 
         for config in chain(tenant_config, microsite_config):
             try:
-                current = json.loads(config[0])
+                current = json.loads(config)
                 org_filter = current.get("course_org_filter", {})
-            except IndexError:
+            except AttributeError:
                 continue
 
             if org_filter:
