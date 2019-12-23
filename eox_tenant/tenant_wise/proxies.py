@@ -126,7 +126,9 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         if cached_value:
             return cached_value
 
-        tenant_config = TenantConfig.objects.values_list("lms_configs")
+        result = None
+        source = "lms_configs" if settings.SERVICE_VARIANT == "lms" else "studio_configs"
+        tenant_config = TenantConfig.objects.values_list(source)
         microsite_config = Microsite.objects.values_list("values")  # pylint: disable=no-member
 
         for config in chain(tenant_config, microsite_config):
@@ -139,12 +141,19 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
             if org_filter:
                 if isinstance(org_filter, six.string_types):
                     org_filter = set([org_filter])
-                if org in org_filter:
-                    result = current.get(val_name, default)
-                    cls.set_key_to_cache(cache_key, result)
-                    return result
 
-        return default
+                for organization in org_filter:
+                    if org == organization:
+                        result = current.get(val_name, default)
+
+                    key = "org-value-{}-{}".format(organization, val_name)
+                    cls.set_key_to_cache(key, current.get(val_name, default))
+
+        if not result:
+            cls.set_key_to_cache(cache_key, default)
+            result = default
+
+        return result
 
     @classmethod
     def has_configuration_set(cls):
