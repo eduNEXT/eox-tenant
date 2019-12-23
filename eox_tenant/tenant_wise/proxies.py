@@ -143,7 +143,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
                     org_filter = set([org_filter])
 
                 for organization in org_filter:
-                    if org == organization:
+                    if org == organization and not result:
                         result = current.get(val_name, default)
 
                     key = "org-value-{}-{}".format(organization, val_name)
