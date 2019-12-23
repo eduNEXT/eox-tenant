@@ -127,7 +127,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
             return cached_value
 
         result = None
-        source = "lms_configs" if settings.SERVICE_VARIANT == "lms" else "studio_configs"
+        source = "lms_configs" if getattr(settings, "SERVICE_VARIANT", "lms") == "lms" else "studio_configs"
         tenant_config = TenantConfig.objects.values_list(source)
         microsite_config = Microsite.objects.values_list("values")  # pylint: disable=no-member
 
@@ -150,6 +150,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
                     cls.set_key_to_cache(key, current.get(val_name, default))
 
         if not result:
+            logger.warning("Tha value for %s and org %s has not been found", val_name, org)
             cls.set_key_to_cache(cache_key, default)
             result = default
 
