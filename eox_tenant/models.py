@@ -26,24 +26,16 @@ class MicrositeManager(models.Manager):
         Returns:
             The value for the given key and org.
         """
-        with connection.cursor() as cursor:
-            cursor.execute(
-                """
-                SELECT
-                    JSON_EXTRACT(`values`, '$.{key}')
-                FROM
-                    ednx_microsites_microsite
-                WHERE
-                    JSON_EXTRACT(`values`, "$.course_org_filter") like '%"{org}"%';
-                """.format(key=key, org=org)
-            )
-            row = cursor.fetchone()
+        query = """
+            SELECT
+                JSON_EXTRACT(`values`, '$.{key}')
+            FROM
+                ednx_microsites_microsite
+            WHERE
+                  JSON_EXTRACT(`values`, "$.course_org_filter") like '%"{org}"%';
+            """.format(key=key, org=org)
 
-            if row and row[0]:
-                try:
-                    return json.loads(row[0])
-                except Exception:  # pylint: disable=broad-except
-                    return row[0]
+        return _execute_simple_query(query)
 
 
 class Microsite(models.Model):
@@ -150,24 +142,16 @@ class TenantConfigManager(models.Manager):
         Returns:
             The value for the given key and org.
         """
-        with connection.cursor() as cursor:
-            cursor.execute(
-                """
-                SELECT
-                    JSON_EXTRACT(`lms_configs`, '$.{key}')
-                FROM
-                    eox_tenant_tenantconfig
-                WHERE
-                    JSON_EXTRACT(`lms_configs`, "$.course_org_filter") like '%"{org}"%';
-                """.format(key=key, org=org)
-            )
-            row = cursor.fetchone()
+        query = """
+            SELECT
+                JSON_EXTRACT(`lms_configs`, '$.{key}')
+            FROM
+                eox_tenant_tenantconfig
+            WHERE
+                JSON_EXTRACT(`lms_configs`, "$.course_org_filter") like '%"{org}"%';
+            """.format(key=key, org=org)
 
-            if row and row[0]:
-                try:
-                    return json.loads(row[0])
-                except Exception:  # pylint: disable=broad-except
-                    return row[0]
+        return _execute_simple_query(query)
 
 
 class TenantConfig(models.Model):
@@ -241,3 +225,20 @@ class Route(models.Model):
         Model meta class.
         """
         app_label = "eox_tenant"
+
+
+def _execute_simple_query(query):
+    """
+    Execute the given query a return the first value for the first row.
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        row = cursor.fetchone()
+
+        if row and row[0]:
+            try:
+                return json.loads(row[0])
+            except Exception:  # pylint: disable=broad-except
+                return row[0]
+
+    return None
