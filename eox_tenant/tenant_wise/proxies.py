@@ -5,7 +5,6 @@ import json
 import logging
 from itertools import chain
 
-import six
 from django.conf import settings
 from django.core.cache import cache
 from django.db import models
@@ -126,33 +125,15 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         if cached_value:
             return cached_value
 
-        result = None
-        source = "lms_configs" if getattr(settings, "SERVICE_VARIANT", "lms") == "lms" else "studio_configs"
-        tenant_config = TenantConfig.objects.values_list(source, flat=True)
-        microsite_config = Microsite.objects.values_list("values", flat=True)  # pylint: disable=no-member
+        result = TenantConfig.objects.get_value_for_org(org, val_name)
 
-        for config in chain(tenant_config, microsite_config):
-            try:
-                current = json.loads(config)
-                org_filter = current.get("course_org_filter", {})
-            except AttributeError:
-                continue
+        if result:
+            cls.set_key_to_cache(cache_key, result)
+            return result
 
-            if org_filter:
-                if isinstance(org_filter, six.string_types):
-                    org_filter = set([org_filter])
-
-                for organization in org_filter:
-                    if org == organization and not result:
-                        result = current.get(val_name, default)
-
-                    key = "org-value-{}-{}".format(organization, val_name)
-                    cls.set_key_to_cache(key, current.get(val_name, default))
-
-        if not result:
-            logger.warning("Tha value for %s and org %s has not been found", val_name, org)
-            cls.set_key_to_cache(cache_key, default)
-            result = default
+        result = Microsite.objects.get_value_for_org(org, val_name)
+        result = result if result else default
+        cls.set_key_to_cache(cache_key, result)
 
         return result
 

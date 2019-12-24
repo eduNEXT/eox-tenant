@@ -11,6 +11,41 @@ from django.utils.translation import ugettext_lazy as _
 from jsonfield.fields import JSONField
 
 
+class MicrositeManager(models.Manager):
+    """
+    Custom managaer for Microsite model.
+    """
+
+    def get_value_for_org(self, org, key):
+        """
+        Execute a query over all the registers and filter the value by the org in the lms_config field.
+
+        Args:
+            org: String.
+            key: String.
+        Returns:
+            The value for the given key and org.
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT
+                    JSON_EXTRACT(`values`, '$.{key}')
+                FROM
+                    ednx_microsites_microsite
+                WHERE
+                    JSON_EXTRACT(`values`, "$.course_org_filter") like '%"{org}"%';
+                """.format(key=key, org=org)
+            )
+            row = cursor.fetchone()
+
+            if row and row[0]:
+                try:
+                    return json.loads(row[0])
+                except Exception:  # pylint: disable=broad-except
+                    return row[0]
+
+
 class Microsite(models.Model):
     """
     This is where the information about the microsite gets stored to the db.
@@ -27,6 +62,7 @@ class Microsite(models.Model):
     key = models.CharField(max_length=63, db_index=True)
     subdomain = models.CharField(max_length=127, db_index=True)
     values = JSONField(null=False, blank=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    objects = MicrositeManager()
 
     class Meta:
         """
@@ -103,6 +139,35 @@ class TenantConfigManager(models.Manager):
                 }
 
         return configurations
+
+    def get_value_for_org(self, org, key):
+        """
+        Execute a query over all the registers and filter the value by the org in the lms_config field.
+
+        Args:
+            org: String.
+            key: String.
+        Returns:
+            The value for the given key and org.
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT
+                    JSON_EXTRACT(`lms_configs`, '$.{key}')
+                FROM
+                    eox_tenant_tenantconfig
+                WHERE
+                    JSON_EXTRACT(`lms_configs`, "$.course_org_filter") like '%"{org}"%';
+                """.format(key=key, org=org)
+            )
+            row = cursor.fetchone()
+
+            if row and row[0]:
+                try:
+                    return json.loads(row[0])
+                except Exception:  # pylint: disable=broad-except
+                    return row[0]
 
 
 class TenantConfig(models.Model):
