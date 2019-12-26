@@ -2,7 +2,10 @@
 Test file to store the tenant_wise test module.
 """
 from __future__ import absolute_import
-from django.test import TestCase
+import mock
+
+from django.contrib.auth.models import User
+from django.test import RequestFactory, TestCase
 
 from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy, TenantGeneratedCertificateProxy
 from eox_tenant.models import Microsite, TenantConfig
@@ -18,6 +21,9 @@ class TenantSiteConfigProxyTest(TestCase):
         """
         This method creates Microsite, TenantConfig and Route objects and in database.
         """
+
+        self.request_factory = RequestFactory()
+
         Microsite.objects.create(  # pylint: disable=no-member
             subdomain="first.test.prod.edunext",
             key="test_fake_key",
@@ -70,10 +76,18 @@ class TenantSiteConfigProxyTest(TestCase):
 
         self.assertTrue(org_list == TenantSiteConfigProxy.get_all_orgs())
 
-    def test_get_value_for_org(self):
+    @mock.patch('eox_tenant.tenant_wise.proxies.get_current_request')
+    def test_get_value_for_org(self, crum_mock):
         """
         Test to get an specific value for a given org.
         """
+        request = self.request_factory.get('/home')
+        request.user = User.objects.create_user(
+            username='validuser',
+            password='12345',
+            email='user@valid.domain.org',
+        )
+        crum_mock.return_value = request
         self.assertEqual(
             TenantSiteConfigProxy.get_value_for_org(
                 org="test1-org",

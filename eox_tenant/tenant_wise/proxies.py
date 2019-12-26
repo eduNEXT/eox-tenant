@@ -5,6 +5,7 @@ import json
 import logging
 from itertools import chain
 
+from crum import get_current_request
 from django.conf import settings
 from django.core.cache import cache
 from django.db import models
@@ -125,6 +126,12 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         if cached_value:
             return cached_value
 
+        user = get_current_request().user
+
+        if user.is_superuser:
+            cls.pre_load_values(val_name)
+            return cache.get(cache_key) or default
+
         result = TenantConfig.objects.get_value_for_org(org, val_name)
 
         if result:
@@ -154,6 +161,30 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
             value,
             EOX_TENANT_CACHE_KEY_TIMEOUT
         )
+
+    @classmethod
+    def pre_load_values(cls, val_name):
+        """
+        Save in cache the values for all the organizations in TenantConfig and Microsite models.
+        """
+        tenant_config = TenantConfig.objects.get_value_for_all_orgs(val_name)
+
+        microsite_config = Microsite.objects.get_value_for_all_orgs(val_name)  # pylint: disable=no-member
+
+        for config in chain(microsite_config, tenant_config):
+            try:
+                org_filter = config.get("course_org_filter")
+                result = config.get(val_name)
+            except AttributeError:
+                continue
+
+            if org_filter and isinstance(org_filter, list):
+                for org in org_filter:
+                    key = "org-value-{}-{}".format(org, val_name)
+                    cls.set_key_to_cache(key, result)
+            elif org_filter:
+                key = "org-value-{}-{}".format(org_filter, val_name)
+                cls.set_key_to_cache(key, result)
 
 
 class TenantCertificateManager(models.Manager):

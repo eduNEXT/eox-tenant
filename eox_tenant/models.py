@@ -18,7 +18,7 @@ class MicrositeManager(models.Manager):
 
     def get_value_for_org(self, org, key):
         """
-        Execute a query over all the registers and filter the value by the org in the lms_config field.
+        Execute a query over all registers and filter the value by the org in the values field.
 
         Args:
             org: String.
@@ -36,6 +36,38 @@ class MicrositeManager(models.Manager):
             """.format(key=key, org=org)
 
         return _execute_simple_query(query)
+
+    def get_value_for_all_orgs(self, key):
+        """
+        Execute a query over all resgisters and return the value and org for the given key.
+
+        Args:
+            key: String.
+        Returns:
+            The value for the given key and org.
+        """
+        result = []
+        query = """
+            SELECT
+                JSON_EXTRACT(`values`, '$.course_org_filter'),
+                JSON_EXTRACT(`values`, '$.{key}')
+            FROM
+                ednx_microsites_microsite
+            WHERE
+                  JSON_EXTRACT(`values`, "$.course_org_filter") IS NOT NULL AND
+                  JSON_EXTRACT(`values`, "$.{key}") IS NOT NULL;
+            """.format(key=key)
+
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+
+            for row in cursor.fetchall():
+                result.append({
+                    "course_org_filter": json.loads(row[0]),
+                    key: json.loads(row[1])
+                })
+
+        return result
 
 
 class Microsite(models.Model):
@@ -134,7 +166,7 @@ class TenantConfigManager(models.Manager):
 
     def get_value_for_org(self, org, key):
         """
-        Execute a query over all the registers and filter the value by the org in the lms_config field.
+        Execute a query over the registers and filter the value by the org in the lms_config field.
 
         Args:
             org: String.
@@ -152,6 +184,38 @@ class TenantConfigManager(models.Manager):
             """.format(key=key, org=org)
 
         return _execute_simple_query(query)
+
+    def get_value_for_all_orgs(self, key):
+        """
+        Execute a query over all resgisters and return the value and org for the given key.
+
+        Args:
+            key: String.
+        Returns:
+            The value for the given key and org.
+        """
+        result = []
+        query = """
+            SELECT
+                JSON_EXTRACT(`lms_configs`, '$.course_org_filter'),
+                JSON_EXTRACT(`lms_configs`, '$.{key}')
+            FROM
+                eox_tenant_tenantconfig
+            WHERE
+                JSON_EXTRACT(`lms_configs`, "$.course_org_filter") IS NOT NULL AND
+                JSON_EXTRACT(`lms_configs`, "$.{key}") IS NOT NULL;
+            """.format(key=key)
+
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+
+            for row in cursor.fetchall():
+                result.append({
+                    "course_org_filter": json.loads(row[0]),
+                    key: json.loads(row[1])
+                })
+
+        return result
 
 
 class TenantConfig(models.Model):
