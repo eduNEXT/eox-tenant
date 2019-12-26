@@ -1,11 +1,9 @@
 """
 Tenant wise proxies that allows to override the platform models.
 """
-import json
 import logging
 from itertools import chain
 
-import six
 from django.conf import settings
 from django.core.cache import cache
 from django.db import models
@@ -91,14 +89,13 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         if not cls.has_configuration_set():
             return org_filter_set
 
-        tenant_config = TenantConfig.objects.values_list("lms_configs")
-        microsite_config = Microsite.objects.values_list("values")  # pylint: disable=no-member
+        tenant_config = TenantConfig.objects.values_list("lms_configs", flat=True)
+        microsite_config = Microsite.objects.values_list("values", flat=True)  # pylint: disable=no-member
 
         for config in chain(tenant_config, microsite_config):
             try:
-                current = json.loads(config[0])
-                org_filter = current.get("course_org_filter", {})
-            except IndexError:
+                org_filter = config.get("course_org_filter", {})
+            except AttributeError:
                 continue
 
             if org_filter and isinstance(org_filter, list):
@@ -127,25 +124,17 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         if cached_value:
             return cached_value
 
-        tenant_config = TenantConfig.objects.values_list("lms_configs")
-        microsite_config = Microsite.objects.values_list("values")  # pylint: disable=no-member
+        result = TenantConfig.get_value_for_org(org, val_name)
 
-        for config in chain(tenant_config, microsite_config):
-            try:
-                current = json.loads(config[0])
-                org_filter = current.get("course_org_filter", {})
-            except IndexError:
-                continue
+        if result:
+            cls.set_key_to_cache(cache_key, result)
+            return result
 
-            if org_filter:
-                if isinstance(org_filter, six.string_types):
-                    org_filter = set([org_filter])
-                if org in org_filter:
-                    result = current.get(val_name, default)
-                    cls.set_key_to_cache(cache_key, result)
-                    return result
+        result = Microsite.get_value_for_org(org, val_name)
+        result = result if result else default
+        cls.set_key_to_cache(cache_key, result)
 
-        return default
+        return result
 
     @classmethod
     def has_configuration_set(cls):

@@ -2,6 +2,8 @@
 Test file to store the tenant_wise test module.
 """
 from __future__ import absolute_import
+from unittest import skip
+
 from django.test import TestCase
 
 from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy, TenantGeneratedCertificateProxy
@@ -70,6 +72,7 @@ class TenantSiteConfigProxyTest(TestCase):
 
         self.assertTrue(org_list == TenantSiteConfigProxy.get_all_orgs())
 
+    @skip("At least one of the DB connections should be to MySQL 5.7")
     def test_get_value_for_org(self):
         """
         Test to get an specific value for a given org.

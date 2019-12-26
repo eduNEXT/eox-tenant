@@ -3,12 +3,11 @@ Model to store a microsite in the database.
 The object is stored as a json representation of the python dict
 that would have been used in the settings.
 """
-import collections
 import json
 
 from django.db import connection, models
 from django.utils.translation import ugettext_lazy as _
-from jsonfield.fields import JSONField
+from django_mysql.models import JSONField
 
 
 class Microsite(models.Model):
@@ -26,7 +25,7 @@ class Microsite(models.Model):
     """
     key = models.CharField(max_length=63, db_index=True)
     subdomain = models.CharField(max_length=127, db_index=True)
-    values = JSONField(null=False, blank=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    values = JSONField(null=False, blank=True)
 
     class Meta:
         """
@@ -64,6 +63,29 @@ class Microsite(models.Model):
         microsites = cls.objects.filter(subdomain=domain)  # pylint: disable=no-member
 
         return microsites[0] if microsites else None
+
+    @classmethod
+    def get_value_for_org(cls, org, val_name):
+        """
+        Filter the value by the org in the values field.
+
+        Args:
+            org: String.
+            key: String.
+        Returns:
+            The value for the given key and org.
+        """
+        results = cls.objects.filter(  # pylint: disable=no-member
+            values__course_org_filter__contains=org
+        ).values_list("values", flat=True)
+
+        for result in results:
+            value = result.get(val_name)
+
+            if value:
+                return value
+
+        return None
 
 
 class TenantConfigManager(models.Manager):
@@ -111,10 +133,10 @@ class TenantConfig(models.Model):
     """
 
     external_key = models.CharField(max_length=63, db_index=True)
-    lms_configs = JSONField(null=False, blank=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
-    studio_configs = JSONField(null=False, blank=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
-    theming_configs = JSONField(null=False, blank=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
-    meta = JSONField(null=False, blank=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    lms_configs = JSONField(null=False, blank=True)
+    studio_configs = JSONField(null=False, blank=True)
+    theming_configs = JSONField(null=False, blank=True)
+    meta = JSONField(null=False, blank=True)
 
     class Meta:
         """
@@ -154,6 +176,29 @@ class TenantConfig(models.Model):
         return {}, None
 
     objects = TenantConfigManager()
+
+    @classmethod
+    def get_value_for_org(cls, org, val_name):
+        """
+        Filter the value by the org in the lms_config field.
+
+        Args:
+            org: String.
+            key: String.
+        Returns:
+            The value for the given key and org.
+        """
+        results = cls.objects.filter(
+            lms_configs__course_org_filter__contains=org
+        ).values_list("lms_configs", flat=True)
+
+        for result in results:
+            value = result.get(val_name)
+
+            if value:
+                return value
+
+        return None
 
 
 class Route(models.Model):
