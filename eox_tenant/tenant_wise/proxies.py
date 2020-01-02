@@ -12,6 +12,7 @@ from django.db import models
 
 from eox_tenant.edxapp_wrapper.certificates_module import get_certificates_models
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
+from eox_tenant.organizations import get_organizations
 from eox_tenant.models import Microsite, TenantConfig
 
 SiteConfigurationModels = get_site_configuration_models()
@@ -176,12 +177,17 @@ class TenantCertificateManager(models.Manager):
         Call parent method and filter the certificates by org.
         """
         generated_certificates = super(TenantCertificateManager, self).get_queryset()
-        excluded_courses = [
-            certificate.course_id
-            for certificate in generated_certificates
-            if certificate.course_id.org not in getattr(settings, "course_org_filter", [])
-        ]
-        return generated_certificates.exclude(course_id__in=excluded_courses)
+        org_filter = get_organizations()
+
+        if org_filter:
+            q_objects = models.Q()  # Create an empty Q object to start with.
+
+            for org in org_filter:
+                q_objects |= models.Q(course_id__startswith="course-v1:{org}+".format(org=org))
+
+            return generated_certificates.filter(q_objects)
+
+        return generated_certificates.none()
 
 
 class TenantEligibleCertificateManager(TenantCertificateManager):
