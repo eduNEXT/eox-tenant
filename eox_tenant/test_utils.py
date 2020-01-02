@@ -6,23 +6,15 @@ from django.db import models
 try:
     from django_fake_model import models as fake
 
-    class CourseFakeModel(fake.FakeModel):
-        """
-        Fake Model for course.
-        """
-
-        org = models.CharField(max_length=400)
-
     class CertificatesFakeModel(fake.FakeModel):
         """
         Fake Model for certificates.
         """
 
-        course_id = models.ForeignKey(CourseFakeModel)
+        course_id = models.CharField(max_length=255, blank=True, default=None)
         status = models.CharField(max_length=32, default='unavailable')
 
 except ImportError:
-    CourseFakeModel = object
     CertificatesFakeModel = object
 
 
