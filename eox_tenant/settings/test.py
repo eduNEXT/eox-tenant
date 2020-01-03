@@ -43,7 +43,6 @@ FEATURES['USE_REDIRECTION_MIDDLEWARE'] = False
 USE_EOX_TENANT = True
 
 SITE_ID = 1
-SILENCED_SYSTEM_CHECKS = ["django_mysql.E016"]
 
 
 def plugin_settings(settings):  # pylint: disable=function-redefined

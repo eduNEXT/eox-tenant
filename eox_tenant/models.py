@@ -7,7 +7,28 @@ import json
 
 from django.db import connection, models
 from django.utils.translation import ugettext_lazy as _
-from django_mysql.models import JSONField
+from django_mysql.checks import mysql_connections
+
+
+def check_mysql_version():
+    """
+    Return True if the mysql version exists and it is mayor to 5.7.
+    """
+    valid_version = False
+    connections = list(mysql_connections())
+
+    if connections:
+        for alias, conn in connections:  # pylint: disable=unused-variable
+            if hasattr(conn, "mysql_version") and conn.mysql_version >= (5, 7):
+                valid_version = True
+
+    return valid_version
+
+
+if check_mysql_version():
+    from django_mysql.models import JSONField
+else:
+    from jsonfield.fields import JSONField
 
 
 class Microsite(models.Model):

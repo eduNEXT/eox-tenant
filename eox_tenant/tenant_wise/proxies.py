@@ -1,11 +1,15 @@
 """
 Tenant wise proxies that allows to override the platform models.
 """
+import json
 import logging
+import warnings
 from itertools import chain
 
+import six
 from django.conf import settings
 from django.core.cache import cache
+from django.core.exceptions import FieldError
 from django.db import models
 
 from eox_tenant.edxapp_wrapper.certificates_module import get_certificates_models
@@ -86,14 +90,14 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
             return org_filter_set
 
         org_filter_set = set()
-        if not cls.has_configuration_set():
-            return org_filter_set
-
         tenant_config = TenantConfig.objects.values_list("lms_configs", flat=True)
         microsite_config = Microsite.objects.values_list("values", flat=True)  # pylint: disable=no-member
 
         for config in chain(tenant_config, microsite_config):
             try:
+                if isinstance(config, six.string_types):
+                    config = json.loads(config)
+
                 org_filter = config.get("course_org_filter", {})
             except AttributeError:
                 continue
@@ -114,10 +118,28 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         Returns a configuration value for a microsite or TenantConfig which has an org_filter that matches
         what is passed in.
         """
+        try:
+            return cls.__get_value_for_org(org, val_name, default)
+        except FieldError:
+            return cls.__deprecated_get_value_for_org(org, val_name, default)
 
-        if not cls.has_configuration_set():
-            return default
+    @classmethod
+    def set_key_to_cache(cls, key, value):
+        """
+        Stores a key value pair in a cache scoped to the thread
+        """
+        cache.set(
+            key,
+            value,
+            EOX_TENANT_CACHE_KEY_TIMEOUT
+        )
 
+    @classmethod
+    def __get_value_for_org(cls, org, val_name, default=None):
+        """
+        Optimized method, that returns a value for the given org and val_name, from the
+        TenantConfig or Microsite model.
+        """
         cache_key = "org-value-{}-{}".format(org, val_name)
         cached_value = cache.get(cache_key)
 
@@ -137,22 +159,95 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         return result
 
     @classmethod
-    def has_configuration_set(cls):
+    def __deprecated_get_value_for_org(cls, org, val_name, default=None):
         """
-        We always require a configuration to function, so we can skip the query
+        This method iterates over all the TenantConfig and Microsite objects, set the cache for the given
+        val_name and all organizations and returns the value for the given org.
+
+        DEPRECATED: use __get_value_for_org method instead.
+        To use __get_value_for_org is necessary MySQL 5.7+, so this method has been kept in
+        order to support previous MySQL versions.
         """
-        return getattr(settings, "USE_EOX_TENANT", False)
+        warnings.warn(
+            "__deprecated_get_value_for_org, MySQL 5.7+ is required to use __get_value_for_org instead.",
+            DeprecationWarning
+        )
+
+        cache_key = "org-value-{}-{}".format(org, val_name)
+        cached_value = cache.get(cache_key)
+
+        if cached_value:
+            return cached_value
+
+        result = None
+        tenant_config = TenantConfig.objects.values_list("lms_configs", flat=True)
+        microsite_config = Microsite.objects.values_list("values", flat=True)  # pylint: disable=no-member
+
+        for config in chain(tenant_config, microsite_config):
+            try:
+                if isinstance(config, six.string_types):
+                    config = json.loads(config)
+
+                org_filter = config.get("course_org_filter", {})
+            except AttributeError:
+                continue
+
+            if org_filter:
+                if isinstance(org_filter, six.string_types):
+                    org_filter = set([org_filter])
+
+                for organization in org_filter:
+                    if org == organization and not result:
+                        result = config.get(val_name, default)
+
+                    key = "org-value-{}-{}".format(organization, val_name)
+                    cls.set_key_to_cache(key, config.get(val_name, default))
+
+        if not result:
+            logger.warning("Tha value for %s and org %s has not been found", val_name, org)
+            cls.set_key_to_cache(cache_key, default)
+            result = default
+
+        return result
 
     @classmethod
-    def set_key_to_cache(cls, key, value):
+    def pre_load_values_by_org(cls, val_name):
         """
-        Stores a key value pair in a cache scoped to the thread
+        Save in cache the values for all the organizations in TenantConfig and Microsite models.
         """
-        cache.set(
-            key,
-            value,
-            EOX_TENANT_CACHE_KEY_TIMEOUT
-        )
+        pre_load_value_key = "eox-tenant-pre-load-{}-key".format(val_name)
+
+        if cache.get(pre_load_value_key):
+            return
+
+        try:
+            tenant_config = TenantConfig.objects.filter(
+                lms_configs__has_key=u"course_org_filter",
+            ).values_list("lms_configs", flat=True)
+
+            microsite_config = Microsite.objects.filter(  # pylint: disable=no-member
+                values__has_key=u"course_org_filter",
+            ).values_list("values", flat=True)
+        except FieldError:
+            tenant_config = TenantConfig.objects.values_list("lms_configs")
+            microsite_config = Microsite.objects.values_list("values")  # pylint: disable=no-member
+
+        for config in chain(microsite_config, tenant_config):
+            try:
+                org_filter = config.get("course_org_filter")
+                result = config.get(val_name)
+            except AttributeError:
+                continue
+
+            if org_filter and isinstance(org_filter, list):
+                for org in org_filter:
+                    key = "org-value-{}-{}".format(org, val_name)
+                    cls.set_key_to_cache(key, result)
+            elif org_filter:
+                key = "org-value-{}-{}".format(org_filter, val_name)
+                cls.set_key_to_cache(key, result)
+
+        cls.set_key_to_cache(pre_load_value_key, True)
 
 
 class TenantCertificateManager(models.Manager):
