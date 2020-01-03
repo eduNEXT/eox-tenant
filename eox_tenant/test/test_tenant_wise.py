@@ -2,6 +2,7 @@
 Test file to store the tenant_wise test module.
 """
 from __future__ import absolute_import
+
 from django.test import TestCase
 
 from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy, TenantGeneratedCertificateProxy
