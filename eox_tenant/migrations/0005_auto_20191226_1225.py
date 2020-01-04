@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 from django.db import migrations
 import django_mysql.models
 
+from eox_tenant.models import check_mysql_version
+
 
 class Migration(migrations.Migration):
 
@@ -38,4 +40,4 @@ class Migration(migrations.Migration):
             name='theming_configs',
             field=django_mysql.models.JSONField(blank=True, default=dict),
         ),
-    ]
+    ] if check_mysql_version() else []
