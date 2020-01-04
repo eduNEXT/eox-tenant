@@ -44,6 +44,18 @@ USE_EOX_TENANT = True
 
 SITE_ID = 1
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "HOST": "127.0.0.1",
+        "NAME": "edxapp",
+        "OPTIONS": {},
+        "PASSWORD": "",
+        "PORT": "3306",
+        "USER": "root"
+    },
+}
+
 
 def plugin_settings(settings):  # pylint: disable=function-redefined
     """

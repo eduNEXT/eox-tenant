@@ -31,3 +31,4 @@ singledispatch==3.4.0.3   # via astroid, pylint
 six==1.11.0               # via astroid, edx-opaque-keys, mock, pylint, singledispatch, stevedore
 stevedore==1.30.0         # via edx-opaque-keys
 wrapt==1.10.11            # via astroid
+mysqlclient
