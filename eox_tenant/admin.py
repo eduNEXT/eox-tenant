@@ -1,10 +1,8 @@
 """
 Django admin page for microsite model
 """
-from django import forms
 from django.contrib import admin
 from django.core.urlresolvers import reverse
-from django.db import models
 
 from eox_tenant.models import Microsite, TenantConfig, Route
 
@@ -27,7 +25,7 @@ class MicrositeAdmin(admin.ModelAdmin):
         'course_org_filter',
         'ednx_signal',
     )
-    search_fields = ('key', 'subdomain', 'values', )
+    search_fields = ('key', 'subdomain', )
 
     def sitename(self, microsite):
         """
@@ -41,11 +39,18 @@ class MicrositeAdmin(admin.ModelAdmin):
 
     def template_dir(self, microsite):
         """
-        TODO: add me
+        Read only method to calculate template dir attribute from config model.
         """
         # pylint: disable=broad-except
         try:
-            return microsite.values.get('template_dir', "NOT CONFIGURED")
+            themes_keys = ["name", "parent", "grandparent"]
+            theme_config = TenantConfig.objects.get(external_key=microsite.key)
+            theme_config = theme_config.theming_configs.get("THEME_OPTIONS", {})
+            theme = theme_config.get("theme", {})
+            values = [theme[key] for key in themes_keys if key in theme]
+            if values:
+                return " <- ".join(values)
+            return "NOT CONFIGURED"
         except Exception as error:
             return str(error)
 
@@ -88,7 +93,7 @@ class TenantConfigAdmin(admin.ModelAdmin):
         'course_org_filter',
         'ednx_signal',
     )
-    search_fields = ('key', 'route__domain', 'lms_configs', )
+    search_fields = ('external_key', 'route__domain', )
 
     def sitename(self, tenant_config):
         """
@@ -106,7 +111,13 @@ class TenantConfigAdmin(admin.ModelAdmin):
         """
         # pylint: disable=broad-except
         try:
-            return tenant_config.lms_configs.get("template_dir", "NOT CONFIGURED")
+            themes_keys = ["name", "parent", "grandparent"]
+            theme_config = tenant_config.theming_configs.get("THEME_OPTIONS", {})
+            theme = theme_config.get("theme", {})
+            values = [theme[key] for key in themes_keys if key in theme]
+            if values:
+                return " <- ".join(values)
+            return "NOT CONFIGURED"
         except Exception as error:
             return str(error)
 
@@ -147,10 +158,9 @@ class RouteAdmin(admin.ModelAdmin):
     """
     Route model admin.
     """
-
-    formfield_overrides = {
-        models.ForeignKey: {'widget': forms.TextInput},
-    }
+    raw_id_fields = [
+        'config',
+    ]
 
     list_display = [
         "domain",
