@@ -3,8 +3,10 @@ Django admin page for microsite model
 """
 from django.contrib import admin
 from django.core.urlresolvers import reverse
+from django_mysql.models import JSONField
 
 from eox_tenant.models import Microsite, TenantConfig, Route
+from eox_tenant.widgets import JsonWidget
 
 
 class MicrositeAdmin(admin.ModelAdmin):
@@ -87,6 +89,9 @@ class TenantConfigAdmin(admin.ModelAdmin):
         'ednx_signal',
     )
     search_fields = ('external_key', 'route__domain', )
+    formfield_overrides = {
+        JSONField: {'widget': JsonWidget}
+    }
 
     def sitename(self, tenant_config):
         """
