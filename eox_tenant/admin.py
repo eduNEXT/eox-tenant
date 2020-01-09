@@ -5,8 +5,10 @@ from django import forms
 from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.db import models
+from django_mysql.models import JSONField
 
 from eox_tenant.models import Microsite, TenantConfig, Route
+from eox_tenant.widgets import JsonWidget
 
 
 class MicrositeAdmin(admin.ModelAdmin):
@@ -28,6 +30,9 @@ class MicrositeAdmin(admin.ModelAdmin):
         'ednx_signal',
     )
     search_fields = ('key', 'subdomain', 'values', )
+    formfield_overrides = {
+        JSONField: {'widget': JsonWidget}
+    }
 
     def sitename(self, microsite):
         """
@@ -89,6 +94,9 @@ class TenantConfigAdmin(admin.ModelAdmin):
         'ednx_signal',
     )
     search_fields = ('key', 'route__domain', 'lms_configs', )
+    formfield_overrides = {
+        JSONField: {'widget': JsonWidget}
+    }
 
     def sitename(self, tenant_config):
         """
