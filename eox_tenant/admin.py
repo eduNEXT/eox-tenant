@@ -29,10 +29,19 @@ class MicrositeAdmin(admin.ModelAdmin):
         'course_org_filter',
         'ednx_signal',
     )
-    search_fields = ('key', 'subdomain', 'values', )
-    formfield_overrides = {
-        JSONField: {'widget': JsonWidget}
-    }
+    search_fields = ('key', 'subdomain',)
+
+    def get_search_results(self, request, queryset, search_term):
+        """
+        Add the filter to search by value.
+        """
+        queryset, use_distinct = super(MicrositeAdmin, self).get_search_results(
+            request,
+            queryset,
+            search_term
+        )
+        queryset |= self.model.get_microsite_for_values(search_term)
+        return queryset, use_distinct
 
     def sitename(self, microsite):
         """

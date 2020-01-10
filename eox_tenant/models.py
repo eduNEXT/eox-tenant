@@ -108,6 +108,29 @@ class Microsite(models.Model):
 
         return None
 
+    @classmethod
+    def get_microsite_for_values(cls, search_term):
+        """
+        Returns a list of microsites searching by the values field.
+        """
+        if search_term == '':
+            return cls.objects.none()
+
+        sql = """
+            SELECT id FROM {table}
+            WHERE JSON_EXTRACT(`values`,"$.*") LIKE %s""" \
+            .format(table=cls._meta.db_table)
+        with connection.cursor() as cursor:
+            cursor.execute(sql, ['%' + search_term + '%'])
+            rows = cursor.fetchall()
+        rows = [row[0] for row in rows]
+        result = cls.objects.filter(pk__in=rows)
+
+        if not result:
+            return cls.objects.none()
+
+        return result
+
 
 class TenantConfigManager(models.Manager):
     """
