@@ -39,8 +39,6 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
     More information in https://docs.djangoproject.com/en/3.0/topics/db/models/#proxy-models
     """
 
-    _values = {}
-
     class Meta:
         """ Set as a proxy model. """
         proxy = True
@@ -82,9 +80,9 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         """
         Returns the raw values of the loaded settings.
         """
-        if self.enabled and not self._values:
-            self._values = vars(settings._wrapped)  # pylint: disable=protected-access
-        return self._values
+        if self.enabled:
+            return vars(settings._wrapped)  # pylint: disable=protected-access
+        return {}
 
     @values.setter
     def values(self, value):
