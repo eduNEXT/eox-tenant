@@ -72,6 +72,22 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
 
         return default
 
+    @property
+    def values(self):
+        """
+        Returns the raw values of the loaded settings.
+        """
+        if self.enabled:
+            return settings.__dict__
+        return {}
+
+    @values.setter
+    def values(self, value):
+        """
+        We ignore the setter since this is a read proxy.
+        """
+        pass
+
     def save(self, *args, **kwargs):
         """
         Don't allow to save TenantSiteConfigProxy model in database.
