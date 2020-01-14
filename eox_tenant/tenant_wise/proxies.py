@@ -16,9 +16,12 @@ from eox_tenant.edxapp_wrapper.certificates_module import get_certificates_model
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
 from eox_tenant.organizations import get_organizations
 from eox_tenant.models import Microsite, TenantConfig
+from eox_tenant.tenant_wise.context_managers import proxy_regression
 
 SiteConfigurationModels = get_site_configuration_models()
 CertificatesModels = get_certificates_models()
+# The following line is necessary because we want to keep the previous Model GeneratedCertificate after the overrides.
+GeneratedCertificate = CertificatesModels.GeneratedCertificate
 TENANT_ALL_ORGS_CACHE_KEY = "tenant.all_orgs_list"
 EOX_TENANT_CACHE_KEY_TIMEOUT = getattr(
     settings,
@@ -312,7 +315,7 @@ class TenantEligibleCertificateManager(TenantCertificateManager):
         )
 
 
-class TenantGeneratedCertificateProxy(CertificatesModels.GeneratedCertificate):
+class TenantGeneratedCertificateProxy(GeneratedCertificate):
     """
     Proxy model for <lms.djangoapps.certificates.models.GeneratedCertificate>.
 
@@ -330,3 +333,10 @@ class TenantGeneratedCertificateProxy(CertificatesModels.GeneratedCertificate):
     def __unicode__(self):
         key = getattr(settings, "EDNX_TENANT_KEY", "No tenant is active at the moment")
         return u"<Tenant proxy as GeneratedCertificate: {}>".format(key)
+
+    def save(self, *args, **kwargs):
+        """
+        Override the save method such that we use the non proxy cert during the save.
+        """
+        with proxy_regression(get_certificates_models(), "GeneratedCertificate", GeneratedCertificate):
+            super(TenantGeneratedCertificateProxy, self).save(*args, **kwargs)

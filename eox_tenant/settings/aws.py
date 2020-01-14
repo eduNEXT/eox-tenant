@@ -62,6 +62,11 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         settings.SITE_ID
     )
 
+    settings.TENANT_WISE_ALLOWED_PROXIES = getattr(settings, 'ENV_TOKENS', {}).get(
+        'TENANT_WISE_ALLOWED_PROXIES',
+        settings.TENANT_WISE_ALLOWED_PROXIES
+    )
+
     if DJANGO_CURRENT_SITE_MIDDLEWARE in settings.MIDDLEWARE_CLASSES and getattr(settings, 'USE_EOX_TENANT', False):
         settings.MIDDLEWARE_CLASSES[settings.MIDDLEWARE_CLASSES.index(DJANGO_CURRENT_SITE_MIDDLEWARE)] = 'eox_tenant.middleware.CurrentSiteMiddleware'  # pylint: disable=line-too-long
 
