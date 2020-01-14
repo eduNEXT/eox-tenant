@@ -54,6 +54,10 @@ def plugin_settings(settings):
     settings.EOX_TENANT_ASYNC_TASKS_HANDLER_DICT = {
         "openedx.core.djangoapps.schedules.tasks.ScheduleRecurringNudge": "get_host_from_siteid",
     }
+    settings.TENANT_WISE_ALLOWED_PROXIES = {
+        'TenantSiteConfigProxy': True,
+        'TenantGeneratedCertificateProxy': True,
+    }
     try:
         settings.MAKO_TEMPLATE_DIRS_BASE.insert(0, path(__file__).abspath().dirname().dirname() / 'templates')  # pylint: disable=no-value-for-parameter
     except AttributeError:
