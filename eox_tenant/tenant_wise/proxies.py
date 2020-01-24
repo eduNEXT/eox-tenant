@@ -336,5 +336,5 @@ class TenantGeneratedCertificateProxy(GeneratedCertificate):
         """
         Override the save method such that we use the non proxy cert during the save.
         """
-        with proxy_regression(get_certificates_models(), "GeneratedCertificate", GeneratedCertificate):
-            super(TenantGeneratedCertificateProxy, self).save(*args, **kwargs)
+        with proxy_regression(get_certificates_models(), "GeneratedCertificate", GeneratedCertificate, self) as model:
+            model.save(*args, **kwargs)
