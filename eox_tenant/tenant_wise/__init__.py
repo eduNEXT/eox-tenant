@@ -3,6 +3,7 @@ Eox Tenant Wise.
 ==================
 This module makes it possible to override the some platform Models using new proxy models.
 """
+import inspect
 from importlib import import_module
 
 import six
@@ -26,15 +27,10 @@ def load_tenant_wise_overrides():
             )
 
         if allowed_proxies.get('TenantGeneratedCertificateProxy'):
-            certificate_list = [
-                'lms.djangoapps.certificates.models',
-                'lms.djangoapps.certificates.queue',
-            ]
-
-            set_as_proxy(
-                modules=certificate_list,
+            set_package_members_as_proxy(
+                package_name='lms.djangoapps.certificates',
                 model='GeneratedCertificate',
-                proxy=TenantGeneratedCertificateProxy
+                proxy=TenantGeneratedCertificateProxy,
             )
 
 
@@ -48,3 +44,24 @@ def set_as_proxy(modules, model, proxy):
     for module in modules:
         module = import_module(module)
         setattr(module, model, proxy)
+
+
+def set_package_members_as_proxy(package_name, model, proxy):
+    """
+    Get the modules from the given package and set every one as a proxy.
+
+    Args:
+        package_name: String with the package name, example 'lms.djangoapps.courseware'.
+        model: String The model name, example User.
+        proxy: Class of proxy model example TenantGeneratedCertificateProxy.
+    Returns:
+        None
+    """
+    package = import_module(package_name)
+    package_members = inspect.getmembers(package)
+
+    set_as_proxy(
+        modules=[member[1].__name__ for member in package_members if hasattr(member[1], model)],
+        model=model,
+        proxy=proxy
+    )
