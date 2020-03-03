@@ -29,6 +29,9 @@ class MicrositeAdmin(admin.ModelAdmin):
         'course_org_filter',
         'ednx_signal',
     )
+    formfield_overrides = {
+        JSONField: {'widget': JsonWidget}
+    }
     search_fields = ('key', 'subdomain',)
 
     def get_search_results(self, request, queryset, search_term):
@@ -40,7 +43,10 @@ class MicrositeAdmin(admin.ModelAdmin):
             queryset,
             search_term
         )
-        queryset |= self.model.get_microsite_for_values(search_term)
+        queryset |= self.model.objects.filter_on_json_fields(
+            search_term,
+            fields=['values']
+        )
         return queryset, use_distinct
 
     def sitename(self, microsite):
@@ -102,10 +108,25 @@ class TenantConfigAdmin(admin.ModelAdmin):
         'course_org_filter',
         'ednx_signal',
     )
-    search_fields = ('key', 'route__domain', 'lms_configs', )
+    search_fields = ('external_key', 'route__domain', )
     formfield_overrides = {
         JSONField: {'widget': JsonWidget}
     }
+
+    def get_search_results(self, request, queryset, search_term):
+        """
+        Add the filter to search by lms_configs, studio_configs, theming_configs or meta.
+        """
+        queryset, use_distinct = super(TenantConfigAdmin, self).get_search_results(
+            request,
+            queryset,
+            search_term
+        )
+        queryset |= self.model.objects.filter_on_json_fields(
+            search_term,
+            fields=['lms_configs', 'studio_configs', 'theming_configs', 'meta']
+        )
+        return queryset, use_distinct
 
     def sitename(self, tenant_config):
         """
