@@ -31,6 +31,55 @@ else:
     from jsonfield.fields import JSONField
 
 
+class JsonSearchMixin(object):
+    """
+    Mixin to search for values in JSONField.
+    """
+    def filter_on_json_fields(self, search_term, fields):
+        """
+        Look for the value in the given field list, the fields must be of type JSONField.
+
+        Args:
+            search_term: String.
+            fields: List of Strings.
+        Returns:
+            Queryset list of the invoking class.
+        """
+        if search_term == '':
+            return self.model.objects.none()
+
+        sql = """SELECT id FROM {table} WHERE """ \
+              .format(table=self.model._meta.db_table)  # pylint: disable=protected-access
+        sql = self.add_fields(sql, fields)
+        with connection.cursor() as cursor:
+            cursor.execute(sql, ['%' + search_term + '%'] * len(fields))
+            rows = cursor.fetchall()
+        rows = [row[0] for row in rows]
+        result = self.model.objects.filter(pk__in=rows)
+
+        if not result:
+            return self.model.objects.none()
+
+        return result
+
+    def add_fields(self, sql, fields):
+        """
+        Return the query with the fields on which you want to search.
+        """
+        conditions = []
+        for field in fields:
+            conditions.append("""JSON_EXTRACT(`{field}`,"$.*") LIKE %s""".format(field=field))
+        conditions = (' OR ').join(conditions)
+        return sql + conditions
+
+
+class MicrositeManager(models.Manager, JsonSearchMixin):
+    """
+    Custom manager for Microsites model.
+    """
+    pass
+
+
 class Microsite(models.Model):
     """
     This is where the information about the microsite gets stored to the db.
@@ -47,6 +96,7 @@ class Microsite(models.Model):
     key = models.CharField(max_length=63, db_index=True)
     subdomain = models.CharField(max_length=127, db_index=True)
     values = JSONField(null=False, blank=True)
+    objects = MicrositeManager()
 
     class Meta:
         """
@@ -109,7 +159,7 @@ class Microsite(models.Model):
         return None
 
 
-class TenantConfigManager(models.Manager):
+class TenantConfigManager(models.Manager, JsonSearchMixin):
     """
     Custom managaer for Tenant Config model.
     """
