@@ -12,6 +12,13 @@ class EdunextOpenedxExtensionsTenantConfig(AppConfig):
     verbose_name = "Edunext Openedx Multitenancy."
 
     plugin_app = {
+        'url_config': {
+            'lms.djangoapp': {
+                'namespace': 'eox-tenant',
+                'regex': r'^eox-tenant/',
+                'relative_path': 'urls',
+            },
+        },
         'settings_config': {
             'lms.djangoapp': {
                 'test': {'relative_path': 'settings.test'},
