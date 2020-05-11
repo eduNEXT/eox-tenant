@@ -44,8 +44,6 @@ USE_EOX_TENANT = True
 
 SITE_ID = 1
 
-ROOT_URLCONF = 'eox_tenant.urls'
-
 
 def plugin_settings(settings):  # pylint: disable=function-redefined
     """
