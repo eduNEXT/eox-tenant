@@ -22,7 +22,7 @@ class ReceiversHelpersTests(TestCase):
         """
         Setup database.
         """
-        Microsite.objects.create(  # pylint: disable=no-member
+        Microsite.objects.create(
             subdomain="first.test.prod.edunext",
             key="test_fake_key",
             values={

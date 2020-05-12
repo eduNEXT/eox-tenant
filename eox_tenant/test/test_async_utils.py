@@ -18,7 +18,7 @@ class AsyncTaskHandlerTests(TestCase):
     def setUp(self):
         """ setup """
         for number in range(3):
-            Site.objects.create(  # pylint: disable=no-member
+            Site.objects.create(
                 domain="tenant{number}.com".format(number=number),
                 name="tenant{number}.com".format(number=number)
             )

@@ -13,7 +13,7 @@ class EditTenantValuesTestCase(TestCase):
 
     def setUp(self):
         """This method creates Microsite objects in database"""
-        Microsite.objects.create(  # pylint: disable=no-member
+        Microsite.objects.create(
             key="test",
             subdomain="first.test.prod.edunext.co",
             values={
@@ -36,7 +36,7 @@ class EditTenantValuesTestCase(TestCase):
     def test_command_exec_confirmation_add(self, _):
         """Tests that we can add a new key"""
         call_command('edit_tenant_values', '--add', 'NEW_KEY', 'NEW_VALUE')
-        tenant = Microsite.objects.get(key='test')  # pylint: disable=no-member
+        tenant = Microsite.objects.get(key='test')
         self.assertIn('NEW_KEY', tenant.values)
         self.assertEqual('NEW_VALUE', tenant.values.get('NEW_KEY'))
 
@@ -44,7 +44,7 @@ class EditTenantValuesTestCase(TestCase):
     def test_command_exec_confirmation_add_nested(self, _):
         """Tests that we can add a new nested key"""
         call_command('edit_tenant_values', '--add', 'NEW_KEY.nested', 'NEW_VALUE')
-        tenant = Microsite.objects.get(key='test')  # pylint: disable=no-member
+        tenant = Microsite.objects.get(key='test')
         self.assertIn('nested', tenant.values.get('NEW_KEY'))
         self.assertEqual('NEW_VALUE', tenant.values.get('NEW_KEY').get('nested'))
 
@@ -52,21 +52,20 @@ class EditTenantValuesTestCase(TestCase):
     def test_command_exec_confirmation_delete(self, _):
         """Tests that we can remove a key"""
         call_command('edit_tenant_values', '--delete', 'KEY')
-        tenant = Microsite.objects.get(key='test')  # pylint: disable=no-member
+        tenant = Microsite.objects.get(key='test')
         self.assertNotIn('KEY', tenant.values)
 
     @patch('eox_tenant.management.commands.edit_tenant_values.input', return_value='y')
     def test_command_exec_confirmation_delete_chain(self, _):
         """Tests that we can remove a nested key"""
         call_command('edit_tenant_values', '--delete', 'NESTED_KEY.key')
-        tenant = Microsite.objects.get(key='test')  # pylint: disable=no-member
+        tenant = Microsite.objects.get(key='test')
         self.assertIn('NESTED_KEY', tenant.values)
         self.assertNotIn('key', tenant.values.get('NESTED_KEY'))
 
     @patch('eox_tenant.management.commands.edit_tenant_values.input', return_value='y')
     def test_command_exec_confirmation_pattern(self, _):
         """Tests that we can affect only the sites defined by a pattern in their subdomain"""
-        # pylint: disable=no-member
         Microsite.objects.create(
             key="test2",
             subdomain="second.test.prod.edunext.co",

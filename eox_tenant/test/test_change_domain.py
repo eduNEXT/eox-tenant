@@ -14,9 +14,9 @@ class ChangeDomainTestCase(TestCase):
 
     def setUp(self):
         """This method creates Microsite objects in database"""
-        Microsite.objects.create(  # pylint: disable=no-member
+        Microsite.objects.create(
             subdomain="first.test.prod.edunext.co")
-        Site.objects.create(  # pylint: disable=no-member
+        Site.objects.create(
             domain="second.test.prod.edunext.co",
             name="second.test.prod.edunext.co")
 
@@ -33,15 +33,15 @@ class ChangeDomainTestCase(TestCase):
         signupsource_mock.return_value = signupsource
 
         call_command('change_domain', signupsources=True)
-        prod = Microsite.objects.filter(  # pylint: disable=no-member
+        prod = Microsite.objects.filter(
             subdomain="first.test.prod.edunext.co").first()
-        stage = Microsite.objects.filter(  # pylint: disable=no-member
+        stage = Microsite.objects.filter(
             subdomain="first-test-prod-edunext-co-stage.edunext.co").first()
         self.assertIsNone(prod)
         self.assertIsNotNone(stage)
-        prod_site = Site.objects.filter(  # pylint: disable=no-member
+        prod_site = Site.objects.filter(
             domain="second.test.prod.edunext.co").first()
-        stage_site = Site.objects.filter(  # pylint: disable=no-member
+        stage_site = Site.objects.filter(
             domain="second-test-prod-edunext-co-stage.edunext.co").first()
         self.assertIsNone(prod_site)
         self.assertIsNotNone(stage_site)
@@ -51,15 +51,15 @@ class ChangeDomainTestCase(TestCase):
     def test_domain_can_change_with_point(self):
         """Subdomain has been changed by the command"""
         call_command('change_domain', suffix_domain=".stage.edunext.co")
-        prod = Microsite.objects.filter(  # pylint: disable=no-member
+        prod = Microsite.objects.filter(
             subdomain="first.test.prod.edunext.co").first()
-        stage = Microsite.objects.filter(  # pylint: disable=no-member
+        stage = Microsite.objects.filter(
             subdomain="first-test-prod-edunext-co.stage.edunext.co").first()
         self.assertIsNone(prod)
         self.assertIsNotNone(stage)
-        prod_site = Site.objects.filter(  # pylint: disable=no-member
+        prod_site = Site.objects.filter(
             domain="second.test.prod.edunext.co").first()
-        stage_site = Site.objects.filter(  # pylint: disable=no-member
+        stage_site = Site.objects.filter(
             domain="second-test-prod-edunext-co.stage.edunext.co").first()
         self.assertIsNone(prod_site)
         self.assertIsNotNone(stage_site)
@@ -70,7 +70,7 @@ class ChangeDomainTestCase(TestCase):
             "ECOMMERCE_PUBLIC_URL_ROOT": "https://ecommerce.url/",
             "ECOMMERCE_API_URL": "https://ecommerce.url/api/v1/",
         }
-        prod = Microsite.objects.filter(  # pylint: disable=no-member
+        prod = Microsite.objects.filter(
             subdomain="first.test.prod.edunext.co").first()
         prod.values = values
         prod.save()
@@ -79,7 +79,7 @@ class ChangeDomainTestCase(TestCase):
             suffix_domain=".stage.edunext.co",
             suffix_ecommerce_domain=".stage-compl1.edunext.co"
         )
-        stage = Microsite.objects.filter(  # pylint: disable=no-member
+        stage = Microsite.objects.filter(
             subdomain="first-test-prod-edunext-co.stage.edunext.co").first()
         ecommerce_public_url_root = stage.values['ECOMMERCE_PUBLIC_URL_ROOT']
         ecommerce_api_url = stage.values['ECOMMERCE_API_URL']

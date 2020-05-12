@@ -110,7 +110,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
 
         org_filter_set = set()
         tenant_config = TenantConfig.objects.values_list("lms_configs", flat=True)
-        microsite_config = Microsite.objects.values_list("values", flat=True)  # pylint: disable=no-member
+        microsite_config = Microsite.objects.values_list("values", flat=True)
 
         for config in chain(tenant_config, microsite_config):
             try:
@@ -200,7 +200,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
 
         result = None
         tenant_config = TenantConfig.objects.values_list("lms_configs", flat=True)
-        microsite_config = Microsite.objects.values_list("values", flat=True)  # pylint: disable=no-member
+        microsite_config = Microsite.objects.values_list("values", flat=True)
 
         for config in chain(tenant_config, microsite_config):
             try:
@@ -244,12 +244,12 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
                 lms_configs__has_key=u"course_org_filter",
             ).values_list("lms_configs", flat=True)
 
-            microsite_config = Microsite.objects.filter(  # pylint: disable=no-member
+            microsite_config = Microsite.objects.filter(
                 values__has_key=u"course_org_filter",
             ).values_list("values", flat=True)
         except FieldError:
             tenant_config = TenantConfig.objects.values_list("lms_configs")
-            microsite_config = Microsite.objects.values_list("values")  # pylint: disable=no-member
+            microsite_config = Microsite.objects.values_list("values")
 
         for config in chain(microsite_config, tenant_config):
             try:
