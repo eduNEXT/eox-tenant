@@ -19,7 +19,7 @@ class TenantSiteConfigProxyTest(TestCase):
         """
         This method creates Microsite, TenantConfig and Route objects and in database.
         """
-        Microsite.objects.create(  # pylint: disable=no-member
+        Microsite.objects.create(
             subdomain="first.test.prod.edunext",
             key="test_fake_key",
             values={
@@ -28,7 +28,7 @@ class TenantSiteConfigProxyTest(TestCase):
             }
         )
 
-        Microsite.objects.create(  # pylint: disable=no-member
+        Microsite.objects.create(
             subdomain="second.test.prod.edunext",
             values={
                 "course_org_filter": ["test2-org", "test3-org"],
@@ -131,17 +131,17 @@ class TenantGeneratedCertificateProxyTest(TestCase):
         This verifies that all the returned objects are filtered by org.
         """
         TenantGeneratedCertificateProxy.objects.create(
-            course_id="course-v1:test-org+CS102+2019_T2",  # pylint: disable=no-member
+            course_id="course-v1:test-org+CS102+2019_T2",
             status=TestCertificateStatuses.generating
         )
 
         TenantGeneratedCertificateProxy.objects.create(
-            course_id="course-v1:test-org1+CS102+2019_T2",  # pylint: disable=no-member
+            course_id="course-v1:test-org1+CS102+2019_T2",
             status=TestCertificateStatuses.audit_notpassing
         )
 
         TenantGeneratedCertificateProxy.objects.create(
-            course_id="course-v1:test-org+CS102+2019_T2",  # pylint: disable=no-member
+            course_id="course-v1:test-org+CS102+2019_T2",
             status=TestCertificateStatuses.audit_passing
         )
 

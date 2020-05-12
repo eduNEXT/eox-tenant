@@ -57,7 +57,7 @@ class Command(BaseCommand):
         self.suffix_stage_ecommerce_domain = options['suffix_ecommerce_domain']
 
         # Changing microsites objects
-        for microsite in Microsite.objects.all():  # pylint: disable=no-member
+        for microsite in Microsite.objects.all():
 
             stage_domain = self.change_subdomain(microsite.subdomain)
 

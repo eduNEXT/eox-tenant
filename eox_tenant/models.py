@@ -131,7 +131,7 @@ class Microsite(models.Model):
 
         # remove any port number from the hostname
         domain = domain.split(':')[0]
-        microsites = cls.objects.filter(subdomain=domain)  # pylint: disable=no-member
+        microsites = cls.objects.filter(subdomain=domain)
 
         return microsites[0] if microsites else None
 
@@ -146,7 +146,7 @@ class Microsite(models.Model):
         Returns:
             The value for the given key and org.
         """
-        results = cls.objects.filter(  # pylint: disable=no-member
+        results = cls.objects.filter(
             values__course_org_filter__contains=org
         ).values_list("values", flat=True)
 

@@ -93,7 +93,7 @@ class Command(BaseCommand):
             LOGGER.info('Options recognized from the command call')
             LOGGER.info(options)
 
-        query = Microsite.objects.all()  # pylint: disable=no-member
+        query = Microsite.objects.all()
 
         if options['pattern']:
             query = query.filter(subdomain__icontains=options['pattern'][0])
