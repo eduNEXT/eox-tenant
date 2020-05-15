@@ -44,6 +44,7 @@ jobs:
           name: Run tests
           command: |
             . venv/bin/activate
+            isort --check-only --recursive --diff ./eox_tenant
             coverage run --source="." manage.py test
             coverage report --fail-under=71 -m
             pycodestyle ./eox_tenant
