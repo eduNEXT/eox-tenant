@@ -21,6 +21,13 @@ UserModel = get_user_model()
 theming_helpers = get_theming_helpers()
 
 
+class EoxTenantAuthFailedError(AuthFailedError):
+    """Exception raised for errors in Authentication.
+        Inherits from AuthFailedError defined by EdxApp
+    """
+    pass
+
+
 class TenantAwareAuthBackend(EdxAuthBackend):
     """
     Authentication Backend class which will check if the user has a signupsource in the requested site.
@@ -84,7 +91,7 @@ class TenantAwareAuthBackend(EdxAuthBackend):
                     loggable_id,
                     current_domain,
                 )
-                raise AuthFailedError(_('User not authorized to perform this action'))
+                raise EoxTenantAuthFailedError(_('User not authorized to perform this action'))
             else:
                 AUDIT_LOG.warning(
                     u"User `%s` tried to login in site `%s`, the permission "

@@ -18,7 +18,12 @@ def proxy_regression(module, model, regressive_model):
         setattr(module, model, regressive_model)
         yield
     except AttributeError as error:
-        logger.error('The error %s has been generated for the module %s and model %s', error, module, model)
+        logger.error(
+            "EoxTenantAttributeError | The error %s has been generated for the module %s and model %s",
+            error,
+            module,
+            model,
+        )
         raise
 
     setattr(module, model, previous_model)

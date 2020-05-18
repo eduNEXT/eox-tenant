@@ -71,7 +71,9 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         try:
             return getattr(settings, name, default)
         except AttributeError as error:
-            logger.exception("Invalid data at the TenantConfigProxy get_value. \n [%s]", error)
+            logger.exception(
+                "EoxTenantAttributeError | Invalid data at the TenantConfigProxy get_value. \n [%s]",
+                error)
 
         return default
 
