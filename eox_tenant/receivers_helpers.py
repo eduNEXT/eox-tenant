@@ -3,7 +3,7 @@ Common utilities for use along signals file.
 """
 from django.conf import settings
 
-from eox_tenant.models import TenantConfig, Microsite
+from eox_tenant.models import Microsite, TenantConfig
 
 
 def get_tenant_config_by_domain(domain):

@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 
 from os.path import dirname, realpath
-from subprocess import check_output, CalledProcessError
+from subprocess import CalledProcessError, check_output
 
 from django.http import JsonResponse
 

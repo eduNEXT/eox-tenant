@@ -3,7 +3,6 @@ Backend Certificates file, here should be all the necessary methods,
 classes and modules from lms.djangoapss.certificates.
 """
 from django.conf import settings
-
 from lms.djangoapps.certificates import models  # pylint: disable=import-error
 
 from eox_tenant.test_utils import TestCertificatesModels

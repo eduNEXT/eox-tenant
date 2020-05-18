@@ -23,8 +23,8 @@ from __future__ import print_function, unicode_literals
 import logging
 import os
 from datetime import datetime
-import six
 
+import six
 from django.apps.config import AppConfig
 from django.conf import settings as base_settings
 

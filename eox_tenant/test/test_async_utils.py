@@ -4,7 +4,6 @@ Tests for the async_utils module.
 """
 from django.contrib.sites.models import Site
 from django.test import TestCase
-
 from mock import patch
 
 from eox_tenant.async_utils import AsyncTaskHandler

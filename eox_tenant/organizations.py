@@ -2,7 +2,6 @@
 General methods for eox-tenant organizations.
 """
 import six
-
 from django.conf import settings
 
 

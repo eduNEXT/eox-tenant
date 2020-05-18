@@ -1,6 +1,5 @@
 """This module include a class that checks the tenant aware functions"""
 import mock
-
 from django.test import TestCase, override_settings
 
 from eox_tenant.tenant_aware_functions.enrollments import filter_enrollments
