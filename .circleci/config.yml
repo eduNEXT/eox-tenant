@@ -48,6 +48,7 @@ jobs:
             coverage report --fail-under=71 -m
             pycodestyle ./eox_tenant
             pylint ./eox_tenant --rcfile=./setup.cfg
+            isort --check-only --recursive --diff ./eox_tenant
 
   # Based on answer https://discuss.circleci.com/t/run-tests-on-multiple-versions-of-python/15462
   test-2.7:
@@ -86,3 +87,4 @@ jobs:
             coverage report --fail-under=71 --rcfile=.coveragerc -m
             pycodestyle ./eox_tenant
             pylint ./eox_tenant --rcfile=./setup.cfg
+            isort --check-only --recursive --diff ./eox_tenant
