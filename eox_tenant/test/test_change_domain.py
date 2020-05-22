@@ -1,10 +1,9 @@
 """This module include a class that checks the command change_domain.py"""
 
 import mock
-
-from django.test import TestCase
 from django.contrib.sites.models import Site
 from django.core.management import call_command
+from django.test import TestCase
 
 from eox_tenant.models import Microsite
 

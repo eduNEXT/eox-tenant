@@ -2,7 +2,6 @@
 This files should contain all the context managers for the tenant_wise module.
 """
 import logging
-
 from contextlib import contextmanager
 
 logger = logging.getLogger(__name__)

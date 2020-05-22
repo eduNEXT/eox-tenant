@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django_mysql.models import JSONField
 
-from eox_tenant.models import Microsite, TenantConfig, Route
+from eox_tenant.models import Microsite, Route, TenantConfig
 from eox_tenant.widgets import JsonWidget
 
 

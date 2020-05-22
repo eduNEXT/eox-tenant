@@ -5,8 +5,8 @@ from __future__ import absolute_import
 
 from django.test import TestCase
 
-from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy, TenantGeneratedCertificateProxy
 from eox_tenant.models import Microsite, TenantConfig
+from eox_tenant.tenant_wise.proxies import TenantGeneratedCertificateProxy, TenantSiteConfigProxy
 from eox_tenant.test_utils import CertificatesFakeModel, TestCertificateStatuses
 
 

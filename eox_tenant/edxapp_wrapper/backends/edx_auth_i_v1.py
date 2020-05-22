@@ -1,5 +1,7 @@
 """ Backend abstraction. """
-from openedx.core.djangoapps.oauth_dispatch.dot_overrides.backends import EdxRateLimitedAllowAllUsersModelBackend  # pylint: disable=import-error
+from openedx.core.djangoapps.oauth_dispatch.dot_overrides.backends import (  # pylint: disable=import-error
+    EdxRateLimitedAllowAllUsersModelBackend,
+)
 from openedx.core.djangoapps.user_authn.exceptions import AuthFailedError  # pylint: disable=import-error
 
 

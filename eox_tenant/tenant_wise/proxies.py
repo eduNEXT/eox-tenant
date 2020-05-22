@@ -14,8 +14,8 @@ from django.db import models
 
 from eox_tenant.edxapp_wrapper.certificates_module import get_certificates_models
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
-from eox_tenant.organizations import get_organizations
 from eox_tenant.models import Microsite, TenantConfig
+from eox_tenant.organizations import get_organizations
 from eox_tenant.tenant_wise.context_managers import proxy_regression
 
 SiteConfigurationModels = get_site_configuration_models()

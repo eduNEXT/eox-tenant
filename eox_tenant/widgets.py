@@ -2,6 +2,7 @@
 Widgets for eox-tenant forms.
 """
 import json
+
 from django.forms.widgets import Widget
 
 

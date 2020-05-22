@@ -11,13 +11,13 @@ from django.test import TestCase
 from mock import MagicMock, patch
 
 from eox_tenant.signals import (
-    start_tenant,
-    _ttl_reached,
-    _update_settings,
     _analyze_current_settings,
     _repopulate_apps,
-    tenant_context_addition,
+    _ttl_reached,
+    _update_settings,
     start_async_tenant,
+    start_tenant,
+    tenant_context_addition,
 )
 
 

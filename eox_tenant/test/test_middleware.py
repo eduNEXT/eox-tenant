@@ -3,15 +3,14 @@
 TODO: add me
 """
 import mock
-
 from django.contrib.sites.models import Site
-from django.test import TestCase, RequestFactory, override_settings
 from django.http import Http404
+from django.test import RequestFactory, TestCase, override_settings
 
 from eox_tenant.middleware import (
-    MicrositeCrossBrandingFilterMiddleware,
     AvailableScreenMiddleware,
     CurrentSiteMiddleware,
+    MicrositeCrossBrandingFilterMiddleware,
 )
 
 

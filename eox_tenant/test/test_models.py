@@ -3,8 +3,9 @@
 TODO: add me
 """
 from __future__ import absolute_import
-from django.test import TestCase
+
 from django.core.exceptions import ValidationError
+from django.test import TestCase
 
 from eox_tenant.models import Microsite
 

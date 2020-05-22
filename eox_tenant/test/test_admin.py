@@ -1,11 +1,11 @@
 """
 Tests for Admin module
 """
-from django.test import TestCase
 from django.contrib.admin.sites import AdminSite
+from django.test import TestCase
 
-from eox_tenant.models import Microsite, TenantConfig
 from eox_tenant.admin import MicrositeAdmin, TenantConfigAdmin
+from eox_tenant.models import Microsite, TenantConfig
 
 
 class MicrositeAdminTest(TestCase):

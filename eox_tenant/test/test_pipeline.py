@@ -5,7 +5,7 @@ Tests for the pipeline module used in multi-tenant third party auth.
 from django.test import TestCase
 from mock import MagicMock
 
-from eox_tenant.pipeline import safer_associate_by_email, EoxTenantAuthException
+from eox_tenant.pipeline import EoxTenantAuthException, safer_associate_by_email
 
 
 class AssociationByEmailTest(TestCase):

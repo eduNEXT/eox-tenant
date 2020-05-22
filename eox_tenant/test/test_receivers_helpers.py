@@ -3,13 +3,10 @@ Module for receivers_helpers tests.
 """
 
 from __future__ import absolute_import
+
 from django.test import TestCase
 
-from eox_tenant.models import (
-    Microsite,
-    Route,
-    TenantConfig,
-)
+from eox_tenant.models import Microsite, Route, TenantConfig
 from eox_tenant.receivers_helpers import get_tenant_config_by_domain
 
 

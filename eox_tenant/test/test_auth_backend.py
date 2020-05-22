@@ -3,14 +3,10 @@
 Module for Auth backend tests.
 """
 import mock
+from django.contrib.auth.models import Permission, User
+from django.test import RequestFactory, TestCase, override_settings
 
-from django.contrib.auth.models import User, Permission
-from django.test import TestCase, RequestFactory, override_settings
-
-from eox_tenant.permissions import (
-    LOGIN_ALL_TENANTS_PERMISSION_CODENAME,
-    load_permissions
-)
+from eox_tenant.permissions import LOGIN_ALL_TENANTS_PERMISSION_CODENAME, load_permissions
 
 
 class TenantAwareAuthBackendTest(TestCase):

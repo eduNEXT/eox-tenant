@@ -9,7 +9,7 @@ from importlib import import_module
 import six
 from django.conf import settings
 
-from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy, TenantGeneratedCertificateProxy
+from eox_tenant.tenant_wise.proxies import TenantGeneratedCertificateProxy, TenantSiteConfigProxy
 
 
 def load_tenant_wise_overrides():

@@ -5,18 +5,19 @@ the subdomain from prod domains to stage versions.
 import json
 import logging
 
+from django.conf import settings
+from django.contrib.sites.models import Site
+from django.core.management.base import BaseCommand
+
+from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
+from eox_tenant.edxapp_wrapper.users import get_user_signup_source
+from eox_tenant.models import Microsite
+
 try:
     from urllib.parse import urlparse  # Python 3 Compatible
 except ImportError:
     from urlparse import urlparse  # Python 2 Compatible
 
-from django.conf import settings
-from django.contrib.sites.models import Site
-from django.core.management.base import BaseCommand
-
-from eox_tenant.models import Microsite
-from eox_tenant.edxapp_wrapper.get_common_util import strip_port_from_host
-from eox_tenant.edxapp_wrapper.users import get_user_signup_source
 
 LOGGER = logging.getLogger(__name__)
 UserSignupSource = get_user_signup_source()
