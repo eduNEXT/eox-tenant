@@ -56,6 +56,24 @@ def plugin_settings(settings):
         'TenantSiteConfigProxy': True,
         'TenantGeneratedCertificateProxy': True,
     }
+    settings.REST_FRAMEWORK = {
+        'PAGINATE_BY': 10,
+        'PAGINATE_BY_PARAM': 'page_size',
+        'MAX_PAGINATE_BY': 100,
+        'DEFAULT_PAGINATION_SERIALIZER_CLASS':
+            'rest_framework_ember.pagination.EmberPaginationSerializer',
+        'DEFAULT_PARSER_CLASSES': (
+            'rest_framework_ember.parsers.EmberJSONParser',
+            'rest_framework.parsers.FormParser',
+            'rest_framework.parsers.MultiPartParser'
+        ),
+        'DEFAULT_RENDERER_CLASSES': (
+            'rest_framework_ember.renderers.JSONRenderer',
+            'rest_framework.renderers.BrowsableAPIRenderer',
+        ),
+        'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
+    }
+
     try:
         settings.MAKO_TEMPLATE_DIRS_BASE.insert(0, path(__file__).abspath().dirname().dirname() / 'templates')  # pylint: disable=no-value-for-parameter
     except AttributeError:

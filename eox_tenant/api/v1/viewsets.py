@@ -16,6 +16,7 @@ class MicrositeViewSet(viewsets.ModelViewSet):
     """
     Microsite viewset.
     """
+    resource_name = 'data'
     permission_classes = [EoxTenantAPIPermission]
     serializer_class = MicrositeSerializer
     queryset = Microsite.objects.all()
