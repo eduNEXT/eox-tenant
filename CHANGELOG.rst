@@ -13,6 +13,7 @@ Unreleased
 ~~~~~~~~~~
 
 * Add tests in python 3.5
+* Added command to move SignUpSources from a site to another site.
 
 [2.5.0] - 2020-01-03
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
