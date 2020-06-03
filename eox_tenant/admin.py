@@ -3,8 +3,9 @@ Django admin page for microsite model
 """
 from django import forms
 from django.contrib import admin
-from django.core.urlresolvers import reverse
 from django.db import models
+from django.urls import reverse
+from django.utils.html import mark_safe
 from django_mysql.models import JSONField
 
 from eox_tenant.models import Microsite, Route, TenantConfig
@@ -205,7 +206,7 @@ class RouteAdmin(admin.ModelAdmin):
         """
         # pylint: disable=protected-access
         url = reverse('admin:%s_%s_change' % (route._meta.app_label, "tenantconfig"), args=[route.config.id])
-        return u'<a href="%s">%s</a>' % (url, route.config.__unicode__())
+        return mark_safe('<a href="%s">%s</a>' % (url, route.config.__unicode__()))
 
     config_link.allow_tags = True
     config_link.short_description = "Configuration"
