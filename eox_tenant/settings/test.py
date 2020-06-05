@@ -11,6 +11,7 @@ class SettingsClass(object):
     pass
 
 
+ALLOWED_HOSTS = ['*']
 SETTINGS = SettingsClass()
 # This is executing the plugin_settings method imported from common module
 plugin_settings(SETTINGS)
