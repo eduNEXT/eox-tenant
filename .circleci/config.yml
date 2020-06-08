@@ -9,6 +9,7 @@ workflows:
   test:
     jobs:
       - test-3.6
+      - test-3.5
       - test-2.7
 jobs:
   test-3.6:
@@ -39,6 +40,45 @@ jobs:
           paths:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            coverage run --source="." manage.py test
+            coverage report --fail-under=71 -m
+            pycodestyle ./eox_tenant
+            pylint ./eox_tenant --rcfile=./setup.cfg
+            isort --check-only --recursive --diff ./eox_tenant
+
+  test-3.5:
+    docker:
+      # specify the version you desire here
+      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
+      - image: circleci/python:3.5
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-35-dependencies-{{ checksum "requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-35-dependencies-
+
+      - run:
+          name: activate virtualenv and install dependencies.
+          command: |
+            test -d venv || virtualenv -p python3 ./venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-35-dependencies-{{ checksum "requirements.txt" }}
 
       - run:
           name: Run tests
