@@ -9,5 +9,5 @@ from django.conf.urls import include, url
 from eox_tenant.api.v1.routers import router
 
 urlpatterns = [
-    url(r'', include(router.urls, namespace='tenant-api')),
+    url(r'', include((router.urls, 'eox_tenant'), namespace='tenant-api')),
 ]

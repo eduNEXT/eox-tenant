@@ -284,7 +284,8 @@ class Route(models.Model):
     )
 
     config = models.ForeignKey(
-        TenantConfig
+        TenantConfig,
+        on_delete=models.CASCADE,
     )
 
     class Meta:

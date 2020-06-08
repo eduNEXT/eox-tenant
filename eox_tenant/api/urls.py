@@ -7,5 +7,5 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 from django.conf.urls import include, url
 
 urlpatterns = [
-    url(r'^v1/', include('eox_tenant.api.v1.urls', namespace='v1'))
+    url(r'^v1/', include(('eox_tenant.api.v1.urls', 'eox_tenant'), namespace='v1'))
 ]
