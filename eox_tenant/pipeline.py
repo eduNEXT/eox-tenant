@@ -45,3 +45,25 @@ def safer_associate_by_email(backend, details, user=None, *args, **kwargs):
                 )
             return {'user': users[0],
                     'is_new': False}
+
+
+def safer_associate_by_signupsource(backend, request, details, user=None, *args, **kwargs):
+    """
+    Inherits the functionality of safer_associate_by_email
+    and checks that the user belongs to the current host.
+    """
+    user = safer_associate_by_email(backend, details, user)
+    if user.get('is_new', True):
+        return None
+
+    user = user.get('user')
+
+    if not user.signupsource_set.filter(site=request.META['HTTP_HOST']).exists():
+        raise EoxTenantAuthException(
+            backend,
+            'this user is not allowed in this host',
+        )
+    return {
+        'user': user,
+        'is_new': False,
+    }
