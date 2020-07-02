@@ -14,6 +14,7 @@ EOX_TENANT_MIDDLEWARES = [
     'eox_tenant.middleware.MicrositeCrossBrandingFilterMiddleware',
 ]
 
+
 def plugin_settings(settings):  # pylint: disable=function-redefined
     """
     Set of plugin settings used by the Open Edx platform.
@@ -80,7 +81,6 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     if DJANGO_CURRENT_SITE_MIDDLEWARE in getattr(settings, middleware) and getattr(settings, 'USE_EOX_TENANT', False):
         aux = getattr(settings, middleware)
         aux[getattr(settings, middleware).index(DJANGO_CURRENT_SITE_MIDDLEWARE)] = EOX_TENANT_CURRENT_SITE_MIDDLEWARE  # pylint: disable=line-too-long
-        
         setattr(settings, middleware, aux)
 
     if settings.SERVICE_VARIANT == "lms":
@@ -88,6 +88,4 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
             aux = getattr(settings, middleware) + EOX_TENANT_MIDDLEWARES
             setattr(settings, middleware, aux)
 
-        settings.AUTHENTICATION_BACKENDS = [
-            EOX_TENANT_AUTH_BACKEND if (backend == EDX_AUTH_BACKEND) else backend for backend in settings.AUTHENTICATION_BACKENDS # pylint: disable=line-too-long
-        ]
+        settings.AUTHENTICATION_BACKENDS = [EOX_TENANT_AUTH_BACKEND if (backend == EDX_AUTH_BACKEND) else backend for backend in settings.AUTHENTICATION_BACKENDS]  # pylint: disable=line-too-long
