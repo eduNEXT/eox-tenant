@@ -12,6 +12,14 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+*
+
+[2.6.0] - 2020-07-02
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added
+_____
+
 * Add tests in python 3.5
 * Added command to move SignUpSources from a site to another site.
 
