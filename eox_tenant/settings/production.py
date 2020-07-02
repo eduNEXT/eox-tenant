@@ -8,6 +8,11 @@ EDX_AUTH_BACKEND = 'openedx.core.djangoapps.oauth_dispatch.dot_overrides.backend
 EOX_TENANT_AUTH_BACKEND = 'eox_tenant.auth.TenantAwareAuthBackend'
 DJANGO_CURRENT_SITE_MIDDLEWARE = 'django.contrib.sites.middleware.CurrentSiteMiddleware'
 
+EOX_TENANT_CURRENT_SITE_MIDDLEWARE = 'eox_tenant.middleware.CurrentSiteMiddleware'
+EOX_TENANT_MIDDLEWARES = [
+    'eox_tenant.middleware.AvailableScreenMiddleware',
+    'eox_tenant.middleware.MicrositeCrossBrandingFilterMiddleware',
+]
 
 def plugin_settings(settings):  # pylint: disable=function-redefined
     """
@@ -67,14 +72,22 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         settings.TENANT_WISE_ALLOWED_PROXIES
     )
 
-    if DJANGO_CURRENT_SITE_MIDDLEWARE in settings.MIDDLEWARE_CLASSES and getattr(settings, 'USE_EOX_TENANT', False):
-        settings.MIDDLEWARE_CLASSES[settings.MIDDLEWARE_CLASSES.index(DJANGO_CURRENT_SITE_MIDDLEWARE)] = 'eox_tenant.middleware.CurrentSiteMiddleware'  # pylint: disable=line-too-long
+    # Validate if MIDDLEWARE_CLASSES attribute exists in the environment
+    middleware = 'MIDDLEWARE_CLASSES'
+    if not hasattr(settings, middleware):
+        middleware = 'MIDDLEWARE'
+
+    if DJANGO_CURRENT_SITE_MIDDLEWARE in getattr(settings, middleware) and getattr(settings, 'USE_EOX_TENANT', False):
+        aux = getattr(settings, middleware)
+        aux[getattr(settings, middleware).index(DJANGO_CURRENT_SITE_MIDDLEWARE)] = EOX_TENANT_CURRENT_SITE_MIDDLEWARE  # pylint: disable=line-too-long
+        
+        setattr(settings, middleware, aux)
 
     if settings.SERVICE_VARIANT == "lms":
         if settings.EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES:
-            settings.MIDDLEWARE_CLASSES += [
-                'eox_tenant.middleware.AvailableScreenMiddleware',
-                'eox_tenant.middleware.MicrositeCrossBrandingFilterMiddleware',
-            ]
+            aux = getattr(settings, middleware) + EOX_TENANT_MIDDLEWARES
+            setattr(settings, middleware, aux)
 
-        settings.AUTHENTICATION_BACKENDS = [EOX_TENANT_AUTH_BACKEND if (backend == EDX_AUTH_BACKEND) else backend for backend in settings.AUTHENTICATION_BACKENDS]  # pylint: disable=line-too-long
+        settings.AUTHENTICATION_BACKENDS = [
+            EOX_TENANT_AUTH_BACKEND if (backend == EDX_AUTH_BACKEND) else backend for backend in settings.AUTHENTICATION_BACKENDS # pylint: disable=line-too-long
+        ]
