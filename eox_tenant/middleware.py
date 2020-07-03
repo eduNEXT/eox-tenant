@@ -29,7 +29,7 @@ HOST_VALIDATION_RE = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{2,5})?$"
 LOG = logging.getLogger(__name__)
 
 
-class MicrositeCrossBrandingFilterMiddleware():
+class MicrositeCrossBrandingFilterMiddleware(MiddlewareMixin):
     """
     Middleware class that prevents a course defined in a branded ORG trough a microsite, to be displayed
     on a different microsite with a different branding.
@@ -69,7 +69,7 @@ class MicrositeCrossBrandingFilterMiddleware():
         raise Http404
 
 
-class AvailableScreenMiddleware(object):
+class AvailableScreenMiddleware(MiddlewareMixin):
     """
     Middleware for Redirecting microsites to other domains or to error pages
     """
