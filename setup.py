@@ -3,8 +3,15 @@ Setup file for eox-tenant Django plugin.
 """
 import os
 import re
-from distutils.core import setup
 
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+
+
+with open('README.rst', 'r') as fh:
+    README = fh.read()
 
 def get_version():
     """
@@ -25,7 +32,21 @@ setup(
     description='Edunext Open edx extensions tenant.',
     author='eduNEXT',
     author_email='contact@edunext.co',
+    long_description=README,
+    long_description_content_type='text/x-rst',
     packages=['eox_tenant'],
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Framework :: Django :: 1.11',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: GNU Affero General Public License v3',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.5',
+    ],
+    license='AGPL',
     zip_safe=False,
     entry_points={
         "lms.djangoapp": [
