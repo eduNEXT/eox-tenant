@@ -79,13 +79,13 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         middleware = 'MIDDLEWARE'
 
     if DJANGO_CURRENT_SITE_MIDDLEWARE in getattr(settings, middleware) and getattr(settings, 'USE_EOX_TENANT', False):
-        aux = getattr(settings, middleware)
-        aux[getattr(settings, middleware).index(DJANGO_CURRENT_SITE_MIDDLEWARE)] = EOX_TENANT_CURRENT_SITE_MIDDLEWARE  # pylint: disable=line-too-long
-        setattr(settings, middleware, aux)
+        middleware_setting = getattr(settings, middleware)
+        middleware_setting[getattr(settings, middleware).index(DJANGO_CURRENT_SITE_MIDDLEWARE)] = EOX_TENANT_CURRENT_SITE_MIDDLEWARE  # pylint: disable=line-too-long
+        setattr(settings, middleware, middleware_setting)
 
     if settings.SERVICE_VARIANT == "lms":
         if settings.EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES:
-            aux = getattr(settings, middleware) + EOX_TENANT_MIDDLEWARES
-            setattr(settings, middleware, aux)
+            middleware_setting = getattr(settings, middleware) + EOX_TENANT_MIDDLEWARES
+            setattr(settings, middleware, middleware_setting)
 
         settings.AUTHENTICATION_BACKENDS = [EOX_TENANT_AUTH_BACKEND if (backend == EDX_AUTH_BACKEND) else backend for backend in settings.AUTHENTICATION_BACKENDS]  # pylint: disable=line-too-long
