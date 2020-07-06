@@ -9,10 +9,23 @@ Change Log
    
    This project adheres to Semantic Versioning (http://semver.org/).
 .. There should always be an "Unreleased" section for changes pending release.
+
 Unreleased
 ~~~~~~~~~~
 
+*
+
+[3.0.0] - 2020-07-06
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added
+_____
+
 * Added juniper support
+
+Removed
+_______
+
 * Removed hawthorn support
 
 [2.6.0] - 2020-07-02
