@@ -12,7 +12,8 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
-*
+* Added juniper support
+* Removed hawthorn support
 
 [2.6.0] - 2020-07-02
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
