@@ -48,6 +48,9 @@ setup(
     ],
     license='AGPL',
     zip_safe=False,
+    install_requires=[
+        "django-mysql==3.6; python_version=='3.5'",
+    ],
     entry_points={
         "lms.djangoapp": [
             "eox_tenant = eox_tenant.apps:EdunextOpenedxExtensionsTenantConfig"
