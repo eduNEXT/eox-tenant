@@ -9,6 +9,7 @@ from importlib import import_module
 import six
 from django.conf import settings
 
+from eox_tenant.constants import LMS_ENVIRONMENT
 from eox_tenant.tenant_wise.proxies import TenantGeneratedCertificateProxy, TenantSiteConfigProxy
 
 
@@ -26,7 +27,7 @@ def load_tenant_wise_overrides():
                 proxy=TenantSiteConfigProxy
             )
 
-        if allowed_proxies.get('TenantGeneratedCertificateProxy'):
+        if allowed_proxies.get('TenantGeneratedCertificateProxy') and LMS_ENVIRONMENT:
             set_package_members_as_proxy(
                 package_name='lms.djangoapps.certificates',
                 model='GeneratedCertificate',

@@ -5,6 +5,7 @@ classes and modules from lms.djangoapss.certificates.
 from django.conf import settings
 from lms.djangoapps.certificates import models  # pylint: disable=import-error
 
+from eox_tenant.constants import LMS_ENVIRONMENT
 from eox_tenant.test_utils import TestCertificatesModels
 
 
@@ -19,4 +20,4 @@ def get_certificates_models():
     # when we are running the platform test, in order to avoid django migration errors.
     # USE_EOX_TENANT is set to False by default, which allows to run the platform tests with its normal behavior,
     # and the plugin tests are run with a different backend.
-    return models if getattr(settings, 'USE_EOX_TENANT', False) else TestCertificatesModels()
+    return models if getattr(settings, 'USE_EOX_TENANT', False) and LMS_ENVIRONMENT else TestCertificatesModels()
