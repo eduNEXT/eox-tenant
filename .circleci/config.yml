@@ -9,11 +9,22 @@ workflows:
   test:
     jobs:
       - test:
+          filters:
+            tags:
+              only: /v?[0-9]+(\.[0-9]+)*/
           matrix:
             # See: https://circleci.com/docs/2.0/configuration-reference/#matrix-requires-version-21
             parameters:
               python_version: ["2.7", "3.5", "3.6"]
               debian_version: ["stretch"]
+      - pypi:
+          requires:
+            - test
+          filters:
+            tags:
+              only: /v?[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
 
 jobs:
   test:
@@ -60,3 +71,35 @@ jobs:
             pycodestyle ./eox_tenant
             pylint ./eox_tenant --rcfile=./setup.cfg
             isort --check-only --recursive --diff ./eox_tenant
+
+  pypi:
+    docker:
+      - image: circleci/python:3.5
+    steps:
+      - checkout
+      - run:
+          name: Init .pypirc
+          command: |
+            echo $'[distutils]\nindex-servers = pypi\n[pypi]' > ~/.pypirc
+            echo -e "username = $PYPI_USERNAME" >> ~/.pypirc
+            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
+      - run:
+          name: Prepare venv for distribution
+          command: |
+            virtualenv venv
+            source venv/bin/activate
+            pip install twine
+      - run:
+          name: Create package
+          command: |
+            python setup.py sdist bdist_wheel
+      - run:
+          name: Check package
+          command: |
+            source venv/bin/activate
+            twine check dist/*
+      - run:
+          name: Upload to pypi
+          command: |
+            source venv/bin/activate
+            twine upload dist/*
