@@ -27,6 +27,12 @@ def load_tenant_wise_overrides():
                 proxy=TenantSiteConfigProxy
             )
 
+            set_as_proxy(
+                modules='contentstore.utils',
+                model='SiteConfiguration',
+                proxy=TenantSiteConfigProxy
+            )
+
         if allowed_proxies.get('TenantGeneratedCertificateProxy') and LMS_ENVIRONMENT:
             set_package_members_as_proxy(
                 package_name='lms.djangoapps.certificates',
