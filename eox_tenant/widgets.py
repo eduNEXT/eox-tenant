@@ -3,6 +3,7 @@ Widgets for eox-tenant forms.
 """
 import json
 
+import six
 from django.forms.widgets import Widget
 
 
@@ -16,8 +17,10 @@ class JsonWidget(Widget):
         """
         Add indent to JSONField.
         """
+        value = json.loads(value) if isinstance(value, six.string_types) else value
+
         try:
-            value = json.dumps(json.loads(value), indent=4, sort_keys=True)
+            value = json.dumps(value, indent=4, sort_keys=True)
         except ValueError:
             pass
         return {'widget': {

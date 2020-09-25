@@ -33,4 +33,4 @@ class RouteViewSet(viewsets.ModelViewSet):
     parser_classes = [JSONParser]
     permission_classes = [EoxTenantAPIPermission]
     serializer_class = RouteSerializer
-    queryset = Route.objects.all()  # pylint: disable=no-member
+    queryset = Route.objects.all()

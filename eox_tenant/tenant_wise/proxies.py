@@ -9,7 +9,6 @@ from itertools import chain
 import six
 from django.conf import settings
 from django.core.cache import cache
-from django.core.exceptions import FieldError
 from django.db import models
 
 from eox_tenant.edxapp_wrapper.certificates_module import get_certificates_models
@@ -43,9 +42,9 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         """ Set as a proxy model. """
         proxy = True
 
-    def __unicode__(self):
+    def __str__(self):
         key = getattr(settings, "EDNX_TENANT_KEY", "No tenant is active at the moment")
-        return u"<Tenant proxy as site_configuration: {}>".format(key)
+        return "<Tenant proxy as site_configuration: {}>".format(key)
 
     @property
     def enabled(self):
@@ -137,10 +136,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         Returns a configuration value for a microsite or TenantConfig which has an org_filter that matches
         what is passed in.
         """
-        try:
-            return cls.__get_value_for_org(org, val_name, default)
-        except FieldError:
-            return cls.__deprecated_get_value_for_org(org, val_name, default)
+        return cls.__deprecated_get_value_for_org(org, val_name, default)
 
     @classmethod
     def set_key_to_cache(cls, key, value):
@@ -239,31 +235,24 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         if cache.get(pre_load_value_key):
             return
 
-        try:
-            tenant_config = TenantConfig.objects.filter(
-                lms_configs__has_key=u"course_org_filter",
-            ).values_list("lms_configs", flat=True)
-
-            microsite_config = Microsite.objects.filter(
-                values__has_key=u"course_org_filter",
-            ).values_list("values", flat=True)
-        except FieldError:
-            tenant_config = TenantConfig.objects.values_list("lms_configs")
-            microsite_config = Microsite.objects.values_list("values")
+        tenant_config = TenantConfig.objects.values_list("lms_configs", flat=True)
+        microsite_config = Microsite.objects.values_list("values", flat=True)
 
         for config in chain(microsite_config, tenant_config):
             try:
-                org_filter = config.get("course_org_filter")
+                if isinstance(config, six.string_types):
+                    config = json.loads(config)
+
+                org_filter = config.get("course_org_filter", [])
                 result = config.get(val_name)
             except AttributeError:
                 continue
 
-            if org_filter and isinstance(org_filter, list):
-                for org in org_filter:
-                    key = "org-value-{}-{}".format(org, val_name)
-                    cls.set_key_to_cache(key, result)
-            elif org_filter:
-                key = "org-value-{}-{}".format(org_filter, val_name)
+            if isinstance(org_filter, six.string_types):
+                org_filter = [org_filter]
+
+            for org in org_filter:
+                key = "org-value-{}-{}".format(org, val_name)
                 cls.set_key_to_cache(key, result)
 
         cls.set_key_to_cache(pre_load_value_key, True)
@@ -328,9 +317,9 @@ class TenantGeneratedCertificateProxy(GeneratedCertificate):
         """ Set as a proxy model. """
         proxy = True
 
-    def __unicode__(self):
+    def __str__(self):
         key = getattr(settings, "EDNX_TENANT_KEY", "No tenant is active at the moment")
-        return u"<Tenant proxy as GeneratedCertificate: {}>".format(key)
+        return "<Tenant proxy as GeneratedCertificate: {}>".format(key)
 
     def save(self, *args, **kwargs):
         """

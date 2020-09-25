@@ -55,6 +55,18 @@ class EdunextOpenedxExtensionsTenantConfig(AppConfig):
                         'receiver_func_name': 'start_async_tenant',
                         'signal_path': 'celery.signals.task_prerun',
                     },
+                    {
+                        'receiver_func_name': 'update_tenant_organizations',
+                        'signal_path': 'django.db.models.signals.post_save',
+                        'dispatch_uid': 'update_tenant_organizations_receiver',
+                        'sender_path': 'eox_tenant.models.TenantConfig',
+                    },
+                    {
+                        'receiver_func_name': 'update_tenant_organizations',
+                        'signal_path': 'django.db.models.signals.post_save',
+                        'dispatch_uid': 'update_tenant_organizations_receiver',
+                        'sender_path': 'eox_tenant.models.Microsite',
+                    },
                 ],
             },
             'cms.djangoapp': {

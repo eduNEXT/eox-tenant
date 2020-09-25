@@ -3,81 +3,34 @@ Model to store a microsite in the database.
 The object is stored as a json representation of the python dict
 that would have been used in the settings.
 """
+import collections
 import json
 
+import six
 from django.db import connection, models
 from django.utils.translation import ugettext_lazy as _
-from django_mysql.checks import mysql_connections
+from jsonfield.fields import JSONField
 
 
-def check_mysql_version():
+class TenantOrganization(models.Model):
     """
-    Return True if the mysql version exists and it is mayor to 5.7.
+    Model to persist organizations.
     """
-    valid_version = False
-    connections = list(mysql_connections())
 
-    if connections:
-        for alias, conn in connections:  # pylint: disable=unused-variable
-            if hasattr(conn, "mysql_version") and conn.mysql_version >= (5, 7):
-                valid_version = True
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        db_index=True,
+    )
 
-    return valid_version
-
-
-if check_mysql_version():
-    from django_mysql.models import JSONField
-else:
-    from jsonfield.fields import JSONField
-
-
-class JsonSearchMixin(object):
-    """
-    Mixin to search for values in JSONField.
-    """
-    def filter_on_json_fields(self, search_term, fields):
+    class Meta:
         """
-        Look for the value in the given field list, the fields must be of type JSONField.
-
-        Args:
-            search_term: String.
-            fields: List of Strings.
-        Returns:
-            Queryset list of the invoking class.
+        Model meta class.
         """
-        if search_term == '':
-            return self.model.objects.none()
+        app_label = "eox_tenant"
 
-        sql = """SELECT id FROM {table} WHERE """ \
-              .format(table=self.model._meta.db_table)  # pylint: disable=protected-access
-        sql = self.add_fields(sql, fields)
-        with connection.cursor() as cursor:
-            cursor.execute(sql, ['%' + search_term + '%'] * len(fields))
-            rows = cursor.fetchall()
-        rows = [row[0] for row in rows]
-        result = self.model.objects.filter(pk__in=rows)
-
-        if not result:
-            return self.model.objects.none()
-
-        return result
-
-    def add_fields(self, sql, fields):
-        """
-        Return the query with the fields on which you want to search.
-        """
-        conditions = []
-        for field in fields:
-            conditions.append("""JSON_EXTRACT(`{field}`,"$.*") LIKE %s""".format(field=field))
-        conditions = (' OR ').join(conditions)
-        return sql + conditions
-
-
-class MicrositeManager(models.Manager, JsonSearchMixin):
-    """
-    Custom manager for Microsites model.
-    """
-    pass
+    def __str__(self):
+        return "<Org: {}>".format(self.name)
 
 
 class Microsite(models.Model):
@@ -95,8 +48,8 @@ class Microsite(models.Model):
     """
     key = models.CharField(max_length=63, db_index=True)
     subdomain = models.CharField(max_length=127, db_index=True)
-    values = JSONField(null=False, blank=True)
-    objects = MicrositeManager()
+    values = JSONField(blank=True, default={}, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    organizations = models.ManyToManyField(TenantOrganization, blank=True)
 
     class Meta:
         """
@@ -106,7 +59,7 @@ class Microsite(models.Model):
         db_table = 'ednx_microsites_microsite'
         app_label = "eox_tenant"
 
-    def __unicode__(self):
+    def __str__(self):
         return self.key
 
     def get_organizations(self):
@@ -117,7 +70,7 @@ class Microsite(models.Model):
         # MicrositeOrganizationMapping.get_organizations_for_microsite_by_pk(self.id)
         org_filter = self.values.get('course_org_filter')  # pylint: disable=no-member
 
-        if isinstance(org_filter, str):
+        if isinstance(org_filter, six.string_types):
             org_filter = [org_filter]
 
         return org_filter
@@ -146,12 +99,10 @@ class Microsite(models.Model):
         Returns:
             The value for the given key and org.
         """
-        results = cls.objects.filter(
-            values__course_org_filter__contains=org
-        ).values_list("values", flat=True)
+        results = cls.objects.filter(organizations__name=org)
 
         for result in results:
-            value = result.get(val_name)
+            value = result.values.get(val_name)
 
             if value:
                 return value
@@ -159,7 +110,7 @@ class Microsite(models.Model):
         return None
 
 
-class TenantConfigManager(models.Manager, JsonSearchMixin):
+class TenantConfigManager(models.Manager):
     """
     Custom managaer for Tenant Config model.
     """
@@ -204,10 +155,11 @@ class TenantConfig(models.Model):
     """
 
     external_key = models.CharField(max_length=63, db_index=True)
-    lms_configs = JSONField(null=False, blank=True)
-    studio_configs = JSONField(null=False, blank=True)
-    theming_configs = JSONField(null=False, blank=True)
-    meta = JSONField(null=False, blank=True)
+    lms_configs = JSONField(blank=True, default={}, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    studio_configs = JSONField(blank=True, default={}, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    theming_configs = JSONField(blank=True, default={}, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    meta = JSONField(blank=True, default={}, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    organizations = models.ManyToManyField(TenantOrganization, blank=True)
 
     class Meta:
         """
@@ -225,7 +177,7 @@ class TenantConfig(models.Model):
 
         org_filter = self.lms_configs.get("course_org_filter")  # pylint: disable=no-member
 
-        if isinstance(org_filter, str):
+        if isinstance(org_filter, six.string_types):
             org_filter = [org_filter]
 
         return org_filter
@@ -259,12 +211,10 @@ class TenantConfig(models.Model):
         Returns:
             The value for the given key and org.
         """
-        results = cls.objects.filter(
-            lms_configs__course_org_filter__contains=org
-        ).values_list("lms_configs", flat=True)
+        results = cls.objects.filter(organizations__name=org)
 
         for result in results:
-            value = result.get(val_name)
+            value = result.lms_configs.get(val_name)
 
             if value:
                 return value

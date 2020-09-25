@@ -39,7 +39,7 @@ class ReceiversHelpersTests(TestCase):
             meta={},
         )
 
-        Route.objects.create(  # pylint: disable=no-member
+        Route.objects.create(
             domain="domain1",
             config=TenantConfig.objects.get(external_key="tenant-key1"),
         )

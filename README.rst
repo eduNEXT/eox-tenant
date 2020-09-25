@@ -40,3 +40,17 @@ From version **1.0.0**\ , middlewares **RedirectionsMiddleware** and **PathRedir
       $ python manage.py lms migrate eox_tenant --settings=<your app settings>
 
 The table corresponding to the Redirection model will not be deleted but it will be discarded from the Django state
+
+Commands
+########
+
+Synchronize Organizations
+*************************
+This comand will synchronize the course_org_filter values in lms_configs(TenantConfig model) or values(Microsite model) with the TenantOrganization registers, if the organization does not existe, it will be create, otherwise it will be add to the organizations model field.
+
+
+.. code-block:: python
+
+  ./manage.py lms synchronize_organizations  # only for TenantConfig and Microsite
+  ./manage.py lms synchronize_organizations --model TenantConfig # only for TenantConfig
+  ./manage.py lms synchronize_organizations --model Microsite # only for Microsite

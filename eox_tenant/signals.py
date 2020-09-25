@@ -30,6 +30,7 @@ from django.conf import settings as base_settings
 
 from eox_tenant.async_utils import AsyncTaskHandler
 from eox_tenant.receivers_helpers import get_tenant_config_by_domain
+from eox_tenant.utils import synchronize_tenant_organizations
 
 LOG = logging.getLogger(__name__)
 
@@ -241,3 +242,15 @@ def start_async_tenant(sender, *args, **kwargs):  # pylint: disable=unused-argum
 
     # Do the update
     _update_settings(domain)
+
+
+def update_tenant_organizations(instance, **kwargs):  # pylint: disable=unused-argument
+    """
+    Receiver method  which synchronizes the course_org_filter value with
+    the instance.organizations field.
+
+    Args:
+        instance: This could be a TenantConfig or Microsite model instance.
+        kwargs: extra arguments.
+    """
+    synchronize_tenant_organizations(instance)
