@@ -1,14 +1,16 @@
 """
 Django admin page for microsite model
 """
+from itertools import chain
+
 from django import forms
 from django.contrib import admin
 from django.db import models
 from django.urls import reverse
-from django.utils.html import mark_safe
-from django_mysql.models import JSONField
+from django.utils.safestring import mark_safe
+from jsonfield.fields import JSONField
 
-from eox_tenant.models import Microsite, Route, TenantConfig
+from eox_tenant.models import Microsite, Route, TenantConfig, TenantOrganization
 from eox_tenant.widgets import JsonWidget
 
 
@@ -29,26 +31,12 @@ class MicrositeAdmin(admin.ModelAdmin):
         'template_dir',
         'course_org_filter',
         'ednx_signal',
+        'organizations',
     )
     formfield_overrides = {
         JSONField: {'widget': JsonWidget}
     }
-    search_fields = ('key', 'subdomain',)
-
-    def get_search_results(self, request, queryset, search_term):
-        """
-        Add the filter to search by value.
-        """
-        queryset, use_distinct = super(MicrositeAdmin, self).get_search_results(
-            request,
-            queryset,
-            search_term
-        )
-        queryset |= self.model.objects.filter_on_json_fields(
-            search_term,
-            fields=['values']
-        )
-        return queryset, use_distinct
+    search_fields = ('key', 'subdomain', 'values')
 
     def sitename(self, microsite):
         """
@@ -108,26 +96,12 @@ class TenantConfigAdmin(admin.ModelAdmin):
         'template_dir',
         'course_org_filter',
         'ednx_signal',
+        'organizations',
     )
-    search_fields = ('external_key', 'route__domain', )
+    search_fields = ('external_key', 'route__domain', 'lms_configs', 'studio_configs', 'theming_configs', 'meta')
     formfield_overrides = {
         JSONField: {'widget': JsonWidget}
     }
-
-    def get_search_results(self, request, queryset, search_term):
-        """
-        Add the filter to search by lms_configs, studio_configs, theming_configs or meta.
-        """
-        queryset, use_distinct = super(TenantConfigAdmin, self).get_search_results(
-            request,
-            queryset,
-            search_term
-        )
-        queryset |= self.model.objects.filter_on_json_fields(
-            search_term,
-            fields=['lms_configs', 'studio_configs', 'theming_configs', 'meta']
-        )
-        return queryset, use_distinct
 
     def sitename(self, tenant_config):
         """
@@ -212,6 +186,102 @@ class RouteAdmin(admin.ModelAdmin):
     config_link.short_description = "Configuration"
 
 
+class TenantOrganizationAdmin(admin.ModelAdmin):
+    """TenantOrganization admin class.
+
+    Define the basic attributes for searching and display.
+    """
+
+    list_display = [
+        'name',
+        'microsites',
+        'tenants',
+    ]
+    readonly_fields = [
+        'name',
+        'microsites',
+        'tenants',
+    ]
+    search_fields = [
+        "name"
+    ]
+    list_per_page = 20
+    # Prevent expensive duplicated COUNT query
+    show_full_result_count = False
+
+    def microsites(self, org):
+        """Return links for the associated microsites.
+
+        Args:
+            org: TenantOrganization instance.
+
+        Returns:
+            String: Concatenated list of subdomains
+        """
+        domains = []
+        microsites = Microsite.objects.filter(organizations=org)
+
+        for microsite in microsites:
+            url = reverse(
+                'admin:%s_%s_change' % (microsite._meta.app_label, "microsite"),  # pylint: disable=protected-access
+                args=[microsite.id],
+            )
+            domains.append('<a href="%s">%s</a>' % (url, microsite.subdomain))
+
+        return mark_safe('\n'.join(domains))
+
+    def tenants(self, org):
+        """Return links for the associated tenants.
+
+        Args:
+            org: TenantOrganization instance.
+
+        Returns:
+            String: Concatenated list of domains.
+        """
+        domains = []
+        tenants = TenantConfig.objects.filter(organizations=org)
+
+        for tenant in tenants:
+            url = reverse(
+                'admin:%s_%s_change' % (tenant._meta.app_label, "tenantconfig"),  # pylint: disable=protected-access
+                args=[tenant.id],
+            )
+            domains += ['<a href="%s">%s</a>' % (url, route.domain) for route in tenant.route_set.all()]
+
+        return mark_safe('\n'.join(domains))
+
+    tenants.allow_tags = True
+    microsites.allow_tags = True
+
+    def get_search_results(self, request, queryset, search_term):
+        """Perform a searching by using the organization name, microsite subdomain and route domain.
+
+        Args:
+            request: Current request.
+            queryset: Queryset with the CertificateTemplate data.
+            search_term: String with the filter value.
+
+        Returns:
+            Tuple containing a queryset to implement the search,
+            and a boolean indicating if the results may contain duplicates.
+        """
+        queryset, _ = super(TenantOrganizationAdmin, self).get_search_results(request, queryset, search_term)
+
+        if search_term:
+            tenant_orgs = Route.objects.filter(
+                domain__icontains=search_term,
+            ).values_list('config__organizations', flat=True).distinct()
+            microsite_orgs = Microsite.objects.filter(
+                subdomain__icontains=search_term,
+            ).values_list('organizations', flat=True).distinct()
+
+            queryset = queryset | TenantOrganization.objects.filter(id__in=chain(tenant_orgs, microsite_orgs))
+
+        return queryset, _
+
+
 admin.site.register(Microsite, MicrositeAdmin)
 admin.site.register(TenantConfig, TenantConfigAdmin)
 admin.site.register(Route, RouteAdmin)
+admin.site.register(TenantOrganization, TenantOrganizationAdmin)

@@ -29,7 +29,7 @@ class RouteAPITest(APITestCase):
             theming_configs={'key': 'theming_value'},
             meta={'key': 'meta_value'},
         )
-        self.route_example = Route.objects.create(  # pylint: disable=no-member
+        self.route_example = Route.objects.create(
             domain='domain.host',
             config=self.tenant_config,
         )
@@ -62,9 +62,9 @@ class RouteAPITest(APITestCase):
         response = self.client.post(self.url, data=data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Route.objects.count(), 2)  # pylint: disable=no-member
-        self.assertEqual(Route.objects.get(pk=2).domain, 'created.domain')  # pylint: disable=no-member
-        self.assertEqual(Route.objects.get(pk=2).config.pk, 1)  # pylint: disable=no-member
+        self.assertEqual(Route.objects.count(), 2)
+        self.assertEqual(Route.objects.get(pk=2).domain, 'created.domain')
+        self.assertEqual(Route.objects.get(pk=2).config.pk, 1)
 
     @patch_permissions
     def test_post_input_empty_data(self, _):
