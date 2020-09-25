@@ -3,7 +3,6 @@ Tenant wise proxies that allows to override the platform models.
 """
 import json
 import logging
-import warnings
 from itertools import chain
 
 import six
@@ -13,7 +12,7 @@ from django.db import models
 
 from eox_tenant.edxapp_wrapper.certificates_module import get_certificates_models
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
-from eox_tenant.models import Microsite, TenantConfig
+from eox_tenant.models import Microsite, TenantConfig, TenantOrganization
 from eox_tenant.organizations import get_organizations
 from eox_tenant.tenant_wise.context_managers import proxy_regression
 
@@ -24,7 +23,7 @@ GeneratedCertificate = CertificatesModels.GeneratedCertificate
 TENANT_ALL_ORGS_CACHE_KEY = "tenant.all_orgs_list"
 EOX_TENANT_CACHE_KEY_TIMEOUT = getattr(
     settings,
-    "EOX_TENANT__CACHE_KEY_TIMEOUT",
+    "EOX_TENANT_CACHE_KEY_TIMEOUT",
     300
 )
 TENANT_MICROSITES_ITERATOR_KEY = "tenant-microsites-iterator"
@@ -104,28 +103,11 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         """
         # Check the cache first
         org_filter_set = cache.get(TENANT_ALL_ORGS_CACHE_KEY)
+
         if org_filter_set:
             return org_filter_set
 
-        org_filter_set = set()
-        tenant_config = TenantConfig.objects.values_list("lms_configs", flat=True)
-        microsite_config = Microsite.objects.values_list("values", flat=True)
-
-        for config in chain(tenant_config, microsite_config):
-            try:
-                if isinstance(config, six.string_types):
-                    config = json.loads(config)
-
-                org_filter = config.get("course_org_filter", {})
-            except AttributeError:
-                continue
-
-            if org_filter and isinstance(org_filter, list):
-                for org in org_filter:
-                    org_filter_set.add(org)
-            elif org_filter:
-                org_filter_set.add(org_filter)
-
+        org_filter_set = set(TenantOrganization.objects.all().values_list("name", flat=True))
         cls.set_key_to_cache(TENANT_ALL_ORGS_CACHE_KEY, org_filter_set)
 
         return org_filter_set
@@ -136,7 +118,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         Returns a configuration value for a microsite or TenantConfig which has an org_filter that matches
         what is passed in.
         """
-        return cls.__deprecated_get_value_for_org(org, val_name, default)
+        return cls.__get_value_for_org(org, val_name, default)
 
     @classmethod
     def set_key_to_cache(cls, key, value):
@@ -170,58 +152,6 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         result = Microsite.get_value_for_org(org, val_name)
         result = result if result else default
         cls.set_key_to_cache(cache_key, result)
-
-        return result
-
-    @classmethod
-    def __deprecated_get_value_for_org(cls, org, val_name, default=None):
-        """
-        This method iterates over all the TenantConfig and Microsite objects, set the cache for the given
-        val_name and all organizations and returns the value for the given org.
-
-        DEPRECATED: use __get_value_for_org method instead.
-        To use __get_value_for_org is necessary MySQL 5.7+, so this method has been kept in
-        order to support previous MySQL versions.
-        """
-        warnings.warn(
-            "__deprecated_get_value_for_org, MySQL 5.7+ is required to use __get_value_for_org instead.",
-            DeprecationWarning
-        )
-
-        cache_key = "org-value-{}-{}".format(org, val_name)
-        cached_value = cache.get(cache_key)
-
-        if cached_value:
-            return cached_value
-
-        result = None
-        tenant_config = TenantConfig.objects.values_list("lms_configs", flat=True)
-        microsite_config = Microsite.objects.values_list("values", flat=True)
-
-        for config in chain(tenant_config, microsite_config):
-            try:
-                if isinstance(config, six.string_types):
-                    config = json.loads(config)
-
-                org_filter = config.get("course_org_filter", {})
-            except AttributeError:
-                continue
-
-            if org_filter:
-                if isinstance(org_filter, six.string_types):
-                    org_filter = set([org_filter])
-
-                for organization in org_filter:
-                    if org == organization and not result:
-                        result = config.get(val_name, default)
-
-                    key = "org-value-{}-{}".format(organization, val_name)
-                    cls.set_key_to_cache(key, config.get(val_name, default))
-
-        if not result:
-            logger.warning("Tha value for %s and org %s has not been found", val_name, org)
-            cls.set_key_to_cache(cache_key, default)
-            result = default
 
         return result
 

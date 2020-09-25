@@ -17,6 +17,12 @@ Added
 _____
 
 * Override contentstore SiteConfiguration.
+* Use TenantOrganization get_value_for_org method.
+
+Removed
+_______
+
+* deprecate_get_value_for_org method
 
 
 [3.2.0] - 2020-09-28
