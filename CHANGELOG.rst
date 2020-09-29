@@ -13,6 +13,12 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+Added
+_____
+
+* Override contentstore SiteConfiguration.
+
+
 [3.2.0] - 2020-09-28
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
