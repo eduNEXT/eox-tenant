@@ -13,7 +13,20 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+[3.2.0] - 2020-09-28
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added
+_____
+
+* TenantOrganizations
+
 * First release on PyPI.
+
+Removed
+_______
+
+* django-mysql JsonFields
 
 [3.0.1] - 2020-07-15
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
