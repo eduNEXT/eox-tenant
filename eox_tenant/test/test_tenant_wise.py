@@ -4,14 +4,14 @@ Test file to store the tenant_wise test module.
 from __future__ import absolute_import
 
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 from eox_tenant.models import Microsite, TenantConfig
 from eox_tenant.tenant_wise.proxies import TenantGeneratedCertificateProxy, TenantSiteConfigProxy
 from eox_tenant.test_utils import CertificatesFakeModel, TestCertificateStatuses
 
 
-class TenantSiteConfigProxyTest(TestCase):
+class TenantSiteConfigProxyTest(TransactionTestCase):
     """
     Test TenantSiteConfigProxy.
     """
@@ -123,7 +123,7 @@ class TenantSiteConfigProxyTest(TestCase):
 
 
 @CertificatesFakeModel.fake_me
-class TenantGeneratedCertificateProxyTest(TestCase):
+class TenantGeneratedCertificateProxyTest(TransactionTestCase):
     """
     Test TenantGeneratedCertificateProxy.
     """

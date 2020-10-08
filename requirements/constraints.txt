@@ -1,0 +1,25 @@
+# Version constraints for pip-installation.
+#
+# This file doesn't install any packages. It specifies version constraints
+# that will be applied if a package is needed.
+#
+# When pinning something here, please provide an explanation of why.  Ideally,
+# link to other information that will help people in the future to remove the
+# pin when possible.  Writing an issue against the offending project and
+# linking to it here is good.
+
+# Already in python3 standard library
+futures; python_version == "2.7"
+
+# TODO: Add constraint explanation
+pylint==1.9.3
+pycodestyle==2.5.0
+
+# Keep same platform version
+djangorestframework==3.6.3
+testfixtures==6.4.3
+jsonfield==2.1.1
+path.py==8.2.1
+
+# Version used in Ironwood version of edx-platform
+edx-opaque-keys<1.0.0

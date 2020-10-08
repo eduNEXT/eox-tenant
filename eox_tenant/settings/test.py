@@ -19,6 +19,10 @@ vars().update(SETTINGS.__dict__)
 INSTALLED_APPS = vars().get('INSTALLED_APPS', [])
 TEST_INSTALLED_APPS = [
     'django.contrib.sites',
+    'django.contrib.admin',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
 ]
 for app in TEST_INSTALLED_APPS:
     if app not in INSTALLED_APPS:
@@ -47,6 +51,28 @@ USE_EOX_TENANT = True
 SITE_ID = 1
 
 ROOT_URLCONF = 'eox_tenant.urls'
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+MIDDLEWARE = [
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+]
 
 
 def plugin_settings(settings):  # pylint: disable=function-redefined

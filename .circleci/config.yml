@@ -1,6 +1,6 @@
-# Python CircleCI 2.1 configuration file
+# Python CircleCI 2.0 configuration file
 #
-# Check https://circleci.com/docs/2.1/language-python/ for more details
+# Check https://circleci.com/docs/2.0/language-python/ for more details.
 #
 
 version: 2.1
@@ -13,32 +13,33 @@ workflows:
             tags:
               only: /v?[0-9]+(\.[0-9]+)*/
           matrix:
-            # See: https://circleci.com/docs/2.0/configuration-reference/#matrix-requires-version-21
             parameters:
-              python_version: ["2.7", "3.5", "3.6"]
-              debian_version: ["stretch"]
-      - pypi:
-          requires:
-            - test
-          filters:
-            tags:
-              only: /v?[0-9]+(\.[0-9]+)*/
-            branches:
-              ignore: /.*/
-
+              python_version: ["2.7", "3.5"]
+              django_version: ["django111", "django22"]
+            exclude:
+              - python_version: "2.7"
+                django_version: "django22"
 jobs:
   test:
     parameters:
+      django_version:
+        type: string
       python_version:
         type: string
       debian_version:
         type: string
-
+        default: stretch
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
       - image: circleci/python:<< parameters.python_version >>-<< parameters.debian_version >>
-    working_directory: ~/repo<<parameters.python_version>>
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo<< parameters.python_version >>
 
     steps:
       - checkout
@@ -46,32 +47,35 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-<< parameters.python_version >>--dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-<< parameters.python_version >>-dependencies-
-
+          - v2-<< parameters.python_version >>-<< parameters.django_version >>-dependencies-{{ checksum "requirements/test.txt" }}
       - run:
-          name: activate virtualenv and install dependencies.
+          name: Install dependencies.
           command: |
             test -d venv || virtualenv venv
             . venv/bin/activate
-            pip install -r requirements.txt
+            pip install -r requirements/tox.txt
 
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-<< parameters.python_version >>-{{ checksum "requirements.txt" }}
-
+      # run tests!
+      # this example uses Django's built-in test-runner
+      # other common Python testing frameworks include pytest and nose
+      # https://pytest.org
+      # https://nose.readthedocs.io
       - run:
           name: Run tests
           command: |
             . venv/bin/activate
-            coverage run --source="." manage.py test
-            coverage report --fail-under=71 -m
-            pycodestyle ./eox_tenant
-            pylint ./eox_tenant --rcfile=./setup.cfg
-            isort --check-only --recursive --diff ./eox_tenant
+            export TOXENV=${TOX_ENV//./}
+            make run-tests
 
+      - save_cache:
+          paths:
+            - ./.tox
+            - ./node_modules
+          key: v2-<< parameters.python_version >>-<< parameters.django_version >>-dependencies-{{ checksum "requirements/test.txt" }}
+
+    environment:
+      - TOX_ENV: py<< parameters.python_version >>-<< parameters.django_version >>
+      
   pypi:
     docker:
       - image: circleci/python:3.5
