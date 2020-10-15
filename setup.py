@@ -49,6 +49,7 @@ setup(
     license='AGPL',
     zip_safe=False,
     install_requires=[],
+    include_package_data=True,
     entry_points={
         "lms.djangoapp": [
             "eox_tenant = eox_tenant.apps:EdunextOpenedxExtensionsTenantConfig"
