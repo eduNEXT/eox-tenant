@@ -89,6 +89,19 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         """
         pass
 
+    @property
+    def site_values(self):
+        """
+        Returns the raw values of the loaded settings. This version works with juniper releases.
+        """
+        return self.values
+
+    @site_values.setter
+    def site_values(self, value):
+        """
+        We ignore the setter since this is a read proxy. This version works with juniper releases.
+        """
+
     def save(self, *args, **kwargs):
         """
         Don't allow to save TenantSiteConfigProxy model in database.
