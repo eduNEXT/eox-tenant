@@ -13,6 +13,14 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+[3.3.5] - 2020-11-19
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added
+_____
+
+* Support for getting values from SiteConfigurationProxy in juniper.
+
 [3.3.4] - 2020-10-15
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
