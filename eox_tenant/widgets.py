@@ -17,11 +17,10 @@ class JsonWidget(Widget):
         """
         Add indent to JSONField.
         """
-        value = json.loads(value) if isinstance(value, six.string_types) else value
-
         try:
+            value = json.loads(value) if isinstance(value, six.string_types) else value
             value = json.dumps(value, indent=4, sort_keys=True)
-        except ValueError:
+        except (ValueError, json.decoder.JSONDecodeError):  # pylint: disable=no-member
             pass
         return {'widget': {
             'name': name,
