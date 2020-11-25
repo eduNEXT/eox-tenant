@@ -19,12 +19,14 @@ def info_view(request):  # pylint: disable=unused-argument
     try:
         working_dir = dirname(realpath(__file__))
         git_data = check_output(["git", "rev-parse", "HEAD"], cwd=working_dir)
+        git_data = git_data.decode().rstrip('\r\n')
     except CalledProcessError:
         git_data = ""
 
-    response_data = {
-        "version": eox_tenant.__version__,
-        "name": "eox-tenant",
-        "git": git_data.decode().rstrip('\r\n'),
-    }
-    return JsonResponse(response_data)
+    return JsonResponse(
+        {
+            "version": eox_tenant.__version__,
+            "name": "eox-tenant",
+            "git": git_data,
+        },
+    )
