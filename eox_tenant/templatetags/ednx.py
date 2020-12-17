@@ -96,8 +96,7 @@ def microsite_get_value(value, *args, **kwargs):  # pylint: disable=unused-argum
         DeprecationWarning
     )
 
-    default = kwargs.get('default', None)
-    return configuration_helpers.get_value(value, default)
+    return tenant_get_value(value, *args, **kwargs)
 
 
 @register.simple_tag
@@ -225,4 +224,4 @@ def tenant_get_value(value, *args, **kwargs):  # pylint: disable=unused-argument
     Django template filter that wraps the configuration_helpers.get_value function
     """
     default = kwargs.get('default', None)
-    return configuration_helpers.get_value(value, default)
+    return configuration_helpers.get_value(value, getattr(settings, value, default))
