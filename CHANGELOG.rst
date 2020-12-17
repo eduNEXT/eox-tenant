@@ -13,6 +13,14 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+[3.3.7] - 2020-12-17
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixed
+_____
+
+* Changes made in template tags to avoid issues getting site values in an async request.
+
 [3.3.6] - 2020-11-20
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
