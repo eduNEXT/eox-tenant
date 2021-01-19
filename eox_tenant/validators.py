@@ -25,6 +25,6 @@ class EoxTenantOAuth2Validator(EdxOAuth2Validator):
         """Validates the token if the current url is in redirect_uris list."""
 
         if request.auth.application.redirect_uri_allowed(request.build_absolute_uri('/')):
-            super(EoxTenantOAuth2Validator, self).validate_bearer_token(token, scopes, request)
-            return True
+            return super(EoxTenantOAuth2Validator, self).validate_bearer_token(token, scopes, request)
+
         return False
