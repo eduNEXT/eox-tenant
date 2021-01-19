@@ -21,5 +21,10 @@ class EoxTenantOAuth2Validator(EdxOAuth2Validator):
         if request.client.redirect_uri_allowed(request_uri.build_absolute_uri('/')):
             super(EoxTenantOAuth2Validator, self).save_bearer_token(token, request, *args, **kwargs)
 
-    def validate_bearer_token():
-        """"""
+    def validate_bearer_token(self, token, scopes, request):
+        """Validates the token if the current url is in redirect_uris list."""
+
+        if request.auth.application.redirect_uri_allowed(request.build_absolute_uri('/')):
+            super(EoxTenantOAuth2Validator, self).validate_bearer_token(token, scopes, request)
+            return True
+        return False
