@@ -1,7 +1,7 @@
 """
 This overwrites the EdxOAuth2Validator behavior
 """
-from eox_tenant.edxapp_wrapper.auth import get_edx_oauth2_validator_class
+from eox_tenant.edxapp_wrapper.oauth_dispatch import get_edx_oauth2_validator_class
 
 EdxOAuth2Validator = get_edx_oauth2_validator_class()
 

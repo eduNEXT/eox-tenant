@@ -35,6 +35,7 @@ def plugin_settings(settings):
     """
     # Plugin settings.
     settings.EOX_TENANT_CACHE_KEY_TIMEOUT = 300
+    settings.GET_OAUTH_DISPATCH_BACKEND = 'eox_tenant.edxapp_wrapper.backends.oauth_dispatch_j_v1'
     settings.GET_BRANDING_API = 'eox_tenant.edxapp_wrapper.backends.branding_api_h_v1'
     settings.GET_CERTIFICATES_MODULE = 'eox_tenant.edxapp_wrapper.backends.certificates_module_i_v1'
     settings.GET_SITE_CONFIGURATION_MODULE = 'eox_tenant.edxapp_wrapper.backends.site_configuration_module_i_v1'
