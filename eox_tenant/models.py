@@ -10,7 +10,7 @@ import six
 from django.db import connection, models
 from django.utils.translation import ugettext_lazy as _
 from jsonfield.fields import JSONField
-
+from oauth2_provider.models import AbstractAccessToken
 
 class TenantOrganization(models.Model):
     """
@@ -243,3 +243,8 @@ class Route(models.Model):
         Model meta class.
         """
         app_label = "eox_tenant"
+
+class EoxTenantAccessToken(AbstractAccessToken):
+    """"""
+    def is_valid(self, scopes=None):
+        """"""
