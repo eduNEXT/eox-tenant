@@ -9,14 +9,16 @@ EdxOAuth2Validator = get_edx_oauth2_validator_class()
 
 
 class EoxTenantOAuth2Validator(EdxOAuth2Validator):
-    """
-    Class that validates the token usage:
-        * The token can only be used in the site it was created
+    """Class that restricts the token creation, the creation is restricted to the application redirect uris
+    hence the current url request must be in the redirect_uris value in order to create a new token otherwise
+    a 401 response will be returned.
     """
 
-    def save_bearer_token(self, token, request, *args, **kwargs):
-        """Save the token if the current url is in redirect_uris list."""
-        request_uri = get_current_request()
+    def _load_application(self, client_id, request):
+        """Return the application if the current url is allowed."""
+        application = super(EoxTenantOAuth2Validator, self)._load_application(client_id, request)
 
-        if request.client.redirect_uri_allowed(request_uri.build_absolute_uri('/')):
-            super(EoxTenantOAuth2Validator, self).save_bearer_token(token, request, *args, **kwargs)
+        if application and application.redirect_uri_allowed(get_current_request().build_absolute_uri('/')):
+            return application
+
+        return None

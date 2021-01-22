@@ -8,7 +8,7 @@ from .common import *  # pylint: disable=wildcard-import
 
 class SettingsClass(object):
     """ dummy settings class """
-    pass
+    OAUTH2_PROVIDER = {}
 
 
 ALLOWED_HOSTS = ['*']
