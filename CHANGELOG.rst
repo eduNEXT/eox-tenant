@@ -13,6 +13,14 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+[3.4.0] - 2021-01-22
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added
+_____
+
+* New oauth2 validator in order to restrict the tokens creation.
+
 [3.3.7] - 2020-12-17
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
