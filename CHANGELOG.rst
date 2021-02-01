@@ -13,6 +13,11 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+Added
+_____
+
+* Add allowed application in order to avoid the site restrictions when a token is created.
+
 [3.4.1] - 2021-01-26
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
