@@ -2,6 +2,7 @@
 File configuration for eox-tenant.
 """
 from django.apps import AppConfig
+from django.conf import settings
 
 
 class EdunextOpenedxExtensionsTenantConfig(AppConfig):
@@ -94,7 +95,8 @@ class EdunextOpenedxExtensionsTenantConfig(AppConfig):
         Method to perform actions after apps registry is ended
         """
         from eox_tenant.permissions import load_permissions
-        load_permissions()
+        if settings.DATABASES.get('default',{}).get('ENGINE') not in ['django.db.backends.dummy', None]:
+            load_permissions()
 
         from eox_tenant.tenant_wise import load_tenant_wise_overrides
         load_tenant_wise_overrides()
