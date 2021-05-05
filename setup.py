@@ -13,6 +13,7 @@ except ImportError:
 with open('README.rst', 'r') as fh:
     README = fh.read()
 
+
 def get_version():
     """
     Retrives the version string from __init__.py.
@@ -26,6 +27,7 @@ def get_version():
             return match_string.group(1)
     raise RuntimeError('Unable to find version string in %s.' % (file_path,))
 
+
 setup(
     name='eox-tenant',
     version=get_version(),
@@ -37,14 +39,13 @@ setup(
     packages=['eox_tenant'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
-        'Framework :: Django :: 1.11',
+        'Framework :: Django :: 2.20',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU Affero General Public License v3',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.8',
     ],
     license='AGPL',
     zip_safe=False,
