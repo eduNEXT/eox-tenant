@@ -19,6 +19,7 @@ class MicrositeCrossBrandingFilterMiddlewareTest(TestCase):
     """
     Testing the middleware MicrositeCrossBrandingFilterMiddleware
     """
+
     def setUp(self):
         """ setup """
         self.request_factory = RequestFactory()
@@ -29,8 +30,8 @@ class MicrositeCrossBrandingFilterMiddlewareTest(TestCase):
         Test when request url does not match the course id pattern
         """
         request = self.request_factory.get('/courses/nomatch')
-        result = self.middleware_instance.process_request(request)
-        self.assertIsNone(result)
+
+        self.assertIsNone(self.middleware_instance.process_request(request))
 
     @mock.patch('eox_tenant.middleware.configuration_helper')
     def test_url_courses_match_org_in_filter(self, conf_helper_mock):
@@ -40,10 +41,10 @@ class MicrositeCrossBrandingFilterMiddlewareTest(TestCase):
         """
         request = self.request_factory.get('/courses/course-v1:TEST_ORG+CS101+2019_T1/')
         conf_helper_mock.get_value.return_value = ['TEST_ORG']
-        result = self.middleware_instance.process_request(request)
+
+        self.assertIsNone(self.middleware_instance.process_request(request))
         conf_helper_mock.get_value.assert_called_once()
         conf_helper_mock.get_all_orgs.assert_not_called()
-        self.assertIsNone(result)
 
     @mock.patch('eox_tenant.middleware.configuration_helper')
     def test_url_courses_match_org_not_in_all_orgs(self, conf_helper_mock):
@@ -54,10 +55,10 @@ class MicrositeCrossBrandingFilterMiddlewareTest(TestCase):
         request = self.request_factory.get('/courses/course-v1:TEST_ORG+CS101+2019_T1/')
         conf_helper_mock.get_value.return_value = []
         conf_helper_mock.get_all_orgs.return_value = ['Some_org', 'new_org', 'other_org']
-        result = self.middleware_instance.process_request(request)
+
+        self.assertIsNone(self.middleware_instance.process_request(request))
         conf_helper_mock.get_value.assert_called_once()
         conf_helper_mock.get_all_orgs.assert_called_once()
-        self.assertIsNone(result)
 
     @mock.patch('eox_tenant.middleware.configuration_helper')
     def test_url_courses_match_org_in_other_site(self, conf_helper_mock):

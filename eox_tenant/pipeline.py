@@ -8,7 +8,7 @@ class EoxTenantAuthException(ValueError):
 
     def __init__(self, backend, *args, **kwargs):
         self.backend = backend
-        super(EoxTenantAuthException, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 # pylint: disable=unused-argument,keyword-arg-before-vararg

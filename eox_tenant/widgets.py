@@ -20,7 +20,7 @@ class JsonWidget(Widget):
         try:
             value = json.loads(value) if isinstance(value, six.string_types) else value
             value = json.dumps(value, indent=4, sort_keys=True)
-        except (ValueError, json.decoder.JSONDecodeError):  # pylint: disable=no-member
+        except (ValueError, json.decoder.JSONDecodeError):
             pass
         return {'widget': {
             'name': name,

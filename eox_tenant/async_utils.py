@@ -11,7 +11,7 @@ from django.contrib.sites.models import Site
 LOG = logging.getLogger(__name__)
 
 
-class AsyncTaskHandler(object):
+class AsyncTaskHandler:
     """
     Handler used to get the tenant of an async task.
     """

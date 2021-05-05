@@ -19,7 +19,7 @@ class TenantConfigAPITest(APITestCase):
         """
         setup.
         """
-        super(TenantConfigAPITest, self).setUp()
+        super().setUp()
         self.api_user = User(1, 'test@example.com', 'test')
         self.url = reverse('api:v1:tenant-api:tenantconfig-list')
         self.client = APIClient()

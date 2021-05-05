@@ -59,7 +59,6 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         """
         We ignore the setter since this is a read proxy.
         """
-        pass
 
     def get_value(self, name, default=None):
         """
@@ -87,7 +86,6 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         """
         We ignore the setter since this is a read proxy.
         """
-        pass
 
     @property
     def site_values(self):
@@ -106,7 +104,6 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         """
         Don't allow to save TenantSiteConfigProxy model in database.
         """
-        pass
 
     @classmethod
     def get_all_orgs(cls):
@@ -211,7 +208,7 @@ class TenantCertificateManager(models.Manager):
         """
         Call parent method and filter the certificates by org.
         """
-        generated_certificates = super(TenantCertificateManager, self).get_queryset()
+        generated_certificates = super().get_queryset()
         org_filter = get_organizations()
 
         if org_filter:
@@ -240,7 +237,7 @@ class TenantEligibleCertificateManager(TenantCertificateManager):
         ineligible certificates.
         """
         certificates_statuses = CertificatesModels.CertificateStatuses
-        return super(TenantEligibleCertificateManager, self).get_queryset().exclude(
+        return super().get_queryset().exclude(
             status__in=(certificates_statuses.audit_passing, certificates_statuses.audit_notpassing)
         )
 
@@ -269,4 +266,4 @@ class TenantGeneratedCertificateProxy(GeneratedCertificate):
         Override the save method such that we use the non proxy cert during the save.
         """
         with proxy_regression(get_certificates_models(), "GeneratedCertificate", GeneratedCertificate):
-            super(TenantGeneratedCertificateProxy, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)

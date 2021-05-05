@@ -193,7 +193,6 @@ def finish_tenant(sender, **kwargs):  # pylint: disable=unused-argument
 
     Since the signal is not very reliable nothing is being done in it
     """
-    pass
 
 
 def clear_tenant(sender, request, **kwargs):  # pylint: disable=unused-argument
@@ -202,7 +201,6 @@ def clear_tenant(sender, request, **kwargs):  # pylint: disable=unused-argument
 
     Signal: django.core.signals.got_request_exception
     """
-    pass
 
 
 def tenant_context_addition(sender, body, headers, *args, **kwargs):  # pylint: disable=unused-argument

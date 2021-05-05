@@ -18,7 +18,7 @@ configuration_helpers = get_configuration_helpers()
 branding_api = get_branding_api()
 theming_helpers = get_theming_helpers()
 
-register = template.Library()  # pylint: disable=invalid-name
+register = template.Library()
 
 
 @register.simple_tag(name="favicon_path")
@@ -86,7 +86,7 @@ def microsite_template_path(template_name):
 
 
 @register.simple_tag
-def microsite_get_value(value, *args, **kwargs):  # pylint: disable=unused-argument
+def microsite_get_value(value, *args, **kwargs):
     """
     Django template filter that wraps the configuration_helpers.get_value function
     DEPRECATED: use tenant_get_value tag instead

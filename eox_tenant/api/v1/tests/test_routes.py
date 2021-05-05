@@ -17,7 +17,7 @@ class RouteAPITest(APITestCase):
 
     def setUp(self):
         """setup."""
-        super(RouteAPITest, self).setUp()
+        super().setUp()
         self.api_user = User(1, 'test@example.com', 'test')
         self.url = reverse('api:v1:tenant-api:route-list')
         self.client = APIClient()

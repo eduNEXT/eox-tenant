@@ -12,14 +12,20 @@
 futures; python_version == "2.7"
 
 # TODO: Add constraint explanation
-pylint==1.9.3
 pycodestyle==2.5.0
 
 # Keep same platform version
-djangorestframework==3.6.3
 testfixtures==6.4.3
 jsonfield==2.1.1
 path.py==8.2.1
+Django<3.0.0
 
-# Version used in Ironwood version of edx-platform
-edx-opaque-keys<1.0.0
+#Drop python 3.5 support
+edx-opaque-keys<2.2.0
+astroid<2.5.0
+django-mysql<3.10.0
+isort<5.0.0
+lazy-object-proxy<1.6.0
+mock<4.0.0
+pylint<2.7.0
+stevedore<2.0.0
