@@ -10,7 +10,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('eox_tenant', '0002_redirection'),
+        ('eox_tenant', '0001_initial'),
     ]
 
     operations = [
