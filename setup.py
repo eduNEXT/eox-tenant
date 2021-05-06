@@ -39,7 +39,7 @@ setup(
     packages=['eox_tenant'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
-        'Framework :: Django :: 2.20',
+        'Framework :: Django :: 2.2',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU Affero General Public License v3',
         'Operating System :: OS Independent',
