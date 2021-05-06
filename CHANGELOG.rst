@@ -13,6 +13,17 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+Removed
+_______
+
+* Remove python 2.7 support.
+
+Added
+_____
+
+* Python 3.8 tests
+
+
 [3.5.0] - 2021-02-01
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

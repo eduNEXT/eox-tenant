@@ -1,6 +1,6 @@
 """ backend """
 try:
-    from branding import api as branding_api  # pylint: disable=import-error
+    from branding import api as branding_api
 except ImportError:
     branding_api = object
 

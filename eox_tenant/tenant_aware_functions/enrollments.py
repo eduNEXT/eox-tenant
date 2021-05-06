@@ -1,7 +1,6 @@
 """
 Microsite aware enrollments filter.
 """
-
 from django.conf import settings
 
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_configuration_helpers
@@ -45,9 +44,8 @@ def filter_enrollments(enrollments):
             continue
 
         # Conversely, filter out any enrollments with courses attributed to exclusion rule.
-        elif org in orgs_to_exclude:
+        if org in orgs_to_exclude:
             continue
 
         # Else, include the enrollment.
-        else:
-            yield enrollment
+        yield enrollment

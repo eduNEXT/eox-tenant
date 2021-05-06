@@ -3,5 +3,7 @@
 
 Django
 djangorestframework
+django-crum
+django-mysql
 jsonfield
 edx-opaque-keys[django]

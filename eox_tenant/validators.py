@@ -22,7 +22,7 @@ class EoxTenantOAuth2Validator(EdxOAuth2Validator):
         """Return the application if the current url is allowed."""
         current_url = get_current_request().build_absolute_uri('/')
         allowed_applications = getattr(settings, 'ALLOWED_AUTH_APPLICATIONS', [])
-        application = super(EoxTenantOAuth2Validator, self)._load_application(client_id, request)
+        application = super()._load_application(client_id, request)
 
         if not application:
             return None

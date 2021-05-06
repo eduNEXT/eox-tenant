@@ -18,7 +18,7 @@ except ImportError:
     CertificatesFakeModel = object
 
 
-class TestCertificateStatuses(object):
+class TestCertificateStatuses:
     """
     Test Enum for certificate statuses
     """
@@ -27,10 +27,11 @@ class TestCertificateStatuses(object):
     audit_notpassing = 'audit_notpassing'
 
 
-class test_theming_helpers(object):
+class test_theming_helpers:
     """
     Test class for theming helpers
     """
+
     def get_current_request(self):
         """
         Test method
@@ -38,7 +39,7 @@ class test_theming_helpers(object):
         return object
 
 
-class TestSiteConfigurationModels(object):
+class TestSiteConfigurationModels:
     """
     Test class for SiteConfigurationModels.
     """
@@ -46,7 +47,7 @@ class TestSiteConfigurationModels(object):
     SiteConfiguration = object
 
 
-class TestCertificatesModels(object):
+class TestCertificatesModels:
     """
     Test class for SiteConfigurationModels.
     """

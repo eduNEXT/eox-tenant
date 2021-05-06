@@ -1,6 +1,7 @@
 -c constraints.txt
 -r base.txt
 
+django-fake-model
 ddt
 pycodestyle
 pylint
