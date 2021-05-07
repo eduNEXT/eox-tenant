@@ -24,6 +24,7 @@ class TenantAwareAuthBackend(EdxAuthBackend):
     """
     Authentication Backend class which will check if the user has a signupsource in the requested site.
     """
+
     def user_can_authenticate(self, user):
         """
         Override user_can_authenticate method with the logic to be tenant aware.
@@ -31,7 +32,7 @@ class TenantAwareAuthBackend(EdxAuthBackend):
         # List storing validations applied
         validations = []
         # Run the default validation from the parent class and add it to the validations list
-        user_can_authenticate = super(TenantAwareAuthBackend, self).user_can_authenticate(user)
+        user_can_authenticate = super().user_can_authenticate(user)
         validations.append(user_can_authenticate)
 
         # Perform the custom auth-on-tenant validation
@@ -84,11 +85,12 @@ class TenantAwareAuthBackend(EdxAuthBackend):
                     current_domain,
                 )
                 raise AuthFailedError(_('User not authorized to perform this action'))
-            else:
-                AUDIT_LOG.warning(
-                    u"User `%s` tried to login in site `%s`, the permission "
-                    "should have been denied based on the signup sources.",
-                    loggable_id,
-                    current_domain,
-                )
+
+            AUDIT_LOG.warning(
+                u"User `%s` tried to login in site `%s`, the permission "
+                "should have been denied based on the signup sources.",
+                loggable_id,
+                current_domain,
+            )
+
         return True

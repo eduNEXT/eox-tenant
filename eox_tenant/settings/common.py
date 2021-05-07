@@ -62,6 +62,6 @@ def plugin_settings(settings):
         settings.OAUTH2_PROVIDER['OAUTH2_VALIDATOR_CLASS'] = 'eox_tenant.validators.EoxTenantOAuth2Validator'
 
     try:
-        settings.MAKO_TEMPLATE_DIRS_BASE.insert(0, path(__file__).abspath().dirname().dirname() / 'templates')  # pylint: disable=no-value-for-parameter
+        settings.MAKO_TEMPLATE_DIRS_BASE.insert(0, path(__file__).abspath().dirname().dirname() / 'templates')
     except AttributeError:
         pass

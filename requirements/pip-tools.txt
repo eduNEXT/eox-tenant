@@ -4,9 +4,18 @@
 #
 #    make upgrade
 #
-click==7.1.2              # via pip-tools
-pip-tools==5.3.1          # via -r requirements/pip-tools.in
-six==1.15.0               # via pip-tools
+--index-url http://edx.devstack.devpi:3141/root/pypi/+simple/
+--extra-index-url https://pypi.python.org/simple
+--trusted-host edx.devstack.devpi
+
+click==7.1.2
+    # via pip-tools
+pep517==0.10.0
+    # via pip-tools
+pip-tools==6.1.0
+    # via -r requirements/pip-tools.in
+toml==0.10.2
+    # via pep517
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

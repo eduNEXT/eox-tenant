@@ -60,7 +60,7 @@ class Microsite(models.Model):
         app_label = "eox_tenant"
 
     def __str__(self):
-        return self.key
+        return str(self.key)
 
     def get_organizations(self):
         """

@@ -266,7 +266,7 @@ class TenantOrganizationAdmin(admin.ModelAdmin):
             Tuple containing a queryset to implement the search,
             and a boolean indicating if the results may contain duplicates.
         """
-        queryset, _ = super(TenantOrganizationAdmin, self).get_search_results(request, queryset, search_term)
+        queryset, _ = super().get_search_results(request, queryset, search_term)
 
         if search_term:
             tenant_orgs = Route.objects.filter(

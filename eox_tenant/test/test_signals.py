@@ -6,6 +6,7 @@ from __future__ import print_function, unicode_literals
 
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.contrib.sites.models import Site
 from django.test import TestCase
 from mock import MagicMock, patch
@@ -196,7 +197,6 @@ class SettingsOverridesTest(TestCase):
         """
         Must reset after every test
         """
-        from django.conf import settings
         settings._setup()  # pylint: disable=protected-access
 
     @patch('eox_tenant.signals.get_tenant_config_by_domain')
@@ -204,7 +204,6 @@ class SettingsOverridesTest(TestCase):
         """
         Settings must only be updated if EDNX_USE_SIGNAL is present
         """
-        from django.conf import settings
         config = {
         }
         _get_config_mock.return_value = config, "tenant-key"
@@ -219,7 +218,6 @@ class SettingsOverridesTest(TestCase):
         """
         Settings must only be updated if EDNX_USE_SIGNAL is present
         """
-        from django.conf import settings
         config = {
             "EDNX_USE_SIGNAL": True,
         }
@@ -234,7 +232,6 @@ class SettingsOverridesTest(TestCase):
         """
         Settings must only be updated if EDNX_USE_SIGNAL is present
         """
-        from django.conf import settings
         config = {
             "EDNX_USE_SIGNAL": True,
             "TEST_PROPERTY": "My value",
@@ -250,7 +247,6 @@ class SettingsOverridesTest(TestCase):
         """
         Settings must only be updated if EDNX_USE_SIGNAL is present
         """
-        from django.conf import settings
         config = {
             "EDNX_USE_SIGNAL": True,
             "TEST_DICT": {
@@ -268,7 +264,6 @@ class SettingsOverridesTest(TestCase):
         """
         Settings must only be updated if EDNX_USE_SIGNAL is present
         """
-        from django.conf import settings
         config = {
             "EDNX_USE_SIGNAL": True,
             "TEST_DICT_OVERRIDE_TEST": {

@@ -93,8 +93,8 @@ class EdunextOpenedxExtensionsTenantConfig(AppConfig):
         """
         Method to perform actions after apps registry is ended
         """
-        from eox_tenant.permissions import load_permissions
+        from eox_tenant.permissions import load_permissions  # pylint: disable=import-outside-toplevel
         load_permissions()
 
-        from eox_tenant.tenant_wise import load_tenant_wise_overrides
+        from eox_tenant.tenant_wise import load_tenant_wise_overrides  # pylint: disable=import-outside-toplevel
         load_tenant_wise_overrides()

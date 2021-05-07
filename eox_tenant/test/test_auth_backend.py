@@ -13,6 +13,7 @@ class TenantAwareAuthBackendTest(TestCase):
     """
     Test tenant aware auth backend.
     """
+
     def setUp(self):
         """ setup """
         self.request_factory = RequestFactory()
@@ -49,7 +50,7 @@ class TenantAwareAuthBackendTest(TestCase):
 
         edx_get_current_request_mock.return_value = request
 
-        from eox_tenant.auth import TenantAwareAuthBackend
+        from eox_tenant.auth import TenantAwareAuthBackend  # pylint: disable=import-outside-toplevel
 
         auth_backend = TenantAwareAuthBackend()
         load_permissions()
@@ -75,7 +76,7 @@ class TenantAwareAuthBackendTest(TestCase):
 
         edx_get_current_request_mock.return_value = None
 
-        from eox_tenant.auth import TenantAwareAuthBackend
+        from eox_tenant.auth import TenantAwareAuthBackend  # pylint: disable=import-outside-toplevel
 
         auth_backend = TenantAwareAuthBackend()
 
@@ -105,7 +106,7 @@ class TenantAwareAuthBackendTest(TestCase):
 
         edx_get_current_request_mock.return_value = request
 
-        from eox_tenant.auth import TenantAwareAuthBackend
+        from eox_tenant.auth import TenantAwareAuthBackend  # pylint: disable=import-outside-toplevel
 
         auth_backend = TenantAwareAuthBackend()
 
@@ -138,7 +139,7 @@ class TenantAwareAuthBackendTest(TestCase):
         edx_get_current_request_mock.return_value = request
         crum_mock.return_value = request
 
-        from eox_tenant.auth import TenantAwareAuthBackend
+        from eox_tenant.auth import TenantAwareAuthBackend  # pylint: disable=import-outside-toplevel
 
         auth_backend = TenantAwareAuthBackend()
 
@@ -170,7 +171,7 @@ class TenantAwareAuthBackendTest(TestCase):
 
         edx_get_current_request_mock.return_value = request
 
-        from eox_tenant.auth import TenantAwareAuthBackend
+        from eox_tenant.auth import TenantAwareAuthBackend  # pylint: disable=import-outside-toplevel
 
         auth_backend = TenantAwareAuthBackend()
 
@@ -205,7 +206,7 @@ class TenantAwareAuthBackendTest(TestCase):
         edx_get_current_request_mock.return_value = request
         crum_mock.return_value = request
 
-        from eox_tenant.auth import TenantAwareAuthBackend
+        from eox_tenant.auth import TenantAwareAuthBackend  # pylint: disable=import-outside-toplevel
 
         auth_backend = TenantAwareAuthBackend()
 
@@ -237,7 +238,7 @@ class TenantAwareAuthBackendTest(TestCase):
 
         edx_get_current_request_mock.return_value = request
 
-        from eox_tenant.auth import TenantAwareAuthBackend
+        from eox_tenant.auth import TenantAwareAuthBackend  # pylint: disable=import-outside-toplevel
 
         auth_backend = TenantAwareAuthBackend()
         auth_backend.request = request

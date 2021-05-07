@@ -23,7 +23,7 @@ from eox_tenant.edxapp_wrapper.site_configuration_module import get_configuratio
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
 from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy
 
-configuration_helper = get_configuration_helpers()  # pylint: disable=invalid-name
+configuration_helper = get_configuration_helpers()
 theming_helper = get_theming_helpers()
 HOST_VALIDATION_RE = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{2,5})?$")
 LOG = logging.getLogger(__name__)
@@ -34,6 +34,7 @@ class MicrositeCrossBrandingFilterMiddleware(MiddlewareMixin):
     Middleware class that prevents a course defined in a branded ORG trough a microsite, to be displayed
     on a different microsite with a different branding.
     """
+
     def process_request(self, request):
         """
         Raise an 404 exception if the course being rendered belongs to an ORG in a
@@ -50,8 +51,8 @@ class MicrositeCrossBrandingFilterMiddleware(MiddlewareMixin):
         course_id = matched_regex.group('course_id')
         try:
             course_key = CourseKey.from_string(course_id)
-        except InvalidKeyError:
-            raise Http404
+        except InvalidKeyError as error:
+            raise Http404 from error
 
         # If the course org is the same as the current microsite
         org_filter = configuration_helper.get_value('course_org_filter', set([]))
