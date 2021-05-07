@@ -18,6 +18,11 @@ _______
 
 * Remove python 2.7 support.
 
+Changed
+_______
+
+* Default user, branding and contentstore backends.
+
 Added
 _____
 

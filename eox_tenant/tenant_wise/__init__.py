@@ -23,8 +23,8 @@ def load_tenant_wise_overrides():
         if allowed_proxies.get('TenantSiteConfigProxy'):
             modules = ['openedx.core.djangoapps.site_configuration.models']
 
-            if not LMS_ENVIRONMENT:
-                modules.append('contentstore.utils')
+            if not LMS_ENVIRONMENT and hasattr(settings, 'CONTENTSTORE_PATH'):
+                modules.append(settings.CONTENTSTORE_PATH)
 
             set_as_proxy(
                 modules=modules,

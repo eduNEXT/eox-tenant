@@ -22,6 +22,10 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     More info: https://github.com/edx/edx-platform/blob/master/openedx/core/djangoapps/plugins/README.rst
     """
     # Backend settings.
+    settings.CONTENTSTORE_PATH = getattr(settings, 'ENV_TOKENS', {}).get(
+        'CONTENTSTORE_PATH',
+        settings.CONTENTSTORE_PATH
+    )
     settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS = getattr(settings, 'ENV_TOKENS', {}).get(
         'EOX_MAX_CONFIG_OVERRIDE_SECONDS',
         settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS
