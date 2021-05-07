@@ -34,6 +34,7 @@ def plugin_settings(settings):
     More info: https://github.com/edx/edx-platform/blob/master/openedx/core/djangoapps/plugins/README.rst
     """
     # Plugin settings.
+    settings.CONTENTSTORE_PATH = 'cms.djangoapps.contentstore.utils'
     settings.EOX_TENANT_CACHE_KEY_TIMEOUT = 300
     settings.GET_OAUTH_DISPATCH_BACKEND = 'eox_tenant.edxapp_wrapper.backends.oauth_dispatch_j_v1'
     settings.GET_BRANDING_API = 'eox_tenant.edxapp_wrapper.backends.branding_api_l_v1'
