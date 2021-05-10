@@ -18,10 +18,10 @@ _______
 
 * Remove python 2.7 support.
 
-Changed
+Added
 _______
 
-* Default user, branding and contentstore backends.
+* Lilac backends.
 
 Added
 _____
