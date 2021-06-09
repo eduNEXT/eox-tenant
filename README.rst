@@ -54,3 +54,12 @@ This comand will synchronize the course_org_filter values in lms_configs(TenantC
   ./manage.py lms synchronize_organizations  # only for TenantConfig and Microsite
   ./manage.py lms synchronize_organizations --model TenantConfig # only for TenantConfig
   ./manage.py lms synchronize_organizations --model Microsite # only for Microsite
+
+How to Contribute
+-----------------
+
+Contributions are welcome! See our `CONTRIBUTING`_ file for more
+information – it also contains guidelines for how to maintain high code
+quality, which will make your contribution more likely to be accepted.
+
+.. _CONTRIBUTING: https://github.com/eduNEXT/eox-tenant/blob/master/CONTRIBUTING.rst
