@@ -1,6 +1,14 @@
 
 EOX tenant
 ----------
+Eox-tenant is a multi-tenancy django app for `edx-platform`_. It is build as an `openedx plugin`_ so even as a django app it will auto install in the larger edx-platform core code once installed in the same python environment.
+
+The code is written and maintained by `eduNEXT`_ and it is what we use to support our own multi-tenant services. It was created as an extension of the `microsites` and `site_configurations` features of the platform, but it has grown to completely replace them.
+
+.. _openedx plugin: https://github.com/edx/edx-platform/tree/master/openedx/core/djangoapps/plugins
+.. _edx-platform: https://github.com/edx/edx-platform/
+.. _eduNEXT: https://www.edunext.co
+
 
 EOX tenant migration notes
 --------------------------
