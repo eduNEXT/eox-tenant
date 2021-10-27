@@ -13,6 +13,16 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+[4.1.0] - 2021-10-27
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Added
+_______
+
+* Set Lilac backends as default in the Common settings file.
+* Update readme with new information and formats.
+
+
 [4.0.0] - 2021-05-10
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
