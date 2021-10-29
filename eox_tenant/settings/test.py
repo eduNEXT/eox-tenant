@@ -85,3 +85,7 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     settings.GET_THEMING_HELPERS = 'eox_tenant.edxapp_wrapper.backends.theming_helpers_test_v1'
     settings.EOX_TENANT_SKIP_FILTER_FOR_TESTS = True
     settings.EOX_TENANT_LOAD_PERMISSIONS = False
+    settings.OAUTH2_PROVIDER['OAUTH2_VALIDATOR_CLASS'] = '{oauth_path}.{validator_path}'.format(
+        oauth_path='openedx.core.djangoapps',
+        validator_path='oauth_dispatch.dot_overrides.validators.EdxOAuth2Validator'
+    )

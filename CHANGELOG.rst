@@ -13,6 +13,19 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+[5.0.0] - 2021-10-29
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixed
+_____
+
+* Changed OAUTH2_PROVIDER test setting to the platform value
+
+Changed
+_____
+
+* **BREAKING CHANGE**: Default backends for edxapp users and branding_api are not compatible with Juniper.
+
 [4.1.0] - 2021-10-27
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
