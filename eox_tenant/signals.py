@@ -211,8 +211,12 @@ def tenant_context_addition(sender, body, headers, *args, **kwargs):  # pylint: 
     See:
         https://celery.readthedocs.io/en/latest/userguide/signals.html#before-task-publish
     """
+    if not getattr(base_settings, "USE_EOX_TENANT", False):
+        return
+
     get_host_func = AsyncTaskHandler().get_host_from_task(sender)
     headers['eox_tenant_sender'] = get_host_func(body)
+    body['kwargs']['eox_tenant_sender'] = get_host_func(body)
 
 
 def start_async_tenant(sender, *args, **kwargs):  # pylint: disable=unused-argument
@@ -225,8 +229,10 @@ def start_async_tenant(sender, *args, **kwargs):  # pylint: disable=unused-argum
     if not getattr(base_settings, "USE_EOX_TENANT", False):
         return
 
-    headers = sender.request.get('headers') or {}
+    context = sender.request
+    headers = context.get('headers') or {}
     http_host = headers.get('eox_tenant_sender')
+    http_host = context.get('kwargs', {}).pop('eox_tenant_sender', http_host)
 
     if not http_host:  # Reset settings in case of no tenant.
         LOG.warning("Could not find the host information for eox_tenant.signals. ")

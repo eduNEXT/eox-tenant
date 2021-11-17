@@ -285,6 +285,9 @@ class CeleryReceiverCLISyncTests(TestCase):
 
     def setUp(self):
         """ setup """
+        self.body = {
+            'kwargs': {},
+        }
         for number in range(3):
             Site.objects.create(
                 domain="tenant{number}.com".format(number=number),
@@ -296,8 +299,8 @@ class CeleryReceiverCLISyncTests(TestCase):
         When the task is unknown the hostname should be None.
         """
         headers = {}
-        body = {}
-        tenant_context_addition("uknown_task", headers=headers, body=body)
+
+        tenant_context_addition("uknown_task", headers=headers, body=self.body)
 
         self.assertIsNone(headers['eox_tenant_sender'])
 
@@ -307,13 +310,12 @@ class CeleryReceiverCLISyncTests(TestCase):
         When the task is called the method get_host_from_siteid should be called.
         """
         headers = {}
-        body = {}
 
         with self.settings():
             tenant_context_addition(
                 "openedx.core.djangoapps.schedules.tasks.ScheduleRecurringNudge",
                 headers=headers,
-                body=body,
+                body=self.body,
             )
 
         _get_host_mock.assert_called()
@@ -337,7 +339,9 @@ class CeleryReceiverSyncTests(TestCase):
         When the task is called from a sync proccess it is used the value of the 'host' key in the request dict.
         """
         headers = {}
-        body = {}
+        body = {
+            'kwargs': {},
+        }
         with self.settings(EDNX_TENANT_DOMAIN="some.tenant.com"):
             tenant_context_addition("some.task", headers=headers, body=body)
 
