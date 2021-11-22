@@ -4,10 +4,6 @@
 #
 #    make upgrade
 #
---index-url http://edx.devstack.devpi:3141/root/pypi/+simple/
---extra-index-url https://pypi.python.org/simple
---trusted-host edx.devstack.devpi
-
 django-crum==0.7.9
     # via -r requirements/base.in
 django-mysql==3.9.0
