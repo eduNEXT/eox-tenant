@@ -1,5 +1,8 @@
 """Lilac backend user module."""
-from common.djangoapps.student.models import UserSignupSource  # pylint: disable=import-error
+try:
+    from common.djangoapps.student.models import UserSignupSource  # pylint: disable=import-error
+except ImportError:
+    UserSignupSource = object
 
 
 def get_user_signup_source():
