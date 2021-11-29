@@ -12,6 +12,13 @@ Change Log
 
 Unreleased
 ~~~~~~~~~~
+[5.1.1] - 2021-11-29
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixed
+_____
+
+* UserSignupSource import in order to avoid raising an exception when running tests.
 
 [5.1.0] - 2021-11-22
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
