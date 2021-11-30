@@ -19,6 +19,41 @@ domain_pattern = re.compile(
     r'+[A-Za-z0-9][A-Za-z0-9-_]{0,61}'  # First 61 characters of the gTLD
     r'[A-Za-z]$'  # Last character of the gTLD
 )
+NON_SERIALIZABLE = object()
+
+
+def clean_serializable_values(obj):
+    """
+    Returns only serializable values
+
+    If an object is not json serializable returns NON_SERIALIZABLE.
+    In case of a list or dict ignore the NON_SERIALIZABLE values.
+    """
+    if isinstance(obj, (str, int, float, float, bool, type(None))):
+        return obj
+
+    if isinstance(obj, list):
+        return [
+            cleaned_item
+            for cleaned_item in (clean_serializable_values(item) for item in obj)
+            if cleaned_item is not NON_SERIALIZABLE
+        ]
+
+    if isinstance(obj, tuple):
+        return tuple(
+            cleaned_item
+            for cleaned_item in (clean_serializable_values(item) for item in obj)
+            if cleaned_item is not NON_SERIALIZABLE
+        )
+
+    if isinstance(obj, dict):
+        return {
+            key: cleaned_value
+            for key, cleaned_value in ((k, clean_serializable_values(v)) for k, v in obj.items())
+            if cleaned_value is not NON_SERIALIZABLE
+        }
+
+    return NON_SERIALIZABLE
 
 
 def is_valid_domain(domain):
