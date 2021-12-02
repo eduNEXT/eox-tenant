@@ -15,6 +15,7 @@ from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configu
 from eox_tenant.models import Microsite, TenantConfig, TenantOrganization
 from eox_tenant.organizations import get_organizations
 from eox_tenant.tenant_wise.context_managers import proxy_regression
+from eox_tenant.utils import clean_serializable_values
 
 SiteConfigurationModels = get_site_configuration_models()
 CertificatesModels = get_certificates_models()
@@ -36,6 +37,8 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
     This allows to add or override methods using as base the SiteConfiguration model.
     More information in https://docs.djangoproject.com/en/3.0/topics/db/models/#proxy-models
     """
+
+    cached_site_values = None
 
     class Meta:
         """ Set as a proxy model. """
@@ -75,7 +78,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
     @property
     def values(self):
         """
-        Returns the raw values of the loaded settings.
+        Returns a serializable subset of the loaded settings.
         """
         if self.enabled:
             return vars(settings._wrapped)  # pylint: disable=protected-access
@@ -90,9 +93,12 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
     @property
     def site_values(self):
         """
-        Returns the raw values of the loaded settings. This version works with juniper releases.
+        Returns a serializable subset of the loaded settings. This version works with juniper releases.
         """
-        return self.values
+        if self.cached_site_values:
+            return self.cached_site_values
+        self.cached_site_values = clean_serializable_values(self.values)
+        return self.cached_site_values
 
     @site_values.setter
     def site_values(self, value):

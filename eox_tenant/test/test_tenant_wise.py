@@ -3,6 +3,8 @@ Test file to store the tenant_wise test module.
 """
 from __future__ import absolute_import
 
+import json
+
 from django.core.management import call_command
 from django.test import TransactionTestCase
 
@@ -120,6 +122,72 @@ class TenantSiteConfigProxyTest(TransactionTestCase):
             self.assertTrue(site_configuration.enabled)
             self.assertTrue(site_configuration.get_value("EDNX_TENANT_KEY"))
             self.assertTrue(site_configuration.get_value("EDNX_USE_SIGNAL"))
+
+    def test_get_site_values_with_serializable_settings(self):
+        """
+        Test that if the settings are json serializable `site_values`
+        returns a dict with the same values and json.dumps doesn't fail.
+        """
+        settings = {
+            "EDNX_TENANT_KEY": True,
+            "EDNX_USE_SIGNAL": True,
+            "serializable_settings": {
+                "integer": 1,
+                "float": 1.0,
+                "string": "str",
+                "bool": False,
+                "null": None,
+                "list": [1, True, 1.0, None],
+                "tuple": (2, False, 0.5, None),
+                "dict": {"string": "str", "12": None},
+            }
+        }
+
+        with self.settings(**settings):
+            site_configuration = TenantSiteConfigProxy()
+            serializable_settings = settings['serializable_settings']
+
+            site_values = site_configuration.site_values['serializable_settings']
+
+            self.assertDictEqual(
+                serializable_settings,
+                site_values
+            )
+            self.assertEqual(
+                json.dumps(serializable_settings, sort_keys=True),
+                json.dumps(site_values, sort_keys=True)
+            )
+
+    def test_get_site_values_with_unserializable_settings(self):
+        """
+        Test that if the settings are **not** json serializable `site_values`
+        returns a subset of the original settings.
+        """
+        settings = {
+            "EDNX_TENANT_KEY": True,
+            "EDNX_USE_SIGNAL": True,
+            "unserializable_settings": {
+                "integer": 1,
+                "float": 1.0,
+                "string": "str",
+                "bool": False,
+                "null": None,
+                "list": [1, True, 1.0, None],
+                "tuple": (2, False, 0.5, None),
+                "dict": {"string": "str", "12": None},
+                "exception": Exception,
+            }
+        }
+
+        with self.settings(**settings):
+            site_configuration = TenantSiteConfigProxy()
+            unserializable_settings = settings['unserializable_settings']
+
+            site_values = site_configuration.site_values['unserializable_settings']
+
+            with self.assertRaises(TypeError):
+                json.dumps(unserializable_settings)
+            self.assertDictContainsSubset(site_values, unserializable_settings)
 
 
 @CertificatesFakeModel.fake_me
