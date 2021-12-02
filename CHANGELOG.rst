@@ -12,6 +12,17 @@ Change Log
 
 Unreleased
 ~~~~~~~~~~
+
+[5.1.2] - 2021-12-02
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixed
+-----
+
+* TenantSiteConfigProxy.site_values returns a serializable subset of settings
+  to avoid an exception while sending emails.
+
+
 [5.1.1] - 2021-11-29
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
