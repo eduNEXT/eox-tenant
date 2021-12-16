@@ -27,6 +27,9 @@ class EoxTenantOAuth2Validator(EdxOAuth2Validator):
         if not application:
             return None
 
+        if not settings.USE_EOX_TENANT:
+            return application
+
         application_name = application.name
 
         if application.redirect_uri_allowed(current_url) or application_name in allowed_applications:
