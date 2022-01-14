@@ -13,6 +13,11 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+Fixed
+-----
+
+* Update backend for edxmako so it's lilac compatible.
+
 [5.1.2] - 2021-12-02
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

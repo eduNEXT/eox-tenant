@@ -56,6 +56,7 @@ For version >= 3.4
 
   GET_BRANDING_API: 'eox_tenant.edxapp_wrapper.backends.branding_api_l_v1'
   EOX_TENANT_USERS_BACKEND: 'eox_tenant.edxapp_wrapper.backends.users_l_v1'
+  EDXMAKO_MODULE_BACKEND: eox_tenant.edxapp_wrapper.backends.edxmako_l_v1
 
 **Lilac**
 
@@ -63,6 +64,7 @@ For version >= 3.4
 
   GET_BRANDING_API: 'eox_tenant.edxapp_wrapper.backends.branding_api_l_v1'
   EOX_TENANT_USERS_BACKEND: 'eox_tenant.edxapp_wrapper.backends.users_l_v1'
+  EDXMAKO_MODULE_BACKEND: eox_tenant.edxapp_wrapper.backends.edxmako_l_v1
 
 Those settings can be changed in ``eox_tenant/settings/common.py`` or, for example, in ansible configurations.
 
