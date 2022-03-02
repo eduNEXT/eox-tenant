@@ -10,6 +10,7 @@ class EdunextOpenedxExtensionsTenantConfig(AppConfig):
     """
     name = 'eox_tenant'
     verbose_name = "Edunext Openedx Multitenancy."
+    default = False
 
     plugin_app = {
         'url_config': {

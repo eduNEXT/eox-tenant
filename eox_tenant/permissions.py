@@ -9,8 +9,8 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.db.utils import ProgrammingError
 
-LOGIN_ALL_TENANTS_PERMISSION_APP_LABEL = u'auth'
-LOGIN_ALL_TENANTS_PERMISSION_CODENAME = u'can_login_all_eox_tenants'
+LOGIN_ALL_TENANTS_PERMISSION_APP_LABEL = 'auth'
+LOGIN_ALL_TENANTS_PERMISSION_CODENAME = 'can_login_all_eox_tenants'
 LOGIN_ALL_TENANTS_PERMISSION_NAME = '.'.join([
     LOGIN_ALL_TENANTS_PERMISSION_APP_LABEL,
     LOGIN_ALL_TENANTS_PERMISSION_CODENAME,
