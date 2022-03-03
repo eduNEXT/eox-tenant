@@ -151,9 +151,7 @@ class Command(BaseCommand):
                 stage_domain += ':' + port
         except TypeError as exc:
             stage_domain = ""
-            message = "Unable to define stage url for site {}".format(
-                subdomain
-            )
+            message = f"Unable to define stage url for site {subdomain}"
             LOGGER.warning(message)
             LOGGER.error(exc.message)  # pylint: disable=no-member
         return stage_domain
