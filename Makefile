@@ -25,6 +25,9 @@ clean: ## delete most git-ignored files
 requirements: ## install environment requirements
 	pip install -r requirements/base.txt
 
+install-dev-dependencies: ## install tox
+	pip install -r requirements/tox.txt
+
 upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
 upgrade: ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
 	pip install -qr requirements/pip-tools.txt
@@ -34,10 +37,14 @@ upgrade: ## update the requirements/*.txt files with the latest packages satisfy
 	$(PIP_COMPILE) -o requirements/test.txt requirements/test.in
 	$(PIP_COMPILE) -o requirements/tox.txt requirements/tox.in
 
+	grep -e "^django==" requirements/test.txt > requirements/django.txt
+	sed '/^[dD]jango==/d;' requirements/test.txt > requirements/test.tmp
+	mv requirements/test.tmp requirements/test.txt
+
 quality: clean ## check coding style with pycodestyle and pylint
 	$(TOX) pycodestyle ./eox_tenant
 	$(TOX) pylint ./eox_tenant --rcfile=./setup.cfg
-	$(TOX) isort --check-only --recursive --diff ./eox_tenant
+	$(TOX) isort --check-only --diff ./eox_tenant
 
 test-python: clean ## Run test suite.
 	$(TOX) pip install -r requirements/test.txt --exists-action w

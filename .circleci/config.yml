@@ -14,13 +14,9 @@ workflows:
               only: /v?[0-9]+(\.[0-9]+)*/
           matrix:
             parameters:
-              python_version: ["3.5", "3.8"]
-              debian_version: ["stretch", "buster"]
-            exclude:
-              - python_version: "3.5"
-                debian_version: "buster"
-              - python_version: "3.8"
-                debian_version: "stretch"
+              python_version: ["3.8"]
+              debian_version: ["buster"]
+              django_version: ["django22", "django32"]
 
       - pypi:
           requires:

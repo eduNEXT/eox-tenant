@@ -14,17 +14,19 @@ If you are looking for professional development or support with multi tenancy or
 Compatibility Notes
 --------------------
 
-+-------------------+----------+
-| Open edX Release  |  Version |
-+===================+==========+
-|      Ironwood     |   < 3.0  |
-+-------------------+----------+
-|       Juniper     |   >= 3.0 |
-+-------------------+----------+
-|        Koa        |   >= 4.0 |
-+-------------------+----------+
-|       Lilac       |   >= 4.0 |
-+-------------------+----------+
++-------------------+-----------------------+
+| Open edX Release  |         Version       |
++===================+=======================+
+|      Ironwood     |          < 3.0        |
++-------------------+-----------------------+
+|       Juniper     |       >= 3.0 < 4.0    |
++-------------------+-----------------------+
+|        Koa        |     >= 4.0 <= 5.1.3   |
++-------------------+-----------------------+
+|       Lilac       |         >= 4.0        |
++-------------------+-----------------------+
+|       Maple       |         >= 6.0        |
++-------------------+-----------------------+
 
 The following changes to the plugin settings are necessary. If the release you are looking for is
 not listed, then the accumulation of changes from previous releases is enough.
@@ -59,6 +61,14 @@ For version >= 3.4
   EDXMAKO_MODULE_BACKEND: eox_tenant.edxapp_wrapper.backends.edxmako_l_v1
 
 **Lilac**
+
+.. code-block:: yaml
+
+  GET_BRANDING_API: 'eox_tenant.edxapp_wrapper.backends.branding_api_l_v1'
+  EOX_TENANT_USERS_BACKEND: 'eox_tenant.edxapp_wrapper.backends.users_l_v1'
+  EDXMAKO_MODULE_BACKEND: eox_tenant.edxapp_wrapper.backends.edxmako_l_v1
+
+**Maple**
 
 .. code-block:: yaml
 

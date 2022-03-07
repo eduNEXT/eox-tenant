@@ -10,10 +10,10 @@ A microsite enables the following features:
 import logging
 import re
 
+import six
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404, HttpResponseNotFound
-from django.utils import six
 from django.utils.deprecation import MiddlewareMixin
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey

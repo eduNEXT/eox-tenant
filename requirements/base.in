@@ -2,6 +2,7 @@
 -c constraints.txt
 
 Django
+six
 djangorestframework
 django-crum
 django-mysql
