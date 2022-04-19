@@ -10,6 +10,6 @@ from eox_tenant.api.v1.routers import router
 from eox_tenant.api.v1.views import MFESettingsView
 
 urlpatterns = [
-    url(r'^mfe-api/(?P<tenant>[\w+\W]+)/$', MFESettingsView.as_view(), name="mfe-api"),
+    url(r'^mfe-api/$', MFESettingsView.as_view(), name="mfe-api"),
     url(r'', include((router.urls, 'eox_tenant'), namespace='tenant-api')),
 ]

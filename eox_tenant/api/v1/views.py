@@ -1,4 +1,5 @@
 from typing import Dict
+from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -7,8 +8,9 @@ from eox_tenant.models import TenantConfig
 
 
 class MFESettingsView(APIView):
-    def get(self, request, format=None, *args, **kwargs) -> Response:
-        tenant_key = kwargs["tenant"]
+    def get(self, request: HttpRequest, format=None, *args, **kwargs) -> Response:
+        domain = request.get_host()
+        tenant_key = domain.split(".")[0]
         tenant = get_object_or_404(TenantConfig, external_key__contains=tenant_key)
         configs = tenant.lms_configs
 
