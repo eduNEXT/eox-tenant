@@ -2,9 +2,11 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from eox_tenant.models import Microsite
+
 
 class MFESettingsView(APIView):
-    def get(self, request, format=None, *args, **kwargs):
+    def get(self, request, format=None, *args, **kwargs) -> Response:
         return Response(
             {
                 "id": "localhost",
