@@ -1,3 +1,6 @@
+"""
+APIViews module to manage the HTTPRequest with views based classes
+"""
 from typing import Dict
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
@@ -8,7 +11,13 @@ from eox_tenant.models import TenantConfig
 
 
 class MFESettingsView(APIView):
-    def get(self, request: HttpRequest, format=None, *args, **kwargs) -> Response:
+    """MFEApiView
+
+    Retrieve the mfe tenant config data
+    """
+    def get(self, request: HttpRequest, format=None) -> Response: # pylint: disable=unused-argument
+
+
         domain = request.get_host()
         tenant_key = domain.split(".")[0]
         tenant = get_object_or_404(TenantConfig, external_key__contains=tenant_key)
@@ -16,7 +25,7 @@ class MFESettingsView(APIView):
 
         common = {
             "SITE_NAME": configs.get("SITE_NAME"),
-            "LOGO_IMAGE_URL": configs.get("LOGO_IMAGE__URL"),
+            "LOGO_URL": configs.get("LOGO_URL"),
             "LOGO_TRADEMARK_URL": configs.get("LOGO_TRADEMARK_URL"),
             "LOGO_WHITE_URL": configs.get("LOGO_WHITE_URL"),
             "INFO_EMAIL": configs.get("INFO_EMAIL"),
@@ -42,13 +51,19 @@ class MFESettingsView(APIView):
         tennat_settings = {
             "id": configs["LMS_BASE"],
             "common": common,
-            "learning": configs.get("learning", dict()),
-            "account": configs.get("account", dict()),
-            "profile": configs.get("profile", dict()),
+            "learning": configs.get("learning", {}),
+            "account": configs.get("account", {}),
+            "profile": configs.get("profile", {}),
         }
 
         return Response(tennat_settings)
 
 
-def dict_filter(object: Dict) -> Dict:
+def dict_filter(object: Dict) -> Dict: # pylint: disable=redefined-builtin
+
+
+    """
+    Filter None value of a dict argument and return just the items with
+    value is not None
+    """
     return {key: value for key, value in object.items() if value is not None}
