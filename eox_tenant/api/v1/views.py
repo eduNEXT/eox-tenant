@@ -57,7 +57,7 @@ class MFESettingsView(APIView):
 
         common = dict_filter(common)
 
-        tennat_settings = {
+        tenant_settings = {
             "id": configs["LMS_BASE"],
             "common": common,
             "learning": configs.get("learning", {}),
@@ -65,7 +65,7 @@ class MFESettingsView(APIView):
             "profile": configs.get("profile", {}),
         }
 
-        return Response(tennat_settings)
+        return Response(tenant_settings)
 
 
 def dict_filter(object: Dict) -> Dict:  # pylint: disable=redefined-builtin
