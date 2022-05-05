@@ -3,11 +3,12 @@ APIViews module to manage the HTTPRequest with views based classes
 """
 from typing import Dict
 
-from django.http import HttpRequest
+from django.http import HttpRequest, Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from eox_tenant.receivers_helpers import get_tenant_config_by_domain
 from eox_tenant.models import TenantConfig
 
 
@@ -28,9 +29,13 @@ class MFESettingsView(APIView):
             Response: JSON Response
         """
         domain = request.get_host()
-        tenant_key = domain.split(".")[0]
-        tenant = get_object_or_404(TenantConfig, external_key__contains=tenant_key)
-        configs = tenant.lms_configs
+        configs, external_key = get_tenant_config_by_domain(domain)
+
+        if not external_key:
+            raise Http404
+
+        configs = dict(configs)
+
 
         common = {
             "SITE_NAME": configs.get("PLATFORM_NAME"),
@@ -58,7 +63,7 @@ class MFESettingsView(APIView):
         common = dict_filter(common)
 
         tenant_settings = {
-            "id": configs["LMS_BASE"],
+            "id": common["LMS_BASE_URL"],
             "common": common,
             "learning": configs.get("learning", {}),
             "account": configs.get("account", {}),
