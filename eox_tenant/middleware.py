@@ -23,7 +23,7 @@ from eox_tenant.edxapp_wrapper.site_configuration_module import get_configuratio
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
 from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy
 
-configuration_helper = get_configuration_helpers()
+configuration_helpers = get_configuration_helpers()
 theming_helper = get_theming_helpers()
 HOST_VALIDATION_RE = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{2,5})?$")
 LOG = logging.getLogger(__name__)
@@ -55,14 +55,13 @@ class MicrositeCrossBrandingFilterMiddleware(MiddlewareMixin):
             raise Http404 from error
 
         # If the course org is the same as the current microsite
-        org_filter = configuration_helper.get_value('course_org_filter', set([]))
-        if isinstance(org_filter, six.string_types):
-            org_filter = set([org_filter])
-        if course_key.org in org_filter:
+        org_filter = configuration_helpers.get_current_site_orgs()
+
+        if isinstance(org_filter, list) and course_key.org in org_filter:
             return None
 
         # If the course does not belong to an ORG defined in a microsite
-        all_orgs = configuration_helper.get_all_orgs()
+        all_orgs = configuration_helpers.get_all_orgs()
         if course_key.org not in all_orgs:
             return None
 
