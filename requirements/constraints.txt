@@ -8,7 +8,7 @@
 # pin when possible.  Writing an issue against the offending project and
 # linking to it here is good.
 
-Django<=3.2.12
+Django<=3.2.15
 pymongo<3.11
 coverage[toml]==6.0.2
 ddt==1.4.4
