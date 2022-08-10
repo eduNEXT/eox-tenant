@@ -7,6 +7,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ImproperlyConfigured
 from django.db.utils import ProgrammingError
 
 LOGIN_ALL_TENANTS_PERMISSION_APP_LABEL = 'auth'
@@ -35,5 +36,5 @@ def load_permissions():
                 # This code runs when the app is loaded, if a migration has not been done a ProgrammingError exception
                 # is raised we are bypassing those cases to let migrations run smoothly.
                 pass
-    except ProgrammingError:
+    except ImproperlyConfigured:
         pass
