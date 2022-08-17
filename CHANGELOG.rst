@@ -13,6 +13,40 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+[6.0.1] - 2022-08-17
+~~~~~~~~~~~~~~~~~~~~
+
+added
+-----
+
+* add support for Nutmeg release
+* update django requirement
+
+[6.0.0] - 2022-03-07
+~~~~~~~~~~~~~~~~~~~~
+
+Changed
+-------
+
+* **BREAKING CHANGE**: remove the Course Management feature
+* **BREAKING CHANGE**: django32: Drop python 3.5 support in favor of python 3.8.
+
+Performance Improvements
+------------------------
+
+* django32: add compatibility with openedx maple release
+* change code to pass tests
+
+Continuous Integration
+----------------------
+
+* add test actions to github workflows
+
+Code Refactoring
+----------------
+
+* change function format by an f-string
+
 [5.1.3] - 2022-01-14
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
