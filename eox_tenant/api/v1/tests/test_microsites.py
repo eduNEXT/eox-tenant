@@ -129,9 +129,3 @@ class MicrositeAPITest(APITestCase):
         response = self.client.delete(self.url_detail)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-    def test_permissions_microsite(self):
-        """Must return 403, only allows superuser."""
-        response = self.client.get(self.url)
-
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
