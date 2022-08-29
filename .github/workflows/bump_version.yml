@@ -22,75 +22,75 @@ jobs:
           default_bump: false
           default_prerelease_bump: false
           dry_run: true
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-      - name: Create bumpversion
-        if: steps.tag_version.outputs.new_version
-        run: |
-          pip install bumpversion
-          bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
-      - name: Commit bumpversion
-        id: bumpversion
-        if: steps.tag_version.outputs.new_version
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          branch: ${{ github.ref }}
-          commit_message: "docs(bumpversion): ${{ steps.tag_version.outputs.previous_tag }} → ${{ steps.tag_version.outputs.new_version }}"
-          file_pattern: setup.cfg eox_core/*
-  release:
-    needs: bumpversion
-    runs-on: ubuntu-latest
-    outputs:
-      tag: ${{ steps.tag_version.outputs.new_tag }}
-      changelog: ${{ steps.tag_version.outputs.changelog }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.PAT }}
-      - name: Create tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          commit_sha: ${{ needs.bumpversion.outputs.bump_commit_sha }}
-          default_bump: false
-          default_prerelease_bump: false
-      - name: Create a GitHub release
-        if: steps.tag_version.outputs.new_tag
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
-          draft: true
-  changelog:
-    needs: release
-    runs-on: ubuntu-latest
-    if: needs.release.outputs.tag
-    steps:
-      - uses: actions/checkout@v2
-      - name: Update Changelog
-        uses: stefanzweifel/changelog-updater-action@v1
-        with:
-          latest-version: ${{ needs.release.outputs.tag }}
-          release-notes: ${{ needs.release.outputs.changelog }}
+      # - name: Set up Python 3.8
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: "3.8"
+      # - name: Create bumpversion
+      #   if: steps.tag_version.outputs.new_version
+      #   run: |
+      #     pip install bumpversion
+      #     bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
+      # - name: Commit bumpversion
+      #   id: bumpversion
+      #   if: steps.tag_version.outputs.new_version
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     branch: ${{ github.ref }}
+      #     commit_message: "docs(bumpversion): ${{ steps.tag_version.outputs.previous_tag }} → ${{ steps.tag_version.outputs.new_version }}"
+      #     file_pattern: setup.cfg eox_core/*
+  # release:
+  #   needs: bumpversion
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     tag: ${{ steps.tag_version.outputs.new_tag }}
+  #     changelog: ${{ steps.tag_version.outputs.changelog }}
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         token: ${{ secrets.PAT }}
+  #     - name: Create tag
+  #       id: tag_version
+  #       uses: mathieudutour/github-tag-action@v6.0
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #         commit_sha: ${{ needs.bumpversion.outputs.bump_commit_sha }}
+  #         default_bump: false
+  #         default_prerelease_bump: false
+  #     - name: Create a GitHub release
+  #       if: steps.tag_version.outputs.new_tag
+  #       uses: ncipollo/release-action@v1
+  #       with:
+  #         tag: ${{ steps.tag_version.outputs.new_tag }}
+  #         name: Release ${{ steps.tag_version.outputs.new_tag }}
+  #         body: ${{ steps.tag_version.outputs.changelog }}
+  #         draft: true
+  # changelog:
+  #   needs: release
+  #   runs-on: ubuntu-latest
+  #   if: needs.release.outputs.tag
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Update Changelog
+  #       uses: stefanzweifel/changelog-updater-action@v1
+  #       with:
+  #         latest-version: ${{ needs.release.outputs.tag }}
+  #         release-notes: ${{ needs.release.outputs.changelog }}
 
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "docs: update CHANGELOG"
-          committer: GitHub <noreply@github.com>
-          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          signoff: false
-          branch: docs/changelog/${{ needs.release.outputs.tag }}
-          delete-branch: true
-          title: "docs: update CHANGELOG to ${{ needs.release.outputs.tag }}"
-          labels: |
-            report
-            automated pr
-          team-reviewers: |
-            eduNEXT/distro
+  #     - name: Create Pull Request
+  #       id: cpr
+  #       uses: peter-evans/create-pull-request@v3
+  #       with:
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         commit-message: "docs: update CHANGELOG"
+  #         committer: GitHub <noreply@github.com>
+  #         author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+  #         signoff: false
+  #         branch: docs/changelog/${{ needs.release.outputs.tag }}
+  #         delete-branch: true
+  #         title: "docs: update CHANGELOG to ${{ needs.release.outputs.tag }}"
+  #         labels: |
+  #           report
+  #           automated pr
+  #         team-reviewers: |
+  #           eduNEXT/distro
