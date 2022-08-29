@@ -31,6 +31,14 @@ jobs:
         run: |
           pip install bumpversion
           bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
+      - name: Import GPG key
+        if: steps.tag_version.outputs.new_version
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
       - name: Commit bumpversion
         id: bumpversion
         if: steps.tag_version.outputs.new_version
