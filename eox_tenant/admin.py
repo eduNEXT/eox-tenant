@@ -16,7 +16,7 @@ from eox_tenant.widgets import JsonWidget
 
 
 
-HOLA = ["si"]
+HOLA = ["si", "no"]
 
 class MicrositeAdmin(admin.ModelAdmin):
     """

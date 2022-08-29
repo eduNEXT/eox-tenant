@@ -22,23 +22,23 @@ jobs:
           default_bump: false
           default_prerelease_bump: false
           dry_run: true
-      # - name: Set up Python 3.8
-      #   uses: actions/setup-python@v2
-      #   with:
-      #     python-version: "3.8"
-      # - name: Create bumpversion
-      #   if: steps.tag_version.outputs.new_version
-      #   run: |
-      #     pip install bumpversion
-      #     bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
-      # - name: Commit bumpversion
-      #   id: bumpversion
-      #   if: steps.tag_version.outputs.new_version
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     branch: ${{ github.ref }}
-      #     commit_message: "docs(bumpversion): ${{ steps.tag_version.outputs.previous_tag }} → ${{ steps.tag_version.outputs.new_version }}"
-      #     file_pattern: setup.cfg eox_core/*
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Create bumpversion
+        if: steps.tag_version.outputs.new_version
+        run: |
+          pip install bumpversion
+          bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
+      - name: Commit bumpversion
+        id: bumpversion
+        if: steps.tag_version.outputs.new_version
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: ${{ github.ref }}
+          commit_message: "docs(bumpversion): ${{ steps.tag_version.outputs.previous_tag }} → ${{ steps.tag_version.outputs.new_version }}"
+          file_pattern: setup.cfg eox_core/*
   # release:
   #   needs: bumpversion
   #   runs-on: ubuntu-latest
