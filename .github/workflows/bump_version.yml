@@ -37,8 +37,7 @@ jobs:
       - name: Create bumpversion
         if: steps.tag_version.outputs.new_version
         run: |
-          pip install bumpversion
-          bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
+          pip install bumpversion && bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
       - name: Commit bumpversion
         id: bumpversion
         if: steps.tag_version.outputs.new_version
