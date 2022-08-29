@@ -37,7 +37,8 @@ jobs:
       - name: Create bumpversion
         if: steps.tag_version.outputs.new_version
         run: |
-          pip install bumpversion && bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
+          pip install bumpversion
+          bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
       - name: Commit bumpversion
         id: bumpversion
         if: steps.tag_version.outputs.new_version
@@ -45,7 +46,7 @@ jobs:
         with:
           branch: ${{ github.ref }}
           commit_message: "docs(bumpversion): ${{ steps.tag_version.outputs.previous_tag }} → ${{ steps.tag_version.outputs.new_version }}"
-          file_pattern: setup.cfg eox_core/*
+          file_pattern: setup.cfg eox_tenant/*
 
   # release:
   #   needs: bumpversion
