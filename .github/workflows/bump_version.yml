@@ -26,13 +26,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.8"
-      - name: Create bumpversion
-        if: steps.tag_version.outputs.new_version
-        run: |
-          pip install bumpversion
-          git config --global user.email "workflows-bot@edunext.co"
-          git config --global user.name "Auto bumpversion bot"
-          bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
       - name: Import GPG key
         if: steps.tag_version.outputs.new_version
         uses: crazy-max/ghaction-import-gpg@v5
@@ -41,6 +34,11 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           git_user_signingkey: true
           git_commit_gpgsign: true
+      - name: Create bumpversion
+        if: steps.tag_version.outputs.new_version
+        run: |
+          pip install bumpversion
+          bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
       - name: Commit bumpversion
         id: bumpversion
         if: steps.tag_version.outputs.new_version
