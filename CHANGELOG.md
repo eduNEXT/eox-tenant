@@ -1,3 +1,16 @@
+## v7.5.0 - 2022-08-30
+
+### [7.5.0](https://github.com/Henrrypg/eox-tenant/compare/v7.4.0...v7.5.0) (2022-08-30)
+
+#### Features
+
+- change one ([8fd8b89](https://github.com/Henrrypg/eox-tenant/commit/8fd8b89091734f9ef22c44fee21652c218570e5a))
+
+#### Documentation
+
+- update CHANGELOG ([ae6b354](https://github.com/Henrrypg/eox-tenant/commit/ae6b354c7a6e9c13c295b0d835355682f57e6133))
+- **bumpversion:** v7.4.0 → 7.5.0 ([957d5f0](https://github.com/Henrrypg/eox-tenant/commit/957d5f0858c32d396e41e8a8fc4c7429f9a8e9b9))
+
 ## v7.4.0 - 2022-08-30
 
 ### [7.4.0](https://github.com/Henrrypg/eox-tenant/compare/v7.3.0...v7.4.0) (2022-08-30)
