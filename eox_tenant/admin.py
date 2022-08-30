@@ -14,6 +14,10 @@ from eox_tenant.models import Microsite, Route, TenantConfig, TenantOrganization
 from eox_tenant.widgets import JsonWidget
 
 
+HOLA = 'hola'
+CHAO = 'chao'
+
+
 class MicrositeAdmin(admin.ModelAdmin):
     """
     TODO: add me
