@@ -80,10 +80,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Update Changelog
-        uses: stefanzweifel/changelog-updater-action@v1
+        uses: stefanzweifel/changelog-updater-action@v1.6.0
         with:
           latest-version: ${{ needs.release.outputs.tag }}
           release-notes: ${{ needs.release.outputs.changelog }}
+          file_pattern: CHANGELOG.rst
 
       - name: Create Pull Request
         id: cpr
@@ -101,4 +102,4 @@ jobs:
             report
             automated pr
           team-reviewers: |
-            eduNEXT/dedalo
+            henrrypg
