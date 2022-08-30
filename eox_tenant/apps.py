@@ -3,10 +3,12 @@ File configuration for eox-tenant.
 """
 from django.apps import AppConfig
 
+
 class EdunextOpenedxExtensionsTenantConfig(AppConfig):
     """
     App configuration
     """
+
     name = 'eox_tenant'
     verbose_name = "Edunext Openedx Multitenancy."
     default = False
