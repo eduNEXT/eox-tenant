@@ -84,7 +84,6 @@ jobs:
         with:
           latest-version: ${{ needs.release.outputs.tag }}
           release-notes: ${{ needs.release.outputs.changelog }}
-          file_pattern: CHANGELOG.rst
 
       - name: Create Pull Request
         id: cpr
