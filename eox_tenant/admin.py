@@ -12,7 +12,8 @@ from jsonfield.fields import JSONField
 
 from eox_tenant.models import Microsite, Route, TenantConfig, TenantOrganization
 from eox_tenant.widgets import JsonWidget
-HOLA = 'hola'
+HOLA = 'hola1
+'
 
 class MicrositeAdmin(admin.ModelAdmin):
     """
