@@ -40,6 +40,7 @@ jobs:
           pip install bumpversion
           bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
       - name: Update Changelog
+        if: steps.tag_version.outputs.new_version
         uses: stefanzweifel/changelog-updater-action@v1.6.0
         with:
           latest-version: ${{ steps.tag_version.outputs.new_tag }}
