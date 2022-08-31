@@ -55,6 +55,7 @@ jobs:
           file_pattern: setup.cfg eox_tenant/*
   release:
     needs: bumpversion
+    if: needs.bumpversion.outputs.version
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.tag_version.outputs.new_tag }}
