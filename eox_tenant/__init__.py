@@ -1,4 +1,4 @@
 """
 Init for eox-tenant.
 """
-__version__ = '7.5.0'
+__version__ = '6.0.0'
