@@ -22,6 +22,9 @@ clean: ## delete most git-ignored files
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f {} +
 
+workflows:
+	@echo "run workflows with Henrry"
+
 requirements: ## install environment requirements
 	pip install -r requirements/base.txt
 
