@@ -1,3 +1,15 @@
+## v6.0.2 - 2022-09-01
+
+### [6.0.2](https://github.com/eduNEXT/eox-tenant/compare/v6.0.1...v6.0.2) (2022-09-01)
+
+### Bug Fixes
+
+- Use get_current_site_orgs instead of get_value ([360abce](https://github.com/eduNEXT/eox-tenant/commit/360abce04a0ea89722cc9d64a5954698e70b00f1))
+
+### Continuous Integration
+
+- add ci pipelines ([#152](https://github.com/eduNEXT/eox-tenant/issues/152)) ([708a248](https://github.com/eduNEXT/eox-tenant/commit/708a2481268d50171e7bbfc69858be73b6eca76b))
+
 ## [6.0.1] - 2022-08-17
 
 ### Features
@@ -36,11 +48,9 @@
 ### Fixed
 
 - TenantSiteConfigProxy.site_values returns a serializable subset of settings
-  to avoid an exception while sending emails.
-
+- to avoid an exception while sending emails.
 
 ## [5.1.1] - 2021-11-29
-
 
 ### Fixed
 
@@ -48,20 +58,17 @@
 
 ## [5.1.0] - 2021-11-22
 
-
 ### Features
 
 - Support for message passing via protocol V2
 
 ## [5.0.1] - 2021-10-29
 
-
 ### Fixed
 
 - Changed OAUTH2_PROVIDER test setting for the CMS
 
 ## [5.0.0] - 2021-10-29
-
 
 ### Fixed
 
@@ -78,7 +85,6 @@
 - Set Lilac backends as default in the Common settings file.
 - Update readme with new information and formats.
 
-
 ## [4.0.0] - 2021-05-10
 
 ### Removed
@@ -92,7 +98,6 @@
 ### Features
 
 - Python 3.8 tests
-
 
 ## [3.5.0] - 2021-02-01
 
@@ -140,7 +145,6 @@
 
 - Manifest file.
 
-
 ## [3.3.2] - 2020-10-14
 
 ### Features
@@ -168,14 +172,14 @@
 
 - deprecate_get_value_for_org method
 
-
 ## [3.2.0] - 2020-09-28
 
 ### Features
 
 - TenantOrganizations
-
+- 
 - First release on PyPI.
+- 
 
 ### Removed
 
@@ -192,10 +196,12 @@
 ### Features
 
 - ### Features juniper support
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 
 ## [2.6.0] - 2020-07-02
 
@@ -203,6 +209,7 @@
 
 - Add tests in python 3.5
 - ### Features command to move SignUpSources from a site to another site.
+- 
 
 ## [2.5.0] - 2020-01-03
 
@@ -215,15 +222,15 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - Improve performance get_value_for_org.
-
 
 ## [2.2.0] - 2019-12-20~~
 
 ### Fixed
 
 - Changes made to not break the edx-platform tests when this plugin is
-  installed.
+- installed.
 
 ## [2.1.0] - 2019-12-19~~
 
@@ -232,7 +239,6 @@
 - Create proxy for GeneratedCertificates model using monkey patch.
 
 ## [2.0.0] - 2019-12-19
-
 
 ### Features
 
@@ -243,7 +249,6 @@
 - **BREAKING CHANGE**: Remove usage of edxapp microsite.
 
 ## [1.3.0] - 2019-12-12
-
 
 ### Features
 
