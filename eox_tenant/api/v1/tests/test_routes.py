@@ -119,9 +119,3 @@ class RouteAPITest(APITestCase):
         response = self.client.patch(self.url_detail, data=data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_permissions_route(self):
-        """Must return 403, only allows superuser."""
-        response = self.client.get(self.url)
-
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
