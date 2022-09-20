@@ -1,3 +1,11 @@
+## v6.1.0 - 2022-09-20
+
+### [6.1.0](https://github.com/eduNEXT/eox-tenant/compare/v6.0.2...v6.1.0) (2022-09-20)
+
+#### Features
+
+- add BearerAuthentication to API and improve EoxTenantAPIPermission checks ([#149](https://github.com/eduNEXT/eox-tenant/issues/149)) ([e8803ea](https://github.com/eduNEXT/eox-tenant/commit/e8803eac29636bf8058d768142b582baf87aa381))
+
 ## v6.0.2 - 2022-09-01
 
 ### [6.0.2](https://github.com/eduNEXT/eox-tenant/compare/v6.0.1...v6.0.2) (2022-09-01)
@@ -197,10 +205,12 @@
 
 - ### Features juniper support
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 
 ## [2.6.0] - 2020-07-02
@@ -209,6 +219,7 @@
 
 - Add tests in python 3.5
 - ### Features command to move SignUpSources from a site to another site.
+- 
 - 
 
 ## [2.5.0] - 2020-01-03
@@ -222,6 +233,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - Improve performance get_value_for_org.
 
