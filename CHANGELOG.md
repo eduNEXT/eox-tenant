@@ -1,3 +1,11 @@
+## v6.2.0 - 2022-09-20
+
+### [6.2.0](https://github.com/eduNEXT/eox-tenant/compare/v6.1.0...v6.2.0) (2022-09-20)
+
+#### Features
+
+- add extra lookup_field to Microsite and TenantConfig viewsets ([d1c8962](https://github.com/eduNEXT/eox-tenant/commit/d1c89622b90eb1ff739e8e12e0b7db9b28c5eb62))
+
 ## v6.1.0 - 2022-09-20
 
 ### [6.1.0](https://github.com/eduNEXT/eox-tenant/compare/v6.0.2...v6.1.0) (2022-09-20)
@@ -206,10 +214,12 @@
 - ### Features juniper support
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 
@@ -219,6 +229,7 @@
 
 - Add tests in python 3.5
 - ### Features command to move SignUpSources from a site to another site.
+- 
 - 
 - 
 
@@ -233,6 +244,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - Improve performance get_value_for_org.
