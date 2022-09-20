@@ -2,16 +2,19 @@
 API v1 viewsets.
 """
 from rest_framework import viewsets
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.parsers import JSONParser
 
 from eox_tenant.api.v1.permissions import EoxTenantAPIPermission
 from eox_tenant.api.v1.serializers import MicrositeSerializer, RouteSerializer, TenantConfigSerializer
+from eox_tenant.edxapp_wrapper.bearer_authentication import BearerAuthentication
 from eox_tenant.models import Microsite, Route, TenantConfig
 
 
 class MicrositeViewSet(viewsets.ModelViewSet):
     """MicrositeViewSet that allows the basic API actions."""
 
+    authentication_classes = (BearerAuthentication, SessionAuthentication)
     parser_classes = [JSONParser]
     permission_classes = [EoxTenantAPIPermission]
     serializer_class = MicrositeSerializer
@@ -21,6 +24,7 @@ class MicrositeViewSet(viewsets.ModelViewSet):
 class TenantConfigViewSet(viewsets.ModelViewSet):
     """TenantConfigViewSet that allows the basic API actions."""
 
+    authentication_classes = (BearerAuthentication, SessionAuthentication)
     parser_classes = [JSONParser]
     permission_classes = [EoxTenantAPIPermission]
     serializer_class = TenantConfigSerializer
@@ -30,6 +34,7 @@ class TenantConfigViewSet(viewsets.ModelViewSet):
 class RouteViewSet(viewsets.ModelViewSet):
     """RouteViewSet that allows the basic API actions."""
 
+    authentication_classes = (BearerAuthentication, SessionAuthentication)
     parser_classes = [JSONParser]
     permission_classes = [EoxTenantAPIPermission]
     serializer_class = RouteSerializer
