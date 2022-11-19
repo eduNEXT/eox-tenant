@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-asgiref==3.5.0
+asgiref==3.5.2
     # via django
 django==3.2.15
     # via
@@ -14,6 +14,7 @@ django==3.2.15
     #   django-mysql
     #   djangorestframework
     #   jsonfield
+    #   openedx-filters
 django-crum==0.7.9
     # via
     #   -c requirements/constraints.txt
@@ -34,13 +35,17 @@ jsonfield==3.1.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-pbr==5.8.1
+openedx-filters==0.8.0
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/base.in
+pbr==5.11.0
     # via stevedore
 pymongo==3.10.1
     # via
     #   -c requirements/constraints.txt
     #   edx-opaque-keys
-pytz==2021.3
+pytz==2022.6
     # via
     #   django
     #   djangorestframework
@@ -48,7 +53,7 @@ six==1.16.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-sqlparse==0.4.2
+sqlparse==0.4.3
     # via django
-stevedore==3.5.0
+stevedore==4.1.1
     # via edx-opaque-keys

@@ -4,7 +4,7 @@
 #
 #    make upgrade
 #
-asgiref==3.5.0
+asgiref==3.5.2
     # via
     #   -r requirements/base.txt
     #   django
@@ -25,6 +25,7 @@ ddt==1.4.4
     #   django-mysql
     #   djangorestframework
     #   jsonfield
+    #   openedx-filters
 django-crum==0.7.9
     # via
     #   -c requirements/constraints.txt
@@ -51,7 +52,7 @@ jsonfield==3.1.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
-lazy-object-proxy==1.7.1
+lazy-object-proxy==1.8.0
     # via astroid
 mccabe==0.6.1
     # via pylint
@@ -59,17 +60,21 @@ mock==4.0.3
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
-path==16.4.0
+openedx-filters==0.8.0
+    # via
+    #   -c requirements/constraints.txt
+    #   -r requirements/base.txt
+path==16.5.0
     # via path-py
 path-py==12.5.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
-pbr==5.8.1
+pbr==5.11.0
     # via
     #   -r requirements/base.txt
     #   stevedore
-platformdirs==2.5.1
+platformdirs==2.5.4
     # via pylint
 pycodestyle==2.8.0
     # via
@@ -84,7 +89,7 @@ pymongo==3.10.1
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   edx-opaque-keys
-pytz==2021.3
+pytz==2022.6
     # via
     #   -r requirements/base.txt
     #   django
@@ -93,11 +98,11 @@ six==1.16.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
-sqlparse==0.4.2
+sqlparse==0.4.3
     # via
     #   -r requirements/base.txt
     #   django
-stevedore==3.5.0
+stevedore==4.1.1
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
@@ -109,7 +114,7 @@ toml==0.10.2
     # via pylint
 tomli==2.0.1
     # via coverage
-typing-extensions==4.1.1
+typing-extensions==4.4.0
     # via
     #   astroid
     #   pylint
