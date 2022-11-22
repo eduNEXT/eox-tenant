@@ -1,3 +1,25 @@
+## v6.3.0 - 2022-11-22
+
+### [6.3.0](https://github.com/eduNEXT/eox-tenant/compare/v6.2.0...v6.3.0) (2022-11-22)
+
+#### Features
+
+- filter user's course enrollment by microsite request ([a8f445d](https://github.com/eduNEXT/eox-tenant/commit/a8f445d3ade47bd049e53115f17f3a3ca441138a))
+
+#### Tests
+
+- add test to custom filter pipeline ([948e455](https://github.com/eduNEXT/eox-tenant/commit/948e45560a3aef0255c408cb9dd3472b031f03e4))
+
+#### Documentation
+
+- add readme filter steps file ([f759510](https://github.com/eduNEXT/eox-tenant/commit/f7595106221d67ed895f33c42c6bd7205fca7f0b))
+- update README file ([f0fb19c](https://github.com/eduNEXT/eox-tenant/commit/f0fb19cb3442ae37861e5b302ae6459c24af0321))
+
+#### Continuous Integration
+
+- add workflow to publish python package ([38dd118](https://github.com/eduNEXT/eox-tenant/commit/38dd118e863ff2efb343ff76455528151eb48842))
+- drop circleci file ([dcbc494](https://github.com/eduNEXT/eox-tenant/commit/dcbc49437a668038221c3ca6911a35b1b151856f))
+
 ## v6.2.0 - 2022-09-20
 
 ### [6.2.0](https://github.com/eduNEXT/eox-tenant/compare/v6.1.0...v6.2.0) (2022-09-20)
@@ -215,10 +237,12 @@
 - 
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 - 
@@ -229,6 +253,7 @@
 
 - Add tests in python 3.5
 - ### Features command to move SignUpSources from a site to another site.
+- 
 - 
 - 
 - 
@@ -244,6 +269,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - 
