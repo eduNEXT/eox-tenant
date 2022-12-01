@@ -1,7 +1,7 @@
 """
 Utils to run tests
 """
-from django.db import models
+
 
 class test_theming_helpers:
     """

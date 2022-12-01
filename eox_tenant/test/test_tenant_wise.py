@@ -11,6 +11,7 @@ from django.test import TransactionTestCase
 from eox_tenant.models import Microsite, TenantConfig
 from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy
 
+
 class TenantSiteConfigProxyTest(TransactionTestCase):
     """
     Test TenantSiteConfigProxy.

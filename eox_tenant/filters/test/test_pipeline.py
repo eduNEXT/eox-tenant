@@ -6,10 +6,11 @@ from unittest.mock import MagicMock
 import ddt
 import mock
 from django.test import TestCase, override_settings
-from eox_tenant.tenant_aware_functions.enrollments import filter_enrollments
-from openedx_filters.tooling import OpenEdxPublicFilter
 from openedx_filters.learning.filters import CertificateRenderStarted
+from openedx_filters.tooling import OpenEdxPublicFilter
+
 from eox_tenant.filters.pipeline import FilterRenderCertificatesByOrg
+from eox_tenant.tenant_aware_functions.enrollments import filter_enrollments
 
 
 # This class was temporarily added while the filter is added in openedx-filters.

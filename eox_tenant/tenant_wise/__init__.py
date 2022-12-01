@@ -32,6 +32,7 @@ def load_tenant_wise_overrides():
                 proxy=TenantSiteConfigProxy
             )
 
+
 def set_as_proxy(modules, model, proxy):
     """
     Helper to patch a loaded module with a proxy object that has all the Tenant wise properties.
