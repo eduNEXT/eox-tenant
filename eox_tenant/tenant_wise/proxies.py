@@ -8,19 +8,13 @@ from itertools import chain
 import six
 from django.conf import settings
 from django.core.cache import cache
-from django.db import models
 
-from eox_tenant.edxapp_wrapper.certificates_module import get_certificates_models
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
 from eox_tenant.models import Microsite, TenantConfig, TenantOrganization
-from eox_tenant.organizations import get_organizations
-from eox_tenant.tenant_wise.context_managers import proxy_regression
 from eox_tenant.utils import clean_serializable_values
 
 SiteConfigurationModels = get_site_configuration_models()
-CertificatesModels = get_certificates_models()
-# The following line is necessary because we want to keep the previous Model GeneratedCertificate after the overrides.
-GeneratedCertificate = CertificatesModels.GeneratedCertificate
+
 TENANT_ALL_ORGS_CACHE_KEY = "tenant.all_orgs_list"
 EOX_TENANT_CACHE_KEY_TIMEOUT = getattr(
     settings,

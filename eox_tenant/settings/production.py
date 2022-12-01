@@ -62,10 +62,6 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         'USE_EOX_TENANT',
         settings.USE_EOX_TENANT
     )
-    settings.GET_CERTIFICATES_MODULE = getattr(settings, 'ENV_TOKENS', {}).get(
-        'GET_CERTIFICATES_MODULE',
-        settings.GET_CERTIFICATES_MODULE
-    )
 
     # Override the default site
     settings.SITE_ID = getattr(settings, 'ENV_TOKENS', {}).get(
