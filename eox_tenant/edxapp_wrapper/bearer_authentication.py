@@ -14,4 +14,4 @@ def get_bearer_authentication():
     return backend.get_bearer_authentication()
 
 
-BearerAuthentication = get_bearer_authentication()  # pylint: disable=invalid-name
+BearerAuthentication = get_bearer_authentication()

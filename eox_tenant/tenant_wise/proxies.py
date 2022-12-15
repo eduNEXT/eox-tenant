@@ -8,19 +8,13 @@ from itertools import chain
 import six
 from django.conf import settings
 from django.core.cache import cache
-from django.db import models
 
-from eox_tenant.edxapp_wrapper.certificates_module import get_certificates_models
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
 from eox_tenant.models import Microsite, TenantConfig, TenantOrganization
-from eox_tenant.organizations import get_organizations
-from eox_tenant.tenant_wise.context_managers import proxy_regression
 from eox_tenant.utils import clean_serializable_values
 
 SiteConfigurationModels = get_site_configuration_models()
-CertificatesModels = get_certificates_models()
-# The following line is necessary because we want to keep the previous Model GeneratedCertificate after the overrides.
-GeneratedCertificate = CertificatesModels.GeneratedCertificate
+
 TENANT_ALL_ORGS_CACHE_KEY = "tenant.all_orgs_list"
 EOX_TENANT_CACHE_KEY_TIMEOUT = getattr(
     settings,
@@ -202,74 +196,3 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
                 cls.set_key_to_cache(key, result)
 
         cls.set_key_to_cache(pre_load_value_key, True)
-
-
-class TenantCertificateManager(models.Manager):
-    """
-    Custom Manager Class that allows to override the get_queryset
-    method in order to filter the results by org.
-    """
-
-    def get_queryset(self):
-        """
-        Call parent method and filter the certificates by org.
-        """
-        generated_certificates = super().get_queryset()
-        org_filter = get_organizations()
-
-        if org_filter:
-            q_objects = models.Q()  # Create an empty Q object to start with.
-
-            for org in org_filter:
-                q_objects |= models.Q(course_id__startswith="course-v1:{org}+".format(org=org))
-
-            return generated_certificates.filter(q_objects)
-
-        return generated_certificates.none()
-
-
-class TenantEligibleCertificateManager(TenantCertificateManager):
-    """
-    A manager for `GeneratedCertificate` models that automatically
-    filters out ineligible certs.
-
-    This class is very similar to <lms.djangoapps.certificates.models.EligibleCertificateManager>
-    and the purpose is the same but the parent class is different.
-    """
-
-    def get_queryset(self):
-        """
-        Return a queryset for `GeneratedCertificate` models, filtering out
-        ineligible certificates.
-        """
-        certificates_statuses = CertificatesModels.CertificateStatuses
-        return super().get_queryset().exclude(
-            status__in=(certificates_statuses.audit_passing, certificates_statuses.audit_notpassing)
-        )
-
-
-class TenantGeneratedCertificateProxy(GeneratedCertificate):
-    """
-    Proxy model for <lms.djangoapps.certificates.models.GeneratedCertificate>.
-
-    The purpose of this is to override the GeneratedCertificate managers.
-    More information in https://docs.djangoproject.com/en/3.0/topics/db/models/#proxy-models
-    """
-
-    eligible_certificates = TenantEligibleCertificateManager()
-    objects = TenantCertificateManager()
-
-    class Meta:
-        """ Set as a proxy model. """
-        proxy = True
-
-    def __str__(self):
-        key = getattr(settings, "EDNX_TENANT_KEY", "No tenant is active at the moment")
-        return "<Tenant proxy as GeneratedCertificate: {}>".format(key)
-
-    def save(self, *args, **kwargs):
-        """
-        Override the save method such that we use the non proxy cert during the save.
-        """
-        with proxy_regression(get_certificates_models(), "GeneratedCertificate", GeneratedCertificate):
-            super().save(*args, **kwargs)

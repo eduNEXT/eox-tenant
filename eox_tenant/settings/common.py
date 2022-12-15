@@ -57,7 +57,6 @@ def plugin_settings(settings):
     }
     settings.TENANT_WISE_ALLOWED_PROXIES = {
         'TenantSiteConfigProxy': True,
-        'TenantGeneratedCertificateProxy': True,
     }
 
     if hasattr(settings, 'OAUTH2_PROVIDER'):

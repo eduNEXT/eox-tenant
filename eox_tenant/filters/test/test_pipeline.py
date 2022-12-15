@@ -3,10 +3,13 @@ Test cases for Open edX Filters steps.
 """
 from unittest.mock import MagicMock
 
+import ddt
 import mock
 from django.test import TestCase, override_settings
+from openedx_filters.learning.filters import CertificateRenderStarted
 from openedx_filters.tooling import OpenEdxPublicFilter
 
+from eox_tenant.filters.pipeline import FilterRenderCertificatesByOrg
 from eox_tenant.tenant_aware_functions.enrollments import filter_enrollments
 
 
@@ -30,9 +33,9 @@ class CourseEnrollmentSiteFilterRequested(OpenEdxPublicFilter):
         return data.get("context")
 
 
-class FilterStepsTestCase(TestCase):
+class FilterUserCourseEnrollmentsByTenantTestCase(TestCase):
     """
-    Filtet steps test cases.
+    FilterUserCourseEnrollmentsByTenant test cases.
     """
 
     def setUp(self):
@@ -138,3 +141,44 @@ class FilterStepsTestCase(TestCase):
         )
 
         self.assertListEqual(list(expected_result), list(result))
+
+
+@ddt.ddt
+class FilterRenderCertificatesByOrgTestCase(TestCase):
+    """Test FilterRenderCertificatesByOrg that prevent certificates
+    render if course org differs from tenant orgs."""
+
+    @mock.patch("eox_tenant.filters.pipeline.get_organizations")
+    @ddt.data(
+        [["demo"], True],
+        [["eduNEXT"], False],
+        [[], False],
+        [["eduNEXT", "demo"], True],
+    )
+    @ddt.unpack
+    def test_filter_render_certificates_by_org(self, organizations, render, mock_get_organizations):
+        """Test the certificates render if course org differs from tenant orgs.
+
+        Args:
+            organizations (list): a list of tenant organization names.
+            render (bool): this specifies whether to render or not.
+            mock_get_organizations (patch): mock for get_organizations method.
+
+        In the ddt data the following structure is being passed:
+        [organizations, render]
+
+        Expected result:
+        - The get_organizations method is called once.
+        - Raise an exception if the course org (ex: demo) differs from tenant org (passed in ddt).
+        """
+
+        mock_get_organizations.return_value = organizations
+        context = {"course_id": "course-v1:demo+01+01"}
+
+        if not render:
+            with self.assertRaises(CertificateRenderStarted.RenderAlternativeInvalidCertificate):
+                FilterRenderCertificatesByOrg.run_filter(self, context, {})
+                mock_get_organizations.assert_called_once()
+        else:
+            FilterRenderCertificatesByOrg.run_filter(self, context, {})
+            mock_get_organizations.assert_called_once()
