@@ -1,3 +1,26 @@
+## v7.0.0 - 2022-12-19
+
+### [7.0.0](https://github.com/eduNEXT/eox-tenant/compare/v6.3.0...v7.0.0) (2022-12-19)
+
+#### ⚠ BREAKING CHANGES
+
+- drop unnecessary certificate proxy
+- 
+- feat: add pipeline step that filter render certificates by organization
+- 
+- refactor: drop unnecessary backend
+- 
+- fix: fix quality tests
+- 
+
+#### Performance Improvements
+
+- filter certificates by org and remove certificate proxy ([#157](https://github.com/eduNEXT/eox-tenant/issues/157)) ([773ac40](https://github.com/eduNEXT/eox-tenant/commit/773ac4046dc5913efee7cc247985a3625a0cdb64))
+
+#### Continuous Integration
+
+- update the changelog updater step in bumpversion ([c45c3e6](https://github.com/eduNEXT/eox-tenant/commit/c45c3e68aedbc94a997806353571b081847904b2))
+
 ## v6.3.0 - 2022-11-22
 
 ### [6.3.0](https://github.com/eduNEXT/eox-tenant/compare/v6.2.0...v6.3.0) (2022-11-22)
@@ -238,10 +261,12 @@
 - 
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 - 
@@ -253,6 +278,7 @@
 
 - Add tests in python 3.5
 - ### Features command to move SignUpSources from a site to another site.
+- 
 - 
 - 
 - 
@@ -269,6 +295,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - 
