@@ -13,13 +13,13 @@ class FilterUserCourseEnrollmentsByTenant(PipelineStep):
     Filter enrollments list by a tenant.
     """
 
-    def run_filter(self, context):  # pylint: disable=arguments-differ
+    def run_filter(self, enrollments):  # pylint: disable=arguments-differ
         """
         Filter especific user course enrollments by tenant request.
         Example Usage:
-        Add the following configurations to you configuration file
+        Add the following configurations to your configuration file
             "OPEN_EDX_FILTERS_CONFIG": {
-                "org.openedx.learning.course_enrollments_site.filter.requested.v1": {
+                "org.openedx.learning.course_enrollment_queryset.requested.v1": {
                     "fail_silently": false,
                     "pipeline": [
                         "eox_tenant.filters.pipeline.FilterUserCourseEnrollmentsByTenant"
@@ -27,8 +27,8 @@ class FilterUserCourseEnrollmentsByTenant(PipelineStep):
                 }
             }
         """
-        tenant_enrollments = filter_enrollments(context)
-        return {"context": tenant_enrollments}
+        tenant_enrollments = filter_enrollments(enrollments)
+        return {"enrollments": tenant_enrollments}
 
 
 class FilterRenderCertificatesByOrg(PipelineStep):
