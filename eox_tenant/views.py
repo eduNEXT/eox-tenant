@@ -3,7 +3,7 @@
 
 from __future__ import unicode_literals
 
-from os.path import dirname, realpath
+from pathlib import Path
 from subprocess import CalledProcessError, check_output
 
 from django.http import JsonResponse
@@ -17,7 +17,7 @@ def info_view(request):  # pylint: disable=unused-argument
     installed app.
     """
     try:
-        working_dir = dirname(realpath(__file__))
+        working_dir = Path(__file__).resolve().parent
         git_data = check_output(["git", "rev-parse", "HEAD"], cwd=working_dir)
         git_data = git_data.decode().rstrip('\r\n')
     except CalledProcessError:

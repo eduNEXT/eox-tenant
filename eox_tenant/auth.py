@@ -7,7 +7,7 @@ import re
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from eox_tenant.edxapp_wrapper.auth import get_edx_auth_backend, get_edx_auth_failed
 from eox_tenant.edxapp_wrapper.theming_helpers import get_theming_helpers
