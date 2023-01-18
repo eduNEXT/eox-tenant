@@ -8,20 +8,20 @@
 # pin when possible.  Writing an issue against the offending project and
 # linking to it here is good.
 
-Django<=3.2.15
-pymongo<3.11
-coverage[toml]==6.0.2
-ddt==1.4.4
+Django<4.0
+pymongo<4.0.0
+coverage[toml]==6.5.0
+ddt==1.6.0
 six==1.16.0
 edx-opaque-keys==2.3.0
 django-crum==0.7.9
 django-fake-model==0.1.4
-django-mysql==4.5.0
+django-mysql==4.7.1
 djangorestframework==3.13.1
 jsonfield==3.1.0
 mock==4.0.3
 path-py==12.5.0
-pycodestyle==2.8.0
-pylint==2.12.2
-testfixtures==6.18.4
+pycodestyle<2.9.0
+pylint==2.13.9
+testfixtures==7.0.0
 openedx_filters==0.8.0
