@@ -40,7 +40,9 @@ class MicrositeCrossBrandingFilterMiddleware(MiddlewareMixin):
         microsite, but it is not the current microsite
         """
         path = request.path_info
-        regex_path_match = re.compile('/courses/{}/'.format(settings.COURSE_ID_PATTERN))
+        regex_path_match = re.compile(
+            f'/(courses|(api/course_home/[/\w/\W]+))/{settings.COURSE_ID_PATTERN}'
+        )
         matched_regex = regex_path_match.match(path)
 
         # If there is no match, then we are not in a ORG-restricted area
