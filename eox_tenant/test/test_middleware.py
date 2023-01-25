@@ -3,6 +3,7 @@
 TODO: add me
 """
 import mock
+from ddt import data, ddt
 from django.contrib.sites.models import Site
 from django.http import Http404
 from django.test import RequestFactory, TestCase, override_settings
@@ -14,11 +15,22 @@ from eox_tenant.middleware import (
 )
 
 
+@ddt
 class MicrositeCrossBrandingFilterMiddlewareTest(TestCase):
 
     """
     Testing the middleware MicrositeCrossBrandingFilterMiddleware
     """
+    COMMON_COURSE_PATHS = [
+        '/courses/course-v1:TEST_ORG+CS101+2019_T1/about',
+        '/courses/course-v1:TEST_ORG+CS101+2019_T1/course',
+        '/api/course_home/course_metadata/course-v1:TEST_ORG+CS101+2019_T1/',
+        '/api/course_home/outline/course-v1:TEST_ORG+CS101+2019_T1?params=test',
+        '/api/course_home/dates/course-v1:TEST_ORG+CS101+2019_T1/?params=test',
+        '/api/course_home/v1/course_metadata/course-v1:TEST_ORG+CS101+2019_T1/',
+        '/api/course_home/v1/outline/course-v1:TEST_ORG+CS101+2019_T1?params=test',
+        '/api/course_home/v1/dates/course-v1:TEST_ORG+CS101+2019_T1/?params=test',
+    ]
 
     def setUp(self):
         """ setup """
@@ -33,26 +45,38 @@ class MicrositeCrossBrandingFilterMiddlewareTest(TestCase):
 
         self.assertIsNone(self.middleware_instance.process_request(request))
 
+    @data(*COMMON_COURSE_PATHS)
     @mock.patch('eox_tenant.middleware.configuration_helpers')
-    def test_url_courses_match_org_in_filter(self, conf_helper_mock):
+    def test_course_org_matchs(self, path, conf_helper_mock):
         """
-        Test when request url match the course id pattern but the course org
-        belongs to the current site/microsite
+        Test when request url matchs the course id pattern and the course org
+        belongs to the current site/microsite.
+
+        Expected behavior:
+            - Return None.
+            - get_current_site_orgs is called once.
+            - get_all_orgs is never called.
         """
-        request = self.request_factory.get('/courses/course-v1:TEST_ORG+CS101+2019_T1/')
+        request = self.request_factory.get(path)
         conf_helper_mock.get_current_site_orgs.return_value = ['TEST_ORG']
 
         self.assertIsNone(self.middleware_instance.process_request(request))
         conf_helper_mock.get_current_site_orgs.assert_called_once()
         conf_helper_mock.get_all_orgs.assert_not_called()
 
+    @data(*COMMON_COURSE_PATHS)
     @mock.patch('eox_tenant.middleware.configuration_helpers')
-    def test_url_courses_match_org_not_in_all_orgs(self, conf_helper_mock):
+    def test_course_org_not_in_all_orgs(self, path, conf_helper_mock):
         """
-        Test when request url match the course id pattern but the course org
-        does not belong to any site/microsite
+        Test when request url matchs the course id pattern but the course org
+        does not belong to any site/microsite.
+
+        Expected behavior:
+            - Return None.
+            - get_current_site_orgs is called once.
+            - get_all_orgs is called once.
         """
-        request = self.request_factory.get('/courses/course-v1:TEST_ORG+CS101+2019_T1/')
+        request = self.request_factory.get(path)
         conf_helper_mock.get_current_site_orgs.return_value = []
         conf_helper_mock.get_all_orgs.return_value = ['Some_org', 'new_org', 'other_org']
 
@@ -60,13 +84,19 @@ class MicrositeCrossBrandingFilterMiddlewareTest(TestCase):
         conf_helper_mock.get_current_site_orgs.assert_called_once()
         conf_helper_mock.get_all_orgs.assert_called_once()
 
+    @data(*COMMON_COURSE_PATHS)
     @mock.patch('eox_tenant.middleware.configuration_helpers')
-    def test_url_courses_match_org_in_other_site(self, conf_helper_mock):
+    def test_course_org_in_all_orgs(self, path, conf_helper_mock):
         """
         Test when request url match the course id pattern but the course org
-        does belong to any site/microsite
+        does belong to other site/microsite.
+
+        Expected behavior:
+            - Raises 404.
+            - get_current_site_orgs is called once.
+            - get_all_orgs is called once.
         """
-        request = self.request_factory.get('/courses/course-v1:TEST_ORG+CS101+2019_T1/')
+        request = self.request_factory.get(path)
         conf_helper_mock.get_current_site_orgs.return_value = ['other_org']
         conf_helper_mock.get_all_orgs.return_value = ['Some_org', 'new_org', 'TEST_ORG']
 
