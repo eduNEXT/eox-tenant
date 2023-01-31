@@ -23,14 +23,16 @@ Compatibility Notes
 +-------------------+-----------------------+
 |        Koa        |     >= 4.0 <= 5.1.3   |
 +-------------------+-----------------------+
-|       Lilac       |         >= 4.0        |
+|       Lilac       |     >= 4.0 < 6.2      |
 +-------------------+-----------------------+
 |       Maple       |         >= 6.0        |
 +-------------------+-----------------------+
 |      Nutmeg       |         >= 6.2        |
 +-------------------+-----------------------+
+|       Olive       |         >= 8.0        |
++-------------------+-----------------------+
 
-**NOTE**: Nutmeg version does not support Django 2.2
+**NOTE**: Since 6.2 version, eox-tenant does not support Django 2.2
 
 The following changes to the plugin settings are necessary. If the release you are looking for is
 not listed, then the accumulation of changes from previous releases is enough.
