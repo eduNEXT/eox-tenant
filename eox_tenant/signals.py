@@ -21,8 +21,8 @@ LOGGING['loggers']['eox_tenant'] = {
 from __future__ import print_function, unicode_literals
 
 import logging
-import os
 from datetime import datetime
+from os import getpid  # pylint: disable=no-name-in-module
 
 import six
 from django.apps.config import AppConfig
@@ -52,7 +52,7 @@ def _update_settings(domain):
     base_settings.EDNX_TENANT_DOMAIN = domain
     base_settings.EDNX_TENANT_SETUP_TIME = datetime.now()
 
-    LOG.debug("PID: %s CONFIGURING THE SETTINGS OBJECT | %s", os.getpid(), tenant_key)
+    LOG.debug("PID: %s CONFIGURING THE SETTINGS OBJECT | %s", getpid(), tenant_key)
     for key, value in six.iteritems(config):
         if isinstance(value, dict):
             try:
@@ -80,7 +80,7 @@ def _repopulate_apps(apps):
     We delegate the decision to the specific tenant on the EDNX_TENANT_INSTALLED_APPS key.
     If present, the key is passed in the apps argument
     """
-    LOG.debug("PID: %s REPOPULATING APPS | %s", os.getpid(), apps)
+    LOG.debug("PID: %s REPOPULATING APPS | %s", getpid(), apps)
     for entry in apps:
         app_config = AppConfig.create(entry)
         app_config.ready()
@@ -115,10 +115,10 @@ def _analyze_current_settings(domain):
     try:
         current_key = base_settings.EDNX_TENANT_KEY
         has_tenant_key = True
-        LOG.debug("PID: %s | The current_key: %s | the current domain: %s", os.getpid(), current_key, domain)
+        LOG.debug("PID: %s | The current_key: %s | the current domain: %s", getpid(), current_key, domain)
     except AttributeError:
         must_reset = False
-        LOG.debug("PID: %s | No TENANT CONFIGURED SO FAR", os.getpid())
+        LOG.debug("PID: %s | No TENANT CONFIGURED SO FAR", getpid())
 
     try:
         if has_tenant_key and base_settings.EDNX_TENANT_DOMAIN == domain:
@@ -129,7 +129,7 @@ def _analyze_current_settings(domain):
     except AttributeError:
         must_reset = True
         LOG.debug("SETTINGS WILL RESET | Reason: we could not find "
-                  "EDNX_TENANT_DOMAIN in the current settings object. PID: %s", os.getpid())
+                  "EDNX_TENANT_DOMAIN in the current settings object. PID: %s", getpid())
 
     return must_reset, can_keep
 
@@ -139,7 +139,7 @@ def _perform_reset():
     Defers to the original django.conf.settings to a new initialization
     """
     base_settings._setup()  # pylint: disable=protected-access
-    LOG.debug("Reset on the settings object for PID: %s", os.getpid())
+    LOG.debug("Reset on the settings object for PID: %s", getpid())
 
 
 def _ttl_reached():

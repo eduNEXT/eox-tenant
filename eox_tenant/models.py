@@ -8,7 +8,7 @@ import json
 
 import six
 from django.db import connection, models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from jsonfield.fields import JSONField
 
 
