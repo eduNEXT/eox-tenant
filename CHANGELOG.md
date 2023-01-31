@@ -1,3 +1,26 @@
+## v8.0.0 - 2023-01-31
+
+### [8.0.0](https://github.com/eduNEXT/eox-tenant/compare/v7.0.1...v8.0.0) (2023-01-31)
+
+#### ⚠ BREAKING CHANGES
+
+- **DS-365:** Remove the useless backends for versions older than maple
+- 
+- ci: update requirements and ci settings
+- 
+- feat: fix issues and add compatibility with new python versions
+- 
+- perf: remove useless backends
+- 
+- docs: update README
+- 
+- ci: update github actions version
+- 
+
+#### Performance Improvements
+
+- **DS-365:** olive support ([#164](https://github.com/eduNEXT/eox-tenant/issues/164)) ([939e71c](https://github.com/eduNEXT/eox-tenant/commit/939e71c495967a0f5ec96659e7309b56776242d9))
+
 ## v7.0.0 - 2022-12-19
 
 ### [7.0.0](https://github.com/eduNEXT/eox-tenant/compare/v6.3.0...v7.0.0) (2022-12-19)
@@ -262,10 +285,12 @@
 - 
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 - 
@@ -283,6 +308,7 @@
 - 
 - 
 - 
+- 
 
 ## [2.5.0] - 2020-01-03
 
@@ -295,6 +321,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - 
