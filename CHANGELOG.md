@@ -1,3 +1,16 @@
+## v7.0.1 - 2023-01-31
+
+### [7.0.1](https://github.com/eduNEXT/eox-tenant/compare/v7.0.0...v7.0.1) (2023-01-31)
+
+### Performance Improvements
+
+- **DS-365:** olive support ([#164](https://github.com/eduNEXT/eox-tenant/issues/164)) ([633fa23](https://github.com/eduNEXT/eox-tenant/commit/633fa23642fccd2c8be4028e2e47e455315f58d3))
+
+### Continuous Integration
+
+- add open-release/* branches to github workflows ([40f23ad](https://github.com/eduNEXT/eox-tenant/commit/40f23ade6400210190f40337214248dbdd1b4e15))
+- adds mantainer group ([baca6d2](https://github.com/eduNEXT/eox-tenant/commit/baca6d2e2bef6c8946b3e3f52ff2f7af86671a75))
+
 ## v7.0.0 - 2022-12-19
 
 ### [7.0.0](https://github.com/eduNEXT/eox-tenant/compare/v6.3.0...v7.0.0) (2022-12-19)
@@ -262,10 +275,12 @@
 - 
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 - 
@@ -283,6 +298,7 @@
 - 
 - 
 - 
+- 
 
 ## [2.5.0] - 2020-01-03
 
@@ -295,6 +311,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - 
