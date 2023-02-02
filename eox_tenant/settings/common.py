@@ -67,3 +67,8 @@ def plugin_settings(settings):
         settings.MAKO_TEMPLATE_DIRS_BASE.insert(0, path(__file__).abspath().dirname().dirname() / 'templates')
     except AttributeError:
         pass
+
+    settings.EOX_TENANT_RESTRICTED_COURSE_PATTERNS = [
+        "courses",
+        "(api/course_home/.+)",
+    ]
