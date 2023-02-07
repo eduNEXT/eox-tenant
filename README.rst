@@ -139,6 +139,15 @@ This comand will synchronize the course_org_filter values in lms_configs(TenantC
   ./manage.py lms synchronize_organizations --model TenantConfig # only for TenantConfig
   ./manage.py lms synchronize_organizations --model Microsite # only for Microsite
 
+Caveats
+-------
+
+- SSO that uses the LMS while authenticating does so with server-to-server communication. Therefore, when the `AvailableScreenMiddleware` gets the current domain, it finds that `lms:8000` as in `SOCIAL_AUTH_EDX_OAUTH2_URL_ROOT` which does not exist, then raises 404 exception. In order to avoid this error, set in your LMS settings file:
+
+.. code-block:: python
+
+  SOCIAL_AUTH_EDX_OAUTH2_URL_ROOT = SOCIAL_AUTH_EDX_OAUTH2_PUBLIC_URL_ROOT
+
 How to Contribute
 -----------------
 
