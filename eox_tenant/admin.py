@@ -4,6 +4,7 @@ Django admin page for microsite model
 from itertools import chain
 
 from django import forms
+from django.conf import settings
 from django.contrib import admin
 from django.db import models
 from django.urls import reverse
@@ -280,8 +281,8 @@ class TenantOrganizationAdmin(admin.ModelAdmin):
 
         return queryset, _
 
-
-admin.site.register(Microsite, MicrositeAdmin)
-admin.site.register(TenantConfig, TenantConfigAdmin)
-admin.site.register(Route, RouteAdmin)
-admin.site.register(TenantOrganization, TenantOrganizationAdmin)
+if getattr(settings, "SERVICE_VARIANT", None) == "lms":
+    admin.site.register(Microsite, MicrositeAdmin)
+    admin.site.register(TenantConfig, TenantConfigAdmin)
+    admin.site.register(Route, RouteAdmin)
+    admin.site.register(TenantOrganization, TenantOrganizationAdmin)
