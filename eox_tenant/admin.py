@@ -281,6 +281,7 @@ class TenantOrganizationAdmin(admin.ModelAdmin):
 
         return queryset, _
 
+
 if getattr(settings, "SERVICE_VARIANT", None) == "lms":
     admin.site.register(Microsite, MicrositeAdmin)
     admin.site.register(TenantConfig, TenantConfigAdmin)
