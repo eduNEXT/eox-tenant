@@ -1,3 +1,18 @@
+## v9.0.0 - 2023-03-14
+
+### [9.0.0](https://github.com/eduNEXT/eox-tenant/compare/v8.0.0...v9.0.0) (2023-03-14)
+
+#### ⚠ BREAKING CHANGES
+
+- avoid registering models in services different than LMS
+- 
+- refactor!(DS-434): avoid registering models in services different than LMS (#177) ([70b6b57](https://github.com/eduNEXT/eox-tenant/commit/70b6b576931c9a28ba219e4ee5854ddbd505f759)), closes [#177](https://github.com/eduNEXT/eox-tenant/issues/177)
+- 
+
+#### Documentation
+
+- add caveats section describing issue with middleware ([#173](https://github.com/eduNEXT/eox-tenant/issues/173)) ([f3745a5](https://github.com/eduNEXT/eox-tenant/commit/f3745a5a2ae6e66cb67fbc92a938172ab52988ea))
+
 ## v8.0.0 - 2023-01-31
 
 ### [8.0.0](https://github.com/eduNEXT/eox-tenant/compare/v7.0.1...v8.0.0) (2023-01-31)
@@ -286,10 +301,12 @@
 - 
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 - 
@@ -309,6 +326,7 @@
 - 
 - 
 - 
+- 
 
 ## [2.5.0] - 2020-01-03
 
@@ -321,6 +339,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - 
