@@ -4,6 +4,7 @@ Permission for eox_tenant api v1.
 from django.conf import settings
 from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ImproperlyConfigured
 from django.db.utils import ProgrammingError
 from rest_framework import exceptions, permissions
 
@@ -13,19 +14,22 @@ def load_permissions():
     Helper method to load a custom permission on DB that will be
     used to give access to the eox-tenant API.
     """
-    if settings.EOX_TENANT_LOAD_PERMISSIONS:
-        try:
-            content_type = ContentType.objects.get_for_model(User)
-            Permission.objects.get_or_create(
-                codename='can_call_eox_tenant',
-                name='Can access eox-tenant API',
-                content_type=content_type,
-            )
-        except ProgrammingError:
-            # This code runs when the app is loaded, if a migration has not been
-            # done a ProgrammingError exception is raised.
-            # we are bypassing those cases to let migrations run smoothly.
-            pass
+    try:
+        if settings.EOX_TENANT_LOAD_PERMISSIONS:
+            try:
+                content_type = ContentType.objects.get_for_model(User)
+                Permission.objects.get_or_create(
+                    codename='can_call_eox_tenant',
+                    name='Can access eox-tenant API',
+                    content_type=content_type,
+                )
+            except ProgrammingError:
+                # This code runs when the app is loaded, if a migration has not been
+                # done a ProgrammingError exception is raised.
+                # we are bypassing those cases to let migrations run smoothly.
+                pass
+    except ImproperlyConfigured:
+        pass
 
 
 class EoxTenantAPIPermission(permissions.BasePermission):
