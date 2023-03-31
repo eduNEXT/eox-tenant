@@ -13,8 +13,12 @@ Filters steps list:
 -------------------
 
 * `FilterUserCourseEnrollmentsByTenant`_: Filters the course enrollments of a user from the tenant site where the request is made.
+* `FilterRenderCertificatesByOrg`_: Stop certificate generation process raising a exception if course org is different to tenant orgs.
+* `TenantAwareLinksFromStudio`_: Filter especific tenant aware link form Studio to the LMS.
 
-.. _FilterUserCourseEnrollmentsByTenant: ./pipeline.py#L9
+.. _FilterUserCourseEnrollmentsByTenant: ./pipeline.py#L12
+.. _FilterRenderCertificatesByOrg: ./pipeline.py#L35
+.. _TenantAwareLinksFromStudio: ./pipeline.py#L63
 
 How to add a new Filter Step:
 -----------------------------
