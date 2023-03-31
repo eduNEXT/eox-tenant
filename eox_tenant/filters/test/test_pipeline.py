@@ -8,7 +8,7 @@ import mock
 from django.test import TestCase, override_settings
 from openedx_filters.learning.filters import CertificateRenderStarted, CourseEnrollmentQuerysetRequested
 
-from eox_tenant.filters.pipeline import FilterRenderCertificatesByOrg
+from eox_tenant.filters.pipeline import FilterRenderCertificatesByOrg, OrgAwareCourseAboutPageURL, OrgAwareLMSURLStudio
 from eox_tenant.tenant_aware_functions.enrollments import filter_enrollments
 
 
@@ -161,3 +161,87 @@ class FilterRenderCertificatesByOrgTestCase(TestCase):
         else:
             FilterRenderCertificatesByOrg.run_filter(self, context, {})
             mock_get_organizations.assert_called_once()
+
+
+class FilterOrgAwareLMSURLStudioTestCase(TestCase):
+    """
+    FilterOrgAwareLMSURLStudioTestCase test cases.
+    """
+
+    def setUp(self):
+        """This method creates Microsite objects in database"""
+
+        # Creating mock to render tenant aware links
+        self.url = "https://lms-base"
+        self.org = "test"
+
+    @override_settings(
+        OPEN_EDX_FILTERS_CONFIG={
+            "org.openedx.learning.tenant_aware_link.render.started.v1": {
+                "fail_silently": False,
+                "pipeline": [
+                    "eox_tenant.filters.pipeline.OrgAwareLMSURLStudio"
+                ]
+            }
+        },
+        LMS_ROOT_URL="https://lms-base"
+    )
+    @mock.patch('eox_tenant.filters.pipeline.configuration_helpers')
+    def test_org_aware_lms_url_studio(self, configuration_helpers_mock):
+        """
+        Test that filter tenant aware link get value for org.
+        """
+        results_get_value = "https://test-tenant-aware-link"
+
+        configuration_helpers_mock.get_value_for_org.return_value = results_get_value
+
+        result = OrgAwareLMSURLStudio.run_filter(
+            self,
+            url=self.url,
+            org=self.org,
+        )
+
+        self.assertEqual(results_get_value, result.get("url"))
+        self.assertEqual(result.get("org"), self.org)
+
+
+class FilterOrgAwareCourseAboutPageURLTestCase(TestCase):
+    """
+    FilterOrgAwareCourseAboutPageURLTestCase test cases.
+    """
+
+    def setUp(self):
+        """This method creates Microsite objects in database"""
+
+        # Creating mock to render tenant aware links
+        self.url = "https://lms-base"
+        self.org = "test"
+
+    @override_settings(
+        OPEN_EDX_FILTERS_CONFIG={
+            "org.openedx.learning.tenant_aware_link.render.started.v1": {
+                "fail_silently": False,
+                "pipeline": [
+                    "eox_tenant.filters.pipeline.OrgAwareCourseAboutPageURL"
+                ]
+            }
+        },
+        LMS_ROOT_URL="https://lms-base"
+    )
+    @mock.patch('eox_tenant.filters.pipeline.configuration_helpers')
+    def test_org_aware_course_about_page_url_studio(self, configuration_helpers_mock):
+        """
+        Test that filter tenant aware link get value for org.
+        """
+        results_get_value = "https://test-tenant-aware-link"
+
+        configuration_helpers_mock.get_value_for_org.return_value = results_get_value
+
+        result = OrgAwareCourseAboutPageURL.run_filter(
+            self,
+            url=self.url,
+            org=self.org,
+        )
+
+        self.assertEqual(results_get_value, result.get("url"))
+        self.assertEqual(result.get("org"), self.org)
