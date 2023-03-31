@@ -8,7 +8,7 @@ import mock
 from django.test import TestCase, override_settings
 from openedx_filters.learning.filters import CertificateRenderStarted, CourseEnrollmentQuerysetRequested
 
-from eox_tenant.filters.pipeline import FilterRenderCertificatesByOrg
+from eox_tenant.filters.pipeline import FilterRenderCertificatesByOrg, OrgAwareCourseAboutPageURL, OrgAwareLMSURLStudio
 from eox_tenant.tenant_aware_functions.enrollments import filter_enrollments
 
 
@@ -161,3 +161,87 @@ class FilterRenderCertificatesByOrgTestCase(TestCase):
         else:
             FilterRenderCertificatesByOrg.run_filter(self, context, {})
             mock_get_organizations.assert_called_once()
+
+
+class OrgAwareLMSURLStudioTestCase(TestCase):
+    """
+    Test OrgAwareLMSURLStudioTestCase that generates a new LMS URL for asset URL generation
+    based on the course organization settings.
+    """
+
+    def setUp(self):
+        """This method initializes the URL and ORG variables for the pipeline"""
+
+        self.url = "https://lms-base"
+        self.org = "test"
+
+    @override_settings(
+        LMS_ROOT_URL="https://lms-base"
+    )
+    @mock.patch('eox_tenant.filters.pipeline.configuration_helpers')
+    def test_get_lms_url_based_for_org(self, configuration_helpers_mock):
+        """
+        Test that filter get new LMS URL for asset URL generation
+        based on the course organization settings for org.
+
+        Args:
+            configuration_helpers_mock (patch): mock for configuration_helpers method.
+
+        Expected result:
+        - The url return is equal to expected.
+        - The org return is equal to expected.
+        """
+        results_get_value = "https://test-tenant-aware-link"
+
+        configuration_helpers_mock.get_value_for_org.return_value = results_get_value
+
+        result = OrgAwareLMSURLStudio.run_filter(
+            self,
+            url=self.url,
+            org=self.org,
+        )
+
+        self.assertEqual(results_get_value, result.get("url"))
+        self.assertEqual(result.get("org"), self.org)
+
+
+class OrgAwareCourseAboutPageURLTestCase(TestCase):
+    """
+    Test OrgAwareCourseAboutPageURLTestCase that generates a new course about URL based
+    on the course organization settings.
+    """
+
+    def setUp(self):
+        """This method initializes the URL and ORG variables for the pipeline"""
+
+        self.url = "https://lms-base"
+        self.org = "test"
+
+    @override_settings(
+        LMS_ROOT_URL="https://lms-base"
+    )
+    @mock.patch('eox_tenant.filters.pipeline.configuration_helpers')
+    def test_get_course_about_url_based_for_org(self, configuration_helpers_mock):
+        """
+        Test that filter get new course about URL based
+        on the course organization settings for org.
+
+        Args:
+            configuration_helpers_mock (patch): mock for configuration_helpers method.
+
+        Expected result:
+        - The url return is equal to expected.
+        - The org return is equal to expected.
+        """
+        results_get_value = "https://test-tenant-aware-link"
+
+        configuration_helpers_mock.get_value_for_org.return_value = results_get_value
+
+        result = OrgAwareCourseAboutPageURL.run_filter(
+            self,
+            url=self.url,
+            org=self.org,
+        )
+
+        self.assertEqual(results_get_value, result.get("url"))
+        self.assertEqual(result.get("org"), self.org)
