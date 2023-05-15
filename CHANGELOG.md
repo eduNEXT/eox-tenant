@@ -1,3 +1,11 @@
+## v9.1.0 - 2023-05-15
+
+### [9.1.0](https://github.com/eduNEXT/eox-tenant/compare/v9.0.0...v9.1.0) (2023-05-15)
+
+#### Features
+
+- add course_home api pattern to MicrositeCrossBrandingFilterMiddleware ([4f90bd5](https://github.com/eduNEXT/eox-tenant/commit/4f90bd599fff9adb4d3180c801de1dda3bfbbc04))
+
 ## v9.0.0 - 2023-03-14
 
 ### [9.0.0](https://github.com/eduNEXT/eox-tenant/compare/v8.0.0...v9.0.0) (2023-03-14)
@@ -302,10 +310,12 @@
 - 
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 - 
@@ -327,6 +337,7 @@
 - 
 - 
 - 
+- 
 
 ## [2.5.0] - 2020-01-03
 
@@ -339,6 +350,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - 
