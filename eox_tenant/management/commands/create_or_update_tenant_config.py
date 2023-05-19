@@ -8,6 +8,7 @@ import logging
 
 from django.core.management import BaseCommand
 from jsonfield.fields import JSONField
+import six
 
 from eox_tenant.models import Route, TenantConfig
 
@@ -54,7 +55,24 @@ class Command(BaseCommand):
             required=False
         )
 
+    def merge_dict(self, base_dict: dict, override: dict):
+        """
+        Merge two nested dicts.
+        """
+        for key, value in override.items():
+            if isinstance(value, dict):
+                merged = base_dict.get(key, {}).copy()
+                merged.update(value)
+                base_dict[key] = merged
+                continue
+            base_dict[key] = value
+        return base_dict
+
+
     def handle(self, *args, **options):
+        """
+        Create or update TenantConfig and link related routes.
+        """
         external_key = options['external_key']
         routes = options['routes']
         configuration = options.get('config')
@@ -86,8 +104,10 @@ class Command(BaseCommand):
                 if isinstance(field, JSONField):
                     name = field.name
                     value = tenant_configuration_values.get(name)
-                    if value is not None:
-                        setattr(tenant, name, value)
+                    if value:
+                        base_value = getattr(tenant, name, {})
+                        merged = self.merge_dict(base_value, value)
+                        setattr(tenant, name, merged)
 
             tenant.save()
         # next add routes and link them
