@@ -1,3 +1,11 @@
+## v9.1.1 - 2023-05-26
+
+### [9.1.1](https://github.com/eduNEXT/eox-tenant/compare/v9.1.0...v9.1.1) (2023-05-26)
+
+### Bug Fixes
+
+- bypass load permission if migrations not completed ([3d518be](https://github.com/eduNEXT/eox-tenant/commit/3d518be64b7f5e43b5c92b07ac19e17b2ba6c268))
+
 ## v9.1.0 - 2023-05-15
 
 ### [9.1.0](https://github.com/eduNEXT/eox-tenant/compare/v9.0.0...v9.1.0) (2023-05-15)
@@ -311,10 +319,12 @@
 - 
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 - 
@@ -338,6 +348,7 @@
 - 
 - 
 - 
+- 
 
 ## [2.5.0] - 2020-01-03
 
@@ -350,6 +361,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - 
