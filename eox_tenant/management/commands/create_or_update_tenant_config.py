@@ -8,7 +8,6 @@ import logging
 
 from django.core.management import BaseCommand
 from jsonfield.fields import JSONField
-import six
 
 from eox_tenant.models import Route, TenantConfig
 
@@ -26,13 +25,31 @@ def load_json_from_file(filename):
 class Command(BaseCommand):
     """
     Management command to create or update TenantConfig.
+
+    Examples:
+    # create/update tenant config and link 2 routes
+    - python manage.py create_or_update_tenant_config --external-key lacolhost.com \
+        --config '{"lms_configs": {"PLATFORM_NAME": "Lacolhost", "CONTACT_EMAIL": "edx@example.com"}}' \
+        lacolhost.com preview.lacolhost.com
+
+    # Override existing lms_configs under a tenant, for example, below command will overwrite `lms_configs`
+    # with given dictionary instead of updating it.
+    - python manage.py create_or_update_tenant_config --external-key lacolhost.com \
+        --config '{"lms_configs": {"PLATFORM_NAME": "New name"}}' lacolhost.com preview.lacolhost.com
+
+    # create/update tenant config using json file
+    - python manage.py create_or_update_tenant_config --external-key lacolhost.com \
+        --config-file /tmp/lms.json lacolhost.com preview.lacolhost.com
+
+    # Link studio.lacolhost.com route to existing/empty tenant config with given external key
+    - python manage.py create_or_update_tenant_config --external-key lacolhost.com studio.lacolhost.com
+
     """
     help = 'Create or update TenantConfig'
 
     def add_arguments(self, parser):
         parser.add_argument(
             '--external-key',
-            action='store',
             dest='external_key',
             required=True,
             type=str,
@@ -54,20 +71,23 @@ class Command(BaseCommand):
             help="Enter the path to the JSON file containing the tenant configuration",
             required=False
         )
+        parser.add_argument(
+            '--override',
+            dest='override',
+            action='store_true',
+            required=False
+        )
 
-    def merge_dict(self, base_dict: dict, override: dict):
+    def merge_dict(self, base_dict, override):
         """
         Merge two nested dicts.
         """
-        for key, value in override.items():
-            if isinstance(value, dict):
-                merged = base_dict.get(key, {}).copy()
-                merged.update(value)
-                base_dict[key] = merged
-                continue
-            base_dict[key] = value
-        return base_dict
+        if isinstance(base_dict, dict) and isinstance(override, dict):
+            for key, value in override.items():
+                base_dict[key] = self.merge_dict(base_dict.get(key, {}), value)
+            return base_dict
 
+        return override
 
     def handle(self, *args, **options):
         """
@@ -78,6 +98,7 @@ class Command(BaseCommand):
         configuration = options.get('config')
         config_file_data = options.get('config_file_data')
         tenant_configuration_values = configuration or config_file_data
+        override = options.get('override')
         # pylint: disable=no-member,protected-access
         external_key_length = TenantConfig._meta.get_field("external_key").max_length
         if external_key:
@@ -104,10 +125,13 @@ class Command(BaseCommand):
                 if isinstance(field, JSONField):
                     name = field.name
                     value = tenant_configuration_values.get(name)
-                    if value:
-                        base_value = getattr(tenant, name, {})
-                        merged = self.merge_dict(base_value, value)
-                        setattr(tenant, name, merged)
+                    if value is not None:
+                        if override:
+                            setattr(tenant, name, value)
+                        else:
+                            base_value = getattr(tenant, name, {})
+                            merged = self.merge_dict(base_value, value)
+                            setattr(tenant, name, merged)
 
             tenant.save()
         # next add routes and link them

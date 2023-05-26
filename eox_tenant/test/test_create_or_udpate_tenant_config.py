@@ -14,7 +14,7 @@ class CreateOrUpdateTenantConfigTestCase(TestCase):
     def setUp(self):
         """This method creates TenantConfig objects in database"""
         self.test_conf = {
-            "lms_configs": {"KEY": "value", "NESTED_KEY": {"key": "value"}},
+            "lms_configs": {"NEW KEY": "value-updated", "NESTED_KEY": {"key": "value"}},
             "studio_configs": {"STUDIO_KEY": "value", "STUDIO_NESTED_KEY": {"key": "value"}, }
         }
         self.external_key = "test"
@@ -123,6 +123,7 @@ class CreateOrUpdateTenantConfigTestCase(TestCase):
     def test_command_update_existing_tenant(self):
         """Tests that command successfully updates existing TenantConfig."""
         config = TenantConfig.objects.get(external_key=self.external_key)
+        self.assertTrue(config.lms_configs == {"KEY": "value"})
         self.assertTrue(config.studio_configs == {})
         call_command(
             "create_or_update_tenant_config",
@@ -134,7 +135,29 @@ class CreateOrUpdateTenantConfigTestCase(TestCase):
             "studio.test.domain"
         )
         updated_config = TenantConfig.objects.get(external_key=self.external_key)
-        self.assertTrue(updated_config.lms_configs == self.test_conf["lms_configs"])
+        for key, value in self.test_conf["lms_configs"].items():
+            self.assertTrue(updated_config.lms_configs[key] == value)
+        self.assertTrue(updated_config.lms_configs["KEY"] == "value")
         self.assertTrue(updated_config.studio_configs == self.test_conf["studio_configs"])
+        created_routes = Route.objects.filter(domain__contains="test.domain").count()
+        self.assertTrue(created_routes == 2)
+
+    def test_command_update_existing_tenant_override(self):
+        """Tests that command successfully replaces existing TenantConfig with override param."""
+        config = TenantConfig.objects.get(external_key=self.external_key)
+        self.assertTrue(config.studio_configs == {})
+        new_conf = {"lms_configs": {"NEW_KEY": "new value"}}
+        call_command(
+            "create_or_update_tenant_config",
+            "--external-key",
+            self.external_key,
+            "--config",
+            json.dumps(new_conf),
+            "test.domain",
+            "studio.test.domain",
+            "--override",
+        )
+        updated_config = TenantConfig.objects.get(external_key=self.external_key)
+        self.assertTrue(updated_config.lms_configs == new_conf["lms_configs"])
         created_routes = Route.objects.filter(domain__contains="test.domain").count()
         self.assertTrue(created_routes == 2)
