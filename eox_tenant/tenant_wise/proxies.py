@@ -10,10 +10,12 @@ from django.conf import settings
 from django.core.cache import cache
 
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
+from eox_tenant.edxapp_wrapper.dark_lang_model import get_dark_lang_config_model
 from eox_tenant.models import Microsite, TenantConfig, TenantOrganization
 from eox_tenant.utils import clean_serializable_values
 
 SiteConfigurationModels = get_site_configuration_models()
+DarkLangConfig = get_dark_lang_config_model()
 
 TENANT_ALL_ORGS_CACHE_KEY = "tenant.all_orgs_list"
 EOX_TENANT_CACHE_KEY_TIMEOUT = getattr(
@@ -33,6 +35,8 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
     """
 
     cached_site_values = None
+
+    logger.info("Entre en el proxy de Tenant :D")
 
     class Meta:
         """ Set as a proxy model. """
@@ -196,3 +200,28 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
                 cls.set_key_to_cache(key, result)
 
         cls.set_key_to_cache(pre_load_value_key, True)
+
+class DarkLangProxy(DarkLangConfig):
+    """This proxy allows us to have release_lenguages tenant aware."""
+    
+    class Meta:
+        """ Set as a proxy model. """
+        proxy = True
+
+    @property
+    def released_languages_list(self):
+        """
+        ``released_languages`` as a list of language codes.
+
+        Example: ['it', 'de-at', 'es', 'pt-br']
+
+        eduNEXT: we support only the list of available languages from the site
+        otherwise is the same as having no configuration
+        """
+        released_languages = getattr(settings, "released_languages", self.released_languages)
+
+        languages = [lang.lower().strip() for lang in released_languages.split(',')]
+        # Put in alphabetical order
+        languages.sort()
+
+        return languages
