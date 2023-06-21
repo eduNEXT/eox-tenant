@@ -10,7 +10,8 @@ import six
 from django.conf import settings
 
 from eox_tenant.constants import LMS_ENVIRONMENT
-from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy
+from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy, DarkLangMiddlewareProxy
+from eox_tenant.tenant_aware_functions.released_languages import tenant_languages
 
 
 def load_tenant_wise_overrides():
@@ -31,6 +32,18 @@ def load_tenant_wise_overrides():
                 model='SiteConfiguration',
                 proxy=TenantSiteConfigProxy
             )
+
+            if settings.FEATURES.get("EDNX_SITE_AWARE_LOCALE", False):
+                set_as_proxy(
+                    modules='openedx.core.djangoapps.lang_pref.api',
+                    model='released_languages',
+                    proxy=tenant_languages
+                )
+                set_as_proxy(
+                    modules='openedx.core.djangoapps.dark_lang.middleware',
+                    model='DarkLangMiddleware',
+                    proxy=DarkLangMiddlewareProxy
+                )
 
 
 def set_as_proxy(modules, model, proxy):

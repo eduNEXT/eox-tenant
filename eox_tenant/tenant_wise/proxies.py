@@ -8,12 +8,15 @@ from itertools import chain
 import six
 from django.conf import settings
 from django.core.cache import cache
-
-from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
+from eox_tenant.edxapp_wrapper.dark_lang_middleware import \
+    get_dark_lang_middleware
+from eox_tenant.edxapp_wrapper.site_configuration_module import \
+    get_site_configuration_models
 from eox_tenant.models import Microsite, TenantConfig, TenantOrganization
 from eox_tenant.utils import clean_serializable_values
 
 SiteConfigurationModels = get_site_configuration_models()
+DarkLangMiddleware = get_dark_lang_middleware()
 
 TENANT_ALL_ORGS_CACHE_KEY = "tenant.all_orgs_list"
 EOX_TENANT_CACHE_KEY_TIMEOUT = getattr(
@@ -196,3 +199,38 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
                 cls.set_key_to_cache(key, result)
 
         cls.set_key_to_cache(pre_load_value_key, True)
+
+
+class DarkLangMiddlewareProxy(DarkLangMiddleware):
+    """This Middleware will be used if you have FEATURES["EDNX_SITE_AWARE_LOCALE"] in True.
+    This take the released_languages from the site aware settings, and set a HTTP_ACCEPT_LANGUAGE if
+    you don't have one."""
+
+    class Meta:
+        """ Set as a proxy model. """
+        proxy = True
+
+    @property
+    def released_langs(self):
+        """
+        Current list of released languages from settings.
+        """
+        
+        language_options = getattr(settings, "released_languages", "")
+        if settings.LANGUAGE_CODE not in language_options:
+            language_options.append(settings.LANGUAGE_CODE)
+        return language_options
+    
+    def process_request(self, request):
+        """
+        This will be run when you do a request, and prevent user from requesting un-released languages.
+        """
+
+        # If the request doesn't have HTTP_ACCEPT_LANGUAGE, eduNEXT set it to
+        # settings.LANGUAGE_CODE that is site aware so that
+        # django.utils.locale.LocaleMiddleware can pick it up
+        accept = request.META.get('HTTP_ACCEPT_LANGUAGE', None)
+        if not accept:
+            request.META['HTTP_ACCEPT_LANGUAGE'] = f"{settings.LANGUAGE_CODE};q=0.1"
+
+        self._clean_accept_headers(request)
