@@ -1,8 +1,12 @@
+"""
+Site/Tenant aware languages filter.
+"""
 from collections import namedtuple
 
 from django.conf import settings
 
 Language = namedtuple('Language', 'code name')
+
 
 def tenant_languages():
     """Retrieve the list of released languages by tenant.

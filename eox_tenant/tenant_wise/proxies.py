@@ -8,10 +8,9 @@ from itertools import chain
 import six
 from django.conf import settings
 from django.core.cache import cache
-from eox_tenant.edxapp_wrapper.dark_lang_middleware import \
-    get_dark_lang_middleware
-from eox_tenant.edxapp_wrapper.site_configuration_module import \
-    get_site_configuration_models
+
+from eox_tenant.edxapp_wrapper.dark_lang_middleware import get_dark_lang_middleware
+from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
 from eox_tenant.models import Microsite, TenantConfig, TenantOrganization
 from eox_tenant.utils import clean_serializable_values
 
@@ -215,12 +214,12 @@ class DarkLangMiddlewareProxy(DarkLangMiddleware):
         """
         Current list of released languages from settings.
         """
-        
+
         language_options = getattr(settings, "released_languages", "")
         if settings.LANGUAGE_CODE not in language_options:
             language_options.append(settings.LANGUAGE_CODE)
         return language_options
-    
+
     def process_request(self, request):
         """
         This will be run when you do a request, and prevent user from requesting un-released languages.
