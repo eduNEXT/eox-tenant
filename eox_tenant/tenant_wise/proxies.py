@@ -215,7 +215,8 @@ class DarkLangMiddlewareProxy(DarkLangMiddleware):
         Current list of released languages from settings.
         """
 
-        language_options = getattr(settings, "released_languages", "")
+        get_language_options = getattr(settings, "released_languages", "")
+        language_options = [lang.lower().strip() for lang in get_language_options.split(',')]
         if settings.LANGUAGE_CODE not in language_options:
             language_options.append(settings.LANGUAGE_CODE)
         return language_options
