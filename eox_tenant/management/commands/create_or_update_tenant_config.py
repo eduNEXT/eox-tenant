@@ -2,7 +2,6 @@
 Create or updates the TenantConfig for given routes.
 """
 
-import codecs
 import json
 import logging
 
@@ -18,7 +17,7 @@ def load_json_from_file(filename):
     """
     Loads json content from file.
     """
-    with codecs.open(filename, encoding='utf-8') as file:
+    with open(filename, encoding='utf-8') as file:
         return json.load(file)
 
 
