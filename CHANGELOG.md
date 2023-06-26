@@ -1,3 +1,11 @@
+## v9.2.0 - 2023-06-26
+
+### [9.2.0](https://github.com/eduNEXT/eox-tenant/compare/v9.1.1...v9.2.0) (2023-06-26)
+
+#### Features
+
+- having released_languages tenant and site aware DS-553 ([#184](https://github.com/eduNEXT/eox-tenant/issues/184)) ([2350c81](https://github.com/eduNEXT/eox-tenant/commit/2350c81f4bd8d8bb3c4354077c4b90da5ad90131))
+
 ## v9.1.1 - 2023-05-26
 
 ### [9.1.1](https://github.com/eduNEXT/eox-tenant/compare/v9.1.0...v9.1.1) (2023-05-26)
@@ -320,10 +328,12 @@
 - 
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 - 
@@ -349,6 +359,7 @@
 - 
 - 
 - 
+- 
 
 ## [2.5.0] - 2020-01-03
 
@@ -361,6 +372,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - 
