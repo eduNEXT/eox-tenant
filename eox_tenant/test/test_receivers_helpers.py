@@ -6,6 +6,7 @@ from __future__ import absolute_import
 
 from django.test import TestCase
 
+from eox_tenant.constants import CMS_CONFIG_COLUMN, LMS_CONFIG_COLUMN
 from eox_tenant.models import Microsite, Route, TenantConfig
 from eox_tenant.receivers_helpers import get_tenant_config_by_domain
 
@@ -34,7 +35,9 @@ class ReceiversHelpersTests(TestCase):
                 "course_org_filter": ["test5-org", "test1-org"],
                 "value-test": "Hello-World3",
             },
-            studio_configs={},
+            studio_configs={
+                "value-test": "studio",
+            },
             theming_configs={},
             meta={},
         )
@@ -44,11 +47,11 @@ class ReceiversHelpersTests(TestCase):
             config=TenantConfig.objects.get(external_key="tenant-key1"),
         )
 
-    def test_tenant_get_config_by_domain(self):
+    def test_tenant_get_lms_config_by_domain(self):
         """
         Test to get the configuration and external key for a given domain.
         """
-        configurations, external_key = get_tenant_config_by_domain("domain1")
+        configurations, external_key = get_tenant_config_by_domain("domain1", LMS_CONFIG_COLUMN)
 
         self.assertEqual(external_key, "tenant-key1")
         self.assertDictEqual(
@@ -59,12 +62,34 @@ class ReceiversHelpersTests(TestCase):
             },
         )
 
-        configurations, external_key = get_tenant_config_by_domain("domain2")
+    def test_tenant_get_studio_config_by_domain(self):
+        """
+        Test to get the configuration and external key for a given domain.
+        """
+        configurations, external_key = get_tenant_config_by_domain("domain1", CMS_CONFIG_COLUMN)
+
+        self.assertEqual(external_key, "tenant-key1")
+        self.assertDictEqual(
+            configurations,
+            {
+                "value-test": "studio",
+            },
+        )
+
+    def test_no_tenant_get_config_by_domain(self):
+        """
+        Test to get the configuration and external key for a non-existent domain.
+        """
+        configurations, external_key = get_tenant_config_by_domain("domain2", LMS_CONFIG_COLUMN)
 
         self.assertEqual(external_key, None)
         self.assertDictEqual(configurations, {})
 
-        configurations, external_key = get_tenant_config_by_domain("first.test.prod.edunext")
+    def test_microsite_get_config_by_domain(self):
+        """
+        Test to get the configuration and external key for a given domain from Microsite table.
+        """
+        configurations, external_key = get_tenant_config_by_domain("first.test.prod.edunext", LMS_CONFIG_COLUMN)
 
         self.assertEqual(external_key, "test_fake_key")
         self.assertDictEqual(
