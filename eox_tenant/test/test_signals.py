@@ -11,13 +11,16 @@ from django.contrib.sites.models import Site
 from django.test import TestCase
 from mock import MagicMock, patch
 
+from eox_tenant.constants import CMS_CONFIG_COLUMN, LMS_CONFIG_COLUMN
 from eox_tenant.signals import (
     _analyze_current_settings,
     _repopulate_apps,
     _ttl_reached,
     _update_settings,
-    start_async_tenant,
-    start_tenant,
+    start_async_lms_tenant,
+    start_async_studio_tenant,
+    start_lms_tenant,
+    start_studio_tenant,
     tenant_context_addition,
 )
 
@@ -40,7 +43,13 @@ class StartTenantSignalTest(TestCase):
         _analyze_mock.return_value = (True, None)
 
         with self.settings(SERVICE_VARIANT='lms'):
-            start_tenant(None, environ)
+            start_lms_tenant(None, environ)
+
+        _reset_mock.assert_called()
+        _reset_mock.reset_mock()
+
+        with self.settings(SERVICE_VARIANT='cms'):
+            start_studio_tenant(None, environ)
 
         _reset_mock.assert_called()
 
@@ -59,7 +68,13 @@ class StartTenantSignalTest(TestCase):
         _ttl_mock.return_value = True
 
         with self.settings(SERVICE_VARIANT='lms'):
-            start_tenant(None, environ)
+            start_lms_tenant(None, environ)
+
+        _reset_mock.assert_called()
+        _reset_mock.reset_mock()
+
+        with self.settings(SERVICE_VARIANT='cms'):
+            start_studio_tenant(None, environ)
 
         _reset_mock.assert_called()
 
@@ -77,7 +92,7 @@ class StartTenantSignalTest(TestCase):
         _analyze_mock.return_value = (False, False)
 
         with self.settings(SERVICE_VARIANT='lms'):
-            start_tenant(None, environ)
+            start_lms_tenant(None, environ)
 
         _reset_mock.assert_not_called()
         _update_mock.assert_called()
@@ -96,7 +111,7 @@ class StartTenantSignalTest(TestCase):
         _analyze_mock.return_value = (False, True)
 
         with self.settings(SERVICE_VARIANT='lms'):
-            start_tenant(None, environ)
+            start_lms_tenant(None, environ)
 
         _reset_mock.assert_not_called()
         _update_mock.assert_not_called()
@@ -152,7 +167,7 @@ class StartTenantSignalTest(TestCase):
         environ.get.return_value = 'tenant.com'
 
         with self.settings(SERVICE_VARIANT='lms'):
-            start_tenant(None, environ)
+            start_lms_tenant(None, environ)
 
         _repopulate_mock.assert_not_called()
 
@@ -170,7 +185,7 @@ class StartTenantSignalTest(TestCase):
         _get_config_mock.return_value = config, "tenant-key"
 
         with self.settings(SERVICE_VARIANT='lms', EDNX_TENANT_INSTALLED_APPS=['fake_app']):
-            start_tenant(None, environ)
+            start_lms_tenant(None, environ)
 
         _repopulate_mock.assert_called()
 
@@ -208,7 +223,7 @@ class SettingsOverridesTest(TestCase):
         }
         _get_config_mock.return_value = config, "tenant-key"
 
-        _update_settings("tenant.com")
+        _update_settings("tenant.com", LMS_CONFIG_COLUMN)
 
         with self.assertRaises(AttributeError):
             settings.EDNX_TENANT_KEY  # pylint: disable=pointless-statement
@@ -223,7 +238,7 @@ class SettingsOverridesTest(TestCase):
         }
         _get_config_mock.return_value = config, "tenant-key"
 
-        _update_settings("tenant.com")
+        _update_settings("tenant.com", LMS_CONFIG_COLUMN)
 
         settings.EDNX_TENANT_KEY  # pylint: disable=pointless-statement
 
@@ -238,7 +253,7 @@ class SettingsOverridesTest(TestCase):
         }
         _get_config_mock.return_value = config, "tenant-key"
 
-        _update_settings("tenant.com")
+        _update_settings("tenant.com", LMS_CONFIG_COLUMN)
 
         self.assertEqual(settings.TEST_PROPERTY, "My value")
 
@@ -255,7 +270,7 @@ class SettingsOverridesTest(TestCase):
         }
         _get_config_mock.return_value = config, "tenant-key"
 
-        _update_settings("tenant.com")
+        _update_settings("tenant.com", LMS_CONFIG_COLUMN)
 
         self.assertEqual(settings.TEST_DICT.get("TEST_PROPERTY"), "My value")
 
@@ -272,7 +287,7 @@ class SettingsOverridesTest(TestCase):
         }
         _get_config_mock.return_value = config, "tenant-key"
 
-        _update_settings("tenant.com")
+        _update_settings("tenant.com", LMS_CONFIG_COLUMN)
 
         self.assertEqual(settings.TEST_DICT_OVERRIDE_TEST.get("key1"), "Some Value")
         self.assertEqual(settings.TEST_DICT_OVERRIDE_TEST.get("key2"), "My value")
@@ -354,27 +369,53 @@ class CeleryReceiverAsyncTests(TestCase):
     """
 
     @patch('eox_tenant.signals._update_settings')
-    def test_start_async_tenant(self, _update_mock):
+    def test_start_lms_async_tenant(self, _update_mock):
         """
         Test function used to handle signal in the async process
         """
         sender = MagicMock()
         headers = {"eox_tenant_sender": "some.tenant.com"}
         sender.request = {"headers": headers}
-        start_async_tenant(sender)
+        start_async_lms_tenant(sender)
 
-        _update_mock.assert_called_with("some.tenant.com")
+        _update_mock.assert_called_with("some.tenant.com", LMS_CONFIG_COLUMN)
 
     @patch('eox_tenant.signals._perform_reset')
     @patch('eox_tenant.signals._update_settings')
-    def test_start_async_tenant_with_null_header(self, _update_mock, _reset_mock):
+    def test_start_async_lms_tenant_with_null_header(self, _update_mock, _reset_mock):
         """
         Test function used to handle signal in the async process.
         """
         sender = MagicMock()
         headers = None
         sender.request = {"headers": headers}
-        start_async_tenant(sender)
+        start_async_lms_tenant(sender)
+
+        _reset_mock.assert_called()
+        _update_mock.assert_not_called()
+
+    @patch('eox_tenant.signals._update_settings')
+    def test_start_async_studio_tenant(self, _update_mock):
+        """
+        Test function used to handle signal in the async process
+        """
+        sender = MagicMock()
+        headers = {"eox_tenant_sender": "some.tenant.com"}
+        sender.request = {"headers": headers}
+        start_async_studio_tenant(sender)
+
+        _update_mock.assert_called_with("some.tenant.com", CMS_CONFIG_COLUMN)
+
+    @patch('eox_tenant.signals._perform_reset')
+    @patch('eox_tenant.signals._update_settings')
+    def test_start_async_tenant_studio_with_null_header(self, _update_mock, _reset_mock):
+        """
+        Test function used to handle signal in the async process.
+        """
+        sender = MagicMock()
+        headers = None
+        sender.request = {"headers": headers}
+        start_async_studio_tenant(sender)
 
         _reset_mock.assert_called()
         _update_mock.assert_not_called()

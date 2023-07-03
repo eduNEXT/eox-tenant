@@ -6,12 +6,13 @@ from django.conf import settings
 from eox_tenant.models import Microsite, TenantConfig
 
 
-def get_tenant_config_by_domain(domain):
+def get_tenant_config_by_domain(domain, config_key):
     """
     Reach for the configuration for a given domain.
 
     **Arguments**
         domain: String parameter.
+        config_key: Config column name.
 
     **Returns**
         configurations: dict
@@ -20,7 +21,7 @@ def get_tenant_config_by_domain(domain):
     if not getattr(settings, 'USE_EOX_TENANT', False):
         return {}, None
 
-    configurations, external_key = TenantConfig.get_configs_for_domain(domain)
+    configurations, external_key = TenantConfig.get_configs_for_domain(domain, config_key)
 
     if configurations and external_key:
         return configurations, external_key

@@ -11,6 +11,8 @@ from django.db import connection, models
 from django.utils.translation import gettext_lazy as _
 from jsonfield.fields import JSONField
 
+from eox_tenant.constants import CMS_CONFIG_COLUMN, LMS_CONFIG_COLUMN
+
 
 class TenantOrganization(models.Model):
     """
@@ -140,8 +142,8 @@ class TenantConfigManager(models.Manager):
                 configurations = {
                     "id": row[0],
                     "external_key": row[1],
-                    "lms_configs": json.loads(row[2]),
-                    "studio_configs": json.loads(row[3]),
+                    LMS_CONFIG_COLUMN: json.loads(row[2]),
+                    CMS_CONFIG_COLUMN: json.loads(row[3]),
                     "theming_configs": json.loads(row[4]),
                     "meta": json.loads(row[5]),
                 }
@@ -183,7 +185,7 @@ class TenantConfig(models.Model):
         return org_filter
 
     @classmethod
-    def get_configs_for_domain(cls, domain):
+    def get_configs_for_domain(cls, domain, config_key):
         """
         Get edxapp configuration using a domain. There is a compat layer to support microsite until
         deprecation.
@@ -194,7 +196,7 @@ class TenantConfig(models.Model):
         config = TenantConfig.objects.get_configurations(domain=domain)
 
         if config:
-            return config["lms_configs"], config["external_key"]
+            return config[config_key], config["external_key"]
 
         return {}, None
 
