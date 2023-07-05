@@ -11,7 +11,7 @@ from django.conf import settings
 
 from eox_tenant.constants import LMS_ENVIRONMENT
 from eox_tenant.tenant_aware_functions.released_languages import tenant_languages
-from eox_tenant.tenant_wise.proxies import DarkLangMiddlewareProxy, TenantSiteConfigProxy
+from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy
 
 
 def load_tenant_wise_overrides():
@@ -38,11 +38,6 @@ def load_tenant_wise_overrides():
                     modules='openedx.core.djangoapps.lang_pref.api',
                     model='released_languages',
                     proxy=tenant_languages
-                )
-                set_as_proxy(
-                    modules='openedx.core.djangoapps.dark_lang.middleware',
-                    model='DarkLangMiddleware',
-                    proxy=DarkLangMiddlewareProxy
                 )
 
 
