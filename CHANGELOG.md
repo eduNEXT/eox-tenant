@@ -1,3 +1,15 @@
+## v9.2.1 - 2023-07-30
+
+### [9.2.1](https://github.com/eduNEXT/eox-tenant/compare/v9.2.0...v9.2.1) (2023-07-30)
+
+### Bug Fixes
+
+- use CourseEnrollmentQuerysetRequested from openedx-filters ([#159](https://github.com/eduNEXT/eox-tenant/issues/159)) ([9ffa5a7](https://github.com/eduNEXT/eox-tenant/commit/9ffa5a7b5508a8e82961aa234272bd387b924bb6))
+
+### Code Refactoring
+
+- remove Darklang middleware because it is not being used ([#186](https://github.com/eduNEXT/eox-tenant/issues/186)) ([6f3020f](https://github.com/eduNEXT/eox-tenant/commit/6f3020f0bfe0ce340d566c24f42608f113da76ee))
+
 ## v9.2.0 - 2023-06-26
 
 ### [9.2.0](https://github.com/eduNEXT/eox-tenant/compare/v9.1.1...v9.2.0) (2023-06-26)
@@ -329,10 +341,12 @@
 - 
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 - 
@@ -360,6 +374,7 @@
 - 
 - 
 - 
+- 
 
 ## [2.5.0] - 2020-01-03
 
@@ -372,6 +387,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - 
