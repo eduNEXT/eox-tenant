@@ -35,7 +35,7 @@ jsonfield==3.1.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
-openedx-filters==0.8.0
+openedx-filters==1.4.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in

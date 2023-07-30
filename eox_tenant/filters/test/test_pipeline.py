@@ -6,31 +6,10 @@ from unittest.mock import MagicMock
 import ddt
 import mock
 from django.test import TestCase, override_settings
-from openedx_filters.learning.filters import CertificateRenderStarted
-from openedx_filters.tooling import OpenEdxPublicFilter
+from openedx_filters.learning.filters import CertificateRenderStarted, CourseEnrollmentQuerysetRequested
 
 from eox_tenant.filters.pipeline import FilterRenderCertificatesByOrg
 from eox_tenant.tenant_aware_functions.enrollments import filter_enrollments
-
-
-# This class was temporarily added while the filter is added in openedx-filters.
-class CourseEnrollmentSiteFilterRequested(OpenEdxPublicFilter):
-    """
-    Custom class used to filter user's course enrollments by site.
-    """
-
-    filter_type = "org.openedx.learning.course_enrollments_site.filter.requested.v1"
-
-    @classmethod
-    def run_filter(cls, context):
-        """
-        Execute a filter with the signature specified.
-
-        Arguments:
-        context (QuerySet): list of all user's course enrollments.
-        """
-        data = super().run_pipeline(context=context)
-        return data.get("context")
 
 
 class FilterUserCourseEnrollmentsByTenantTestCase(TestCase):
@@ -52,7 +31,7 @@ class FilterUserCourseEnrollmentsByTenantTestCase(TestCase):
 
     @override_settings(
         OPEN_EDX_FILTERS_CONFIG={
-            "org.openedx.learning.course_enrollments_site.filter.requested.v1": {
+            "org.openedx.learning.course_enrollment_queryset.requested.v1": {
                 "fail_silently": False,
                 "pipeline": [
                     "eox_tenant.filters.pipeline.FilterUserCourseEnrollmentsByTenant"
@@ -88,8 +67,8 @@ class FilterUserCourseEnrollmentsByTenantTestCase(TestCase):
 
         expected_result = filter_enrollments(self.course_enrollments)
 
-        result = CourseEnrollmentSiteFilterRequested.run_filter(
-            context=self.course_enrollments
+        result = CourseEnrollmentQuerysetRequested.run_filter(
+            enrollments=self.course_enrollments
         )
         expected_result = list(expected_result)
         result = list(result)
@@ -99,7 +78,7 @@ class FilterUserCourseEnrollmentsByTenantTestCase(TestCase):
 
     @override_settings(
         OPEN_EDX_FILTERS_CONFIG={
-            "org.openedx.learning.course_enrollments_site.filter.requested.v1": {
+            "org.openedx.learning.course_enrollment_queryset.requested.v1": {
                 "fail_silently": False,
                 "pipeline": [
                     "eox_tenant.filters.pipeline.FilterUserCourseEnrollmentsByTenant"
@@ -136,8 +115,8 @@ class FilterUserCourseEnrollmentsByTenantTestCase(TestCase):
 
         expected_result = filter_enrollments(self.course_enrollments)
 
-        result = CourseEnrollmentSiteFilterRequested.run_filter(
-            context=self.course_enrollments
+        result = CourseEnrollmentQuerysetRequested.run_filter(
+            enrollments=self.course_enrollments
         )
 
         self.assertListEqual(list(expected_result), list(result))

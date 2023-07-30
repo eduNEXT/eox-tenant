@@ -62,7 +62,7 @@ mock==4.0.3
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
-openedx-filters==0.8.0
+openedx-filters==1.4.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
