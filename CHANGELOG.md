@@ -1,3 +1,11 @@
+## v9.3.0 - 2023-11-07
+
+### [9.3.0](https://github.com/eduNEXT/eox-tenant/compare/v9.2.1...v9.3.0) (2023-11-07)
+
+#### Features
+
+- add create_or_update_tenant_config management command ([#182](https://github.com/eduNEXT/eox-tenant/issues/182)) ([19d0a20](https://github.com/eduNEXT/eox-tenant/commit/19d0a209aa8bd1c31a1f39f86439bb3ba4dbf971))
+
 ## v9.2.1 - 2023-07-30
 
 ### [9.2.1](https://github.com/eduNEXT/eox-tenant/compare/v9.2.0...v9.2.1) (2023-07-30)
@@ -342,10 +350,12 @@
 - 
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 - 
@@ -375,6 +385,7 @@
 - 
 - 
 - 
+- 
 
 ## [2.5.0] - 2020-01-03
 
@@ -387,6 +398,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - 
