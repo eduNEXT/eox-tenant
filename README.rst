@@ -130,7 +130,7 @@ Commands
 
 Synchronize Organizations
 *************************
-This comand will synchronize the course_org_filter values in lms_configs(TenantConfig model) or values(Microsite model) with the TenantOrganization registers, if the organization does not existe, it will be create, otherwise it will be add to the organizations model field.
+This command will synchronize the course_org_filter values in lms_configs(TenantConfig model) or values(Microsite model) with the TenantOrganization registers, if the organization does not exist, it will be created, otherwise it will be add to the organizations model field.
 
 
 .. code-block:: bash
@@ -138,6 +138,21 @@ This comand will synchronize the course_org_filter values in lms_configs(TenantC
   ./manage.py lms synchronize_organizations  # only for TenantConfig and Microsite
   ./manage.py lms synchronize_organizations --model TenantConfig # only for TenantConfig
   ./manage.py lms synchronize_organizations --model Microsite # only for Microsite
+
+Create/Edit tenant configuration
+********************************
+`create_or_update_tenant_config` helps to add or edit ``TenantConfig`` and linked ``Routes`` via command line.
+
+.. code-block:: bash
+
+  # this command will create/edit entry in TenantConfig with external_key lacolhost.com and update its JSONField(s) with passed json content.
+  ./manage.py lms create_or_update_tenant_config --external-key lacolhost.com --config '{"lms_configs": {"PLATFORM_NAME": "Lacolhost"}, "studio_configs": {"PLATFORM_NAME": "Lacolhost"}}' lacolhost.com studio.lacolhost.com preview.lacolhost.com
+
+  # this command will create/edit entry in TenantConfig with external_key lacolhost.com and update its JSONField(s) with passed json config file content.
+  ./manage.py lms create_or_update_tenant_config --external-key lacolhost.com --config-file /tmp/some.json lacolhost.com studio.lacolhost.com preview.lacolhost.com
+
+  # Same as above, but it will override configuration instead of updating it.
+  ./manage.py lms create_or_update_tenant_config --external-key lacolhost.com --config-file /tmp/some.json lacolhost.com studio.lacolhost.com preview.lacolhost.com --override
 
 Caveats
 -------

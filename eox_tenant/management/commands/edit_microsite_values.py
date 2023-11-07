@@ -44,11 +44,12 @@ class Command(BaseCommand):
     Main class handling the execution of the command to alter the sites by adding or removing keys
 
     Examples:
-    - python manage.py lms edit_tenant_values --add EDNX_USE_SIGNAL True
-    - python manage.py lms edit_tenant_values --delete EDNX_USE_SIGNAL
+    - python manage.py lms edit_microsite_values --add EDNX_USE_SIGNAL True
+    - python manage.py lms edit_microsite_values --delete EDNX_USE_SIGNAL
 
     Advanced example:
-    - python manage.py lms edit_tenant_values --pattern yoursite.com -v 2 --add NESTED.KEY.NAME {interpolated_value} -f
+    - python manage.py lms edit_microsite_values --pattern yoursite.com -v 2 \
+        --add NESTED.KEY.NAME {interpolated_value} -f
     """
     help = """
         Exposes a cli to perform bulk modification of eox_tenant sites
