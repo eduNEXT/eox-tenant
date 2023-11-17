@@ -24,4 +24,4 @@ path-py==12.5.0
 pycodestyle<2.9.0
 pylint==2.13.9
 testfixtures==7.0.0
-openedx_filters==0.8.0
+openedx_filters==1.2.0
