@@ -1,3 +1,20 @@
+## v10.0.0 - 2023-11-20
+
+### [10.0.0](https://github.com/eduNEXT/eox-tenant/compare/v9.3.0...v10.0.0) (2023-11-20)
+
+#### ⚠ BREAKING CHANGES
+
+- add compatibility with palm
+- 
+- feat: added palm support and changed default settings to always use eox_tenant
+- 
+- chore: modifed tutor version and changed constraints file
+- 
+
+#### Performance Improvements
+
+- added palm support ([#190](https://github.com/eduNEXT/eox-tenant/issues/190)) ([a46b2a2](https://github.com/eduNEXT/eox-tenant/commit/a46b2a23a4461a8f8de64a320a900c2e5b7b8d8f))
+
 ## v9.3.0 - 2023-11-07
 
 ### [9.3.0](https://github.com/eduNEXT/eox-tenant/compare/v9.2.1...v9.3.0) (2023-11-07)
@@ -351,10 +368,12 @@
 - 
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 - 
@@ -386,6 +405,7 @@
 - 
 - 
 - 
+- 
 
 ## [2.5.0] - 2020-01-03
 
@@ -398,6 +418,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - 
