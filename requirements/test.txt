@@ -4,13 +4,13 @@
 #
 #    make upgrade
 #
-asgiref==3.6.0
+asgiref==3.7.2
     # via
     #   -r requirements/base.txt
     #   django
 astroid==2.11.7
     # via pylint
-coverage[toml]==6.5.0
+coverage==6.5.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
@@ -18,7 +18,7 @@ ddt==1.6.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
-dill==0.3.6
+dill==0.3.7
     # via pylint
     # via
     #   -c requirements/constraints.txt
@@ -48,7 +48,7 @@ edx-opaque-keys[django]==2.3.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
-isort==5.11.4
+isort==5.12.0
     # via pylint
 jsonfield==3.1.0
     # via
@@ -62,21 +62,21 @@ mock==4.0.3
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
-openedx-filters==1.4.0
+openedx-filters==1.2.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
-path==16.6.0
+path==16.7.1
     # via path-py
 path-py==12.5.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
-pbr==5.11.1
+pbr==6.0.0
     # via
     #   -r requirements/base.txt
     #   stevedore
-platformdirs==2.6.2
+platformdirs==4.0.0
     # via pylint
 pycodestyle==2.8.0
     # via
@@ -91,7 +91,7 @@ pymongo==3.13.0
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   edx-opaque-keys
-pytz==2022.7.1
+pytz==2023.3.post1
     # via
     #   -r requirements/base.txt
     #   django
@@ -100,11 +100,11 @@ six==1.16.0
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
-sqlparse==0.4.3
+sqlparse==0.4.4
     # via
     #   -r requirements/base.txt
     #   django
-stevedore==4.1.1
+stevedore==5.1.0
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
@@ -113,14 +113,14 @@ testfixtures==7.0.0
     #   -c requirements/constraints.txt
     #   -r requirements/test.in
 tomli==2.0.1
+    # via pylint
+typing-extensions==4.8.0
     # via
-    #   coverage
-    #   pylint
-typing-extensions==4.4.0
-    # via
+    #   -r requirements/base.txt
+    #   asgiref
     #   astroid
     #   pylint
-wrapt==1.14.1
+wrapt==1.16.0
     # via astroid
 
 # The following packages are considered to be unsafe in a requirements file:
