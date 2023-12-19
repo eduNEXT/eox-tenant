@@ -2,8 +2,13 @@
 The pipeline module defines functions that are used in the third party authentication flow
 """
 
+try:
+    from social_core.exceptions import AuthFailed
+except ImportError:
+    AuthFailed = ValueError
 
-class EoxTenantAuthException(ValueError):
+
+class EoxTenantAuthException(AuthFailed):
     """Auth process exception."""
 
     def __init__(self, backend, *args, **kwargs):
