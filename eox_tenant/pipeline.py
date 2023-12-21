@@ -1,11 +1,7 @@
 """
 The pipeline module defines functions that are used in the third party authentication flow
 """
-
-try:
-    from social_core.exceptions import AuthFailed
-except ImportError:
-    AuthFailed = ValueError
+from social_core.exceptions import AuthFailed
 
 
 class EoxTenantAuthException(AuthFailed):
