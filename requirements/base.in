@@ -8,3 +8,4 @@ django-crum
 django-mysql
 jsonfield
 edx-opaque-keys[django]
+social-auth-core
