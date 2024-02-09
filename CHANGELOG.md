@@ -1,3 +1,11 @@
+## v10.1.0 - 2024-02-09
+
+### [10.1.0](https://github.com/eduNEXT/eox-tenant/compare/v10.0.0...v10.1.0) (2024-02-09)
+
+#### Features
+
+- add openedx commitlint.config.js ([#193](https://github.com/eduNEXT/eox-tenant/issues/193)) ([2f6fbb1](https://github.com/eduNEXT/eox-tenant/commit/2f6fbb1c5ee03f3556d168cde0f98ff7869dac23))
+
 ## v10.0.0 - 2023-11-20
 
 ### [10.0.0](https://github.com/eduNEXT/eox-tenant/compare/v9.3.0...v10.0.0) (2023-11-20)
@@ -369,10 +377,12 @@
 - 
 - 
 - 
+- 
 
 ### Removed
 
 - ### Removed hawthorn support
+- 
 - 
 - 
 - 
@@ -406,6 +416,7 @@
 - 
 - 
 - 
+- 
 
 ## [2.5.0] - 2020-01-03
 
@@ -418,6 +429,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+- 
 - 
 - 
 - 
