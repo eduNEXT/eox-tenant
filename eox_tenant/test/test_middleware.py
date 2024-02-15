@@ -35,7 +35,7 @@ class MicrositeCrossBrandingFilterMiddlewareTest(TestCase):
     def setUp(self):
         """ setup """
         self.request_factory = RequestFactory()
-        self.middleware_instance = MicrositeCrossBrandingFilterMiddleware()
+        self.middleware_instance = MicrositeCrossBrandingFilterMiddleware(get_response=lambda req: None)
 
     def test_no_url_courses_match(self):
         """
@@ -113,7 +113,7 @@ class AvailableScreenMiddlewareTest(TestCase):
     def setUp(self):
         """ setup """
         self.request_factory = RequestFactory()
-        self.middleware_instance = AvailableScreenMiddleware()
+        self.middleware_instance = AvailableScreenMiddleware(get_response=lambda req: None)
 
     @mock.patch('eox_tenant.middleware.theming_helper')
     @mock.patch('eox_tenant.middleware.HttpResponseNotFound')
@@ -160,7 +160,7 @@ class CurrentSiteMiddlewareTest(TestCase):
     def setUp(self):
         """ Setup. """
         self.request_factory = RequestFactory(SERVER_NAME='test-domain.com')
-        self.middleware_instance = CurrentSiteMiddleware()
+        self.middleware_instance = CurrentSiteMiddleware(get_response=lambda req: None)
 
         Site.objects.create(
             domain='test-domain.com',
