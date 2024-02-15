@@ -6,7 +6,9 @@
 #
 asgiref==3.7.2
     # via django
-django==3.2.23
+backports-zoneinfo==0.2.1
+    # via django
+django==4.2.10
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
@@ -16,46 +18,30 @@ django==3.2.23
     #   jsonfield
     #   openedx-filters
 django-crum==0.7.9
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
-django-mysql==4.7.1
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
-djangorestframework==3.13.1
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
-edx-opaque-keys[django]==2.3.0
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
+    # via -r requirements/base.in
+django-mysql==4.12.0
+    # via -r requirements/base.in
+djangorestframework==3.14.0
+    # via -r requirements/base.in
+edx-opaque-keys[django]==2.5.1
+    # via -r requirements/base.in
 jsonfield==3.1.0
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
-openedx-filters==1.2.0
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
+    # via -r requirements/base.in
+openedx-filters==1.6.0
+    # via -r requirements/base.in
 pbr==6.0.0
     # via stevedore
 pymongo==3.13.0
-    # via
-    #   -c requirements/constraints.txt
-    #   edx-opaque-keys
-pytz==2023.3.post1
-    # via
-    #   django
-    #   djangorestframework
+    # via edx-opaque-keys
+pytz==2024.1
+    # via djangorestframework
 six==1.16.0
-    # via
-    #   -c requirements/constraints.txt
-    #   -r requirements/base.in
+    # via -r requirements/base.in
 sqlparse==0.4.4
     # via django
 stevedore==5.1.0
     # via edx-opaque-keys
-typing-extensions==4.8.0
-    # via asgiref
+typing-extensions==4.9.0
+    # via
+    #   asgiref
+    #   edx-opaque-keys
