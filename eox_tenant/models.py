@@ -122,7 +122,7 @@ class TenantConfigManager(models.Manager):
         configurations = {}
 
         with connection.cursor() as cursor:
-            cursor.execute(f"""
+            cursor.execute("""
                 SELECT
                     eox_config.id,
                     eox_config.external_key,
@@ -132,7 +132,7 @@ class TenantConfigManager(models.Manager):
                     eox_config.meta
                 FROM eox_tenant_tenantconfig eox_config
                 WHERE eox_config.id = (SELECT eox_tenant_route.config_id from eox_tenant_route
-                WHERE eox_tenant_route.domain={domain})""")
+                WHERE eox_tenant_route.domain=%s)""", [domain])
 
             # Using fetchone since the query will return one configuration per domain at the most.
             row = cursor.fetchone()
