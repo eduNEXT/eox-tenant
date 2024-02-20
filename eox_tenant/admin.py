@@ -180,8 +180,8 @@ class RouteAdmin(admin.ModelAdmin):
         Helper method to display a link to the related config model.
         """
         # pylint: disable=protected-access
-        url = reverse('admin:%s_%s_change' % (route._meta.app_label, "tenantconfig"), args=[route.config.id])
-        return mark_safe('<a href="%s">%s</a>' % (url, route.config.__unicode__()))
+        url = reverse(f'admin:{route._meta.app_label}_tenantconfig_change', args=[route.config.id])
+        return mark_safe(f'<a href="{url}">{route.config.__unicode__()}</a>')
 
     config_link.allow_tags = True
     config_link.short_description = "Configuration"
@@ -224,10 +224,10 @@ class TenantOrganizationAdmin(admin.ModelAdmin):
 
         for microsite in microsites:
             url = reverse(
-                'admin:%s_%s_change' % (microsite._meta.app_label, "microsite"),  # pylint: disable=protected-access
+                f'admin:{microsite._meta.app_label}_microsite_change',  # pylint: disable=protected-access
                 args=[microsite.id],
             )
-            domains.append('<a href="%s">%s</a>' % (url, microsite.subdomain))
+            domains.append(f'<a href="{url}">{microsite.subdomain}</a>')
 
         return mark_safe('\n'.join(domains))
 
@@ -245,10 +245,10 @@ class TenantOrganizationAdmin(admin.ModelAdmin):
 
         for tenant in tenants:
             url = reverse(
-                'admin:%s_%s_change' % (tenant._meta.app_label, "tenantconfig"),  # pylint: disable=protected-access
+                f'admin:{tenant._meta.app_label}_tenantconfig_change',  # pylint: disable=protected-access
                 args=[tenant.id],
             )
-            domains += ['<a href="%s">%s</a>' % (url, route.domain) for route in tenant.route_set.all()]
+            domains += [f'<a href="{url}">{route.domain}</a>' for route in tenant.route_set.all()]
 
         return mark_safe('\n'.join(domains))
 

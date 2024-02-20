@@ -31,7 +31,7 @@ class TenantConfigAPITest(APITestCase):
             theming_configs={'key': 'value'},
             meta={'key': 'value'},
         )
-        self.url_detail = '{url}{id}/'.format(url=self.url, id=self.tenant_config_example.pk)
+        self.url_detail = f'{self.url}{self.tenant_config_example.pk}/'
 
     @patch_permissions
     def test_get_tenant_configs(self, _):

@@ -52,7 +52,7 @@ def microsite_css_overrides_file():
         file_path = configuration_helpers.get_value('css_overrides_file')
 
     if file_path is not None:
-        return "<link href='{}' rel='stylesheet' type='text/css'>".format(static(file_path))
+        return f"<link href='{static(file_path)}' rel='stylesheet' type='text/css'>"
     else:
         return ""
 
@@ -197,7 +197,7 @@ def tenant_css_overrides_file():
         file_path = configuration_helpers.get_value('css_overrides_file')
 
     if file_path is not None:
-        return "<link href='{}' rel='stylesheet' type='text/css'>".format(static(file_path))
+        return f"<link href='{static(file_path)}' rel='stylesheet' type='text/css'>"
     else:
         return ""
 

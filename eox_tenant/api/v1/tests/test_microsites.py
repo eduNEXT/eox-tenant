@@ -27,7 +27,7 @@ class MicrositeAPITest(APITestCase):
             subdomain='test.host',
             values={'key': 'value'},
         )
-        self.url_detail = '{url}{id}/'.format(url=self.url, id=self.microsite_example.pk)
+        self.url_detail = f'{self.url}{self.microsite_example.pk}/'
 
     @patch_permissions
     def test_get_microsites(self, _):

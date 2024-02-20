@@ -30,7 +30,7 @@ class TenantOrganization(models.Model):
         app_label = "eox_tenant"
 
     def __str__(self):
-        return "<Org: {}>".format(self.name)
+        return f"<Org: {self.name}>"
 
 
 class Microsite(models.Model):
@@ -122,7 +122,7 @@ class TenantConfigManager(models.Manager):
         configurations = {}
 
         with connection.cursor() as cursor:
-            cursor.execute("""
+            cursor.execute(f"""
                 SELECT
                     eox_config.id,
                     eox_config.external_key,
@@ -132,7 +132,7 @@ class TenantConfigManager(models.Manager):
                     eox_config.meta
                 FROM eox_tenant_tenantconfig eox_config
                 WHERE eox_config.id = (SELECT eox_tenant_route.config_id from eox_tenant_route
-                WHERE eox_tenant_route.domain=%s)""", [domain])
+                WHERE eox_tenant_route.domain={domain})""")
 
             # Using fetchone since the query will return one configuration per domain at the most.
             row = cursor.fetchone()

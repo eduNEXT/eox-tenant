@@ -33,7 +33,7 @@ class RouteAPITest(APITestCase):
             domain='domain.host',
             config=self.tenant_config,
         )
-        self.url_detail = '{url}{id}/'.format(url=self.url, id=self.route_example.pk)
+        self.url_detail = f'{self.url}{self.route_example.pk}/'
 
     @patch_permissions
     def test_get_routes(self, _):
