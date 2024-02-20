@@ -22,7 +22,7 @@ from __future__ import print_function, unicode_literals
 
 import logging
 from datetime import datetime
-from os import getpid  # pylint: disable=no-name-in-module
+from os import getpid
 
 import six
 from django.apps.config import AppConfig
