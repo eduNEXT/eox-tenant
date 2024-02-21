@@ -52,10 +52,10 @@ class Command(BaseCommand):
             model = getattr(models, valid_model)
             queryset = model.objects.all()
 
-            LOGGER.info("Synchronize {} {} registers.".format(
-                len(queryset),
-                valid_model,
-            ))
+            LOGGER.info("Synchronize %s %s registers.",
+                        len(queryset),
+                        valid_model,
+                        )
 
             for instance in queryset:
                 synchronize_tenant_organizations(instance)

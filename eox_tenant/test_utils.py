@@ -3,7 +3,7 @@ Utils to run tests
 """
 
 
-class test_theming_helpers:
+class test_theming_helpers:     # pylint: disable=invalid-name
     """
     Test class for theming helpers
     """

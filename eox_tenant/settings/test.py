@@ -3,7 +3,7 @@ Common settings for eox_tenant project.
 """
 from __future__ import absolute_import, unicode_literals
 
-from .common import *  # pylint: disable=wildcard-import
+from .common import *  # pylint: disable=wildcard-import,unused-wildcard-import
 
 
 class SettingsClass:
@@ -87,7 +87,6 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     settings.EOX_TENANT_SKIP_FILTER_FOR_TESTS = True
     settings.EOX_TENANT_LOAD_PERMISSIONS = False
     if hasattr(settings, 'OAUTH2_PROVIDER'):
-        settings.OAUTH2_PROVIDER['OAUTH2_VALIDATOR_CLASS'] = '{oauth_path}.{validator_path}'.format(
-            oauth_path='openedx.core.djangoapps',
-            validator_path='oauth_dispatch.dot_overrides.validators.EdxOAuth2Validator'
+        settings.OAUTH2_PROVIDER['OAUTH2_VALIDATOR_CLASS'] = (
+            'openedx.core.djangoapps.oauth_dispatch.dot_overrides.validators.EdxOAuth2Validator'
         )

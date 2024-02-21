@@ -95,6 +95,8 @@ class AvailableScreenMiddleware(MiddlewareMixin):
                 )
             )
 
+        return None
+
 
 class CurrentSiteMiddleware(MiddlewareMixin):
     """

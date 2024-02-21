@@ -110,6 +110,7 @@ class AvailableScreenMiddlewareTest(TestCase):
     """
     Testing the middleware AvailableScreenMiddleware
     """
+
     def setUp(self):
         """ setup """
         self.request_factory = RequestFactory()

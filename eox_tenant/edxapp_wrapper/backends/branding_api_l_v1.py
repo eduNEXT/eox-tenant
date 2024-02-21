@@ -2,7 +2,7 @@
 try:
     from lms.djangoapps.branding import api as branding_api
 except ImportError:
-    branding_api = object
+    branding_api = object   # pylint: disable=invalid-name
 
 
 def get_branding_api():

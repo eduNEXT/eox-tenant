@@ -32,16 +32,17 @@ def safer_associate_by_email(backend, details, user=None, *args, **kwargs):
         users = list(backend.strategy.storage.user.get_users_by_email(email))
         if not users:
             return None
-        elif len(users) > 1:
+        if len(users) > 1:
             raise EoxTenantAuthException(
                 backend,
                 'The given email address is associated with another account'
             )
-        else:
-            if users[0].is_staff or users[0].is_superuser:
-                raise EoxTenantAuthException(
-                    backend,
-                    'It is not allowed to auto associate staff or admin users'
-                )
-            return {'user': users[0],
-                    'is_new': False}
+        if users[0].is_staff or users[0].is_superuser:
+            raise EoxTenantAuthException(
+                backend,
+                'It is not allowed to auto associate staff or admin users'
+            )
+        return {'user': users[0],
+                'is_new': False}
+
+    return None

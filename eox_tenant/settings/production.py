@@ -2,7 +2,7 @@
 Settings for eox_tenant project meant to be called on the edx-platform/*/envs/production.py module
 """
 
-from .common import *  # pylint: disable=wildcard-import
+from .common import *  # pylint: disable=wildcard-import,unused-wildcard-import
 
 EDX_AUTH_BACKEND = \
     'openedx.core.djangoapps.oauth_dispatch.dot_overrides.backends.EdxRateLimitedAllowAllUsersModelBackend'

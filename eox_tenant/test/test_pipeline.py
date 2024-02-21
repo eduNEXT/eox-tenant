@@ -12,6 +12,7 @@ class AssociationByEmailTest(TestCase):
     """
     Test the custom association backend.
     """
+
     def setUp(self):
         self.backend_mock = MagicMock()
         self.user_mock = MagicMock()

@@ -88,30 +88,30 @@ class Command(BaseCommand):
 
         return override
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options):     # pylint: disable=too-many-branches
         """
         Create or update TenantConfig and link related routes.
         """
-        external_key = options['external_key']
-        routes = options['routes']
-        configuration = options.get('config')
-        config_file_data = options.get('config_file_data')
-        tenant_configuration_values = configuration or config_file_data
-        override = options.get('override')
+        data = {
+            "external_key": options['external_key'],
+            "routes": options['routes'],
+            "tenant_configuration_values": options.get('config') or options.get('config_file_data'),
+            "override": options.get('override'),
+        }
         # pylint: disable=no-member,protected-access
         external_key_length = TenantConfig._meta.get_field("external_key").max_length
-        if external_key:
-            if len(str(external_key)) > external_key_length:
+        if data["external_key"]:
+            if len(str(data["external_key"])) > external_key_length:
                 LOG.warning(
                     "The external_key %s is too long, truncating to %s"
                     " characters. Please update external_key in admin.",
-                    external_key,
+                    data["external_key"],
                     external_key_length
                 )
             # trim name as the column has a limit of 63 characters
-            external_key = external_key[:external_key_length]
+            data["external_key"] = data["external_key"][:external_key_length]
         tenant, created = TenantConfig.objects.get_or_create(
-            external_key=external_key,
+            external_key=data["external_key"],
         )
         if created:
             LOG.info("Tenant does not exist. Created new tenant: '%s'", tenant.external_key)
@@ -119,22 +119,23 @@ class Command(BaseCommand):
             LOG.info("Found existing tenant for: '%s'", tenant.external_key)
 
         # split out lms, studio, theme, meta from configuration json
-        if tenant_configuration_values:
+        if data["tenant_configuration_values"]:
             for field in TenantConfig._meta.get_fields():
                 if isinstance(field, JSONField):
                     name = field.name
-                    value = tenant_configuration_values.get(name)
-                    if value is not None:
-                        if override:
-                            setattr(tenant, name, value)
-                        else:
-                            base_value = getattr(tenant, name, {})
-                            merged = self.merge_dict(base_value, value)
-                            setattr(tenant, name, merged)
+                    value = data["tenant_configuration_values"].get(name)
+                    if not value:
+                        continue
+                    if data["override"]:
+                        setattr(tenant, name, value)
+                    else:
+                        base_value = getattr(tenant, name, {})
+                        merged = self.merge_dict(base_value, value)
+                        setattr(tenant, name, merged)
 
             tenant.save()
         # next add routes and link them
-        for route in routes:
+        for route in data["routes"]:
             route, created = Route.objects.update_or_create(
                 domain=route,
                 defaults={"config": tenant}
