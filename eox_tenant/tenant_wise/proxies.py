@@ -65,7 +65,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         try:
             return getattr(settings, name, default)
         except AttributeError as error:
-            logger.exception(f"Invalid data at the TenantConfigProxy get_value. \n [{error}]")
+            logger.exception("Invalid data at the TenantConfigProxy get_value. \n [%s]", error)
 
         return default
 

@@ -63,7 +63,7 @@ def is_valid_domain(domain):
     try:
         return domain_pattern.match(domain)
     except (UnicodeError, AttributeError):
-        log.error(f"{domain} is not a valid domain.")
+        log.error("{} is not a valid domain.".format(domain))
     return False
 
 
@@ -74,10 +74,10 @@ def move_signupsource(old_domain, new_domain):
 
     if is_valid_domain(old_domain) and is_valid_domain(new_domain):
 
-        log.info(f"Changing SignupSources from {old_domain} to {new_domain}.")
+        log.info("Changing SignupSources from {} to {}.".format(old_domain, new_domain))
         count = UserSignupSource.objects.filter(site=old_domain).update(site=new_domain)
 
-        log.info(f"Updated {count} SignupSources from {old_domain} to {new_domain}.")
+        log.info("Updated {} SignupSources from {} to {}.".format(count, old_domain, new_domain))
 
 
 def synchronize_tenant_organizations(instance):

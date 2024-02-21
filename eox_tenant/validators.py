@@ -33,7 +33,9 @@ class EoxTenantOAuth2Validator(EdxOAuth2Validator):
             return application
 
         logger.warning(
-            f'The application <{application_name}> has not been configured with the url <{current_url}>',
+            'The application <%s> has not been configured with the url <%s>',
+            application_name,
+            current_url,
         )
 
         return None

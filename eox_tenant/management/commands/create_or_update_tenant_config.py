@@ -103,8 +103,10 @@ class Command(BaseCommand):
         if external_key:
             if len(str(external_key)) > external_key_length:
                 LOG.warning(
-                    f"The external_key {external_key} is too long, truncating to {external_key_length}"
-                    " characters. Please update external_key in admin."
+                    "The external_key %s is too long, truncating to %s"
+                    " characters. Please update external_key in admin.",
+                    external_key,
+                    external_key_length
                 )
             # trim name as the column has a limit of 63 characters
             external_key = external_key[:external_key_length]
@@ -112,9 +114,9 @@ class Command(BaseCommand):
             external_key=external_key,
         )
         if created:
-            LOG.info(f"Tenant does not exist. Created new tenant: '{tenant.external_key}'")
+            LOG.info("Tenant does not exist. Created new tenant: '%s'", tenant.external_key)
         else:
-            LOG.info(f"Found existing tenant for: '{tenant.external_key}'")
+            LOG.info("Found existing tenant for: '%s'", tenant.external_key)
 
         # split out lms, studio, theme, meta from configuration json
         if tenant_configuration_values:
@@ -138,6 +140,6 @@ class Command(BaseCommand):
                 defaults={"config": tenant}
             )
             if created:
-                LOG.info(f"Route does not exist. Created new route: '{route.domain}'")
+                LOG.info("Route does not exist. Created new route: '%s'", route.domain)
             else:
-                LOG.info(f"Found existing route for: '{route.domain}'")
+                LOG.info("Found existing route for: '%s'", route.domain)

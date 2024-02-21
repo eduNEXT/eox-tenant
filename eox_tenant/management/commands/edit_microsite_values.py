@@ -101,7 +101,7 @@ class Command(BaseCommand):
 
         LOGGER.info("This command will affect the following sites:")
         for tenant in query:
-            LOGGER.info(f"{tenant} on: {tenant.subdomain}")
+            LOGGER.info("{} on: {}".format(tenant, tenant.subdomain))
 
         if not options['force']:
             user_response = input("Continue? y/n: ")
@@ -134,7 +134,7 @@ class Command(BaseCommand):
 
                 tenant.save()
             except KeyError:
-                LOGGER.info(f"Could not find key: {key} on site {tenant}")
+                LOGGER.info("Could not find key: {} on site {}".format(key, tenant))
 
     def action_add(self, tenant, key, value):
         """
@@ -158,4 +158,4 @@ class Command(BaseCommand):
 
             tenant.save()
         except Exception:  # pylint: disable=broad-except
-            LOGGER.info(f"Could not add key {key} to site {tenant}")
+            LOGGER.info("Could not add key {} to site {}".format(key, tenant))

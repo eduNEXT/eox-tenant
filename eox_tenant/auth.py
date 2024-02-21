@@ -80,13 +80,17 @@ class TenantAwareAuthBackend(EdxAuthBackend):
                 # the user is not authorized to login to the current tenant. The exception error message is
                 # displayed on the standard login page
                 AUDIT_LOG.warning(
-                    f"User {loggable_id} tried to login in site {current_domain}, but was denied permission based on the signup sources."
+                    "User `%s` tried to login in site `%s`, but was denied permission based on the signup sources.",
+                    loggable_id,
+                    current_domain,
                 )
                 raise AuthFailedError(_('User not authorized to perform this action'))
 
             AUDIT_LOG.warning(
-                f"User {loggable_id} tried to login in site {current_domain}, the permission "
-                "should have been denied based on the signup sources."
+                "User `%s` tried to login in site `%s`, the permission "
+                "should have been denied based on the signup sources.",
+                loggable_id,
+                current_domain,
             )
 
         return True
