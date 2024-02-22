@@ -155,7 +155,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
 
         result = TenantConfig.get_value_for_org(org, val_name)
 
-        if result:
+        if result is not None:
             cls.set_key_to_cache(cache_key, result)
             return result
 
