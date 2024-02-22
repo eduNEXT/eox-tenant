@@ -216,7 +216,7 @@ class TenantConfig(models.Model):
         for result in results:
             value = result.lms_configs.get(val_name)
 
-            if value:
+            if value is not None:
                 return value
 
         return None
