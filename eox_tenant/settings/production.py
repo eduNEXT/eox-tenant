@@ -5,7 +5,7 @@ Settings for eox_tenant project meant to be called on the edx-platform/*/envs/pr
 from .common import *  # pylint: disable=wildcard-import
 
 EDX_AUTH_BACKEND = \
-    'openedx.core.djangoapps.oauth_dispatch.dot_overrides.backends.EdxRateLimitedAllowAllUsersModelBackend'
+    'django.contrib.auth.backends.AllowAllUsersModelBackend'
 EOX_TENANT_AUTH_BACKEND = 'eox_tenant.auth.TenantAwareAuthBackend'
 DJANGO_CURRENT_SITE_MIDDLEWARE = 'django.contrib.sites.middleware.CurrentSiteMiddleware'
 
