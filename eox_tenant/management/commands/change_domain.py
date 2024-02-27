@@ -32,7 +32,7 @@ class Command(BaseCommand):
         This function will iterate over all microsites objects
         to change microsite prod domains to a stage versions.
         Usage Example:
-        python manage.py lms change_domain ".i.stage.ednx.co" ".i.ecom.ednx.co" --signupsources --settings=production
+        python manage.py lms change_domain ".i.stage.ednx.co" ".i.ecom.ednx.co" --signupsources
     """
     suffix_stage_domain = ""
     suffix_stage_ecommerce_domain = ""

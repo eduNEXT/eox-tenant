@@ -17,7 +17,7 @@ class Command(BaseCommand):
          signupsources of a given domain with another domain.
 
         Usage Example:
-        python manage.py lms change_signup_sources --from old.edunext.io --to new.edunext.io --settings=production
+        python manage.py lms change_signup_sources --from old.edunext.io --to new.edunext.io
     """
 
     def add_arguments(self, parser):

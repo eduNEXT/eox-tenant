@@ -11,7 +11,7 @@ jobs:
       previous_tag: ${{ steps.tag_version.outputs.previous_tag }}
       bump_commit_sha: ${{ steps.bumpversion.outputs.commit_hash }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.DEDALO_PAT }}
       - name: Get next version
@@ -23,7 +23,7 @@ jobs:
           default_prerelease_bump: false
           dry_run: true
       - name: Set up Python 3.8
-        uses: actions/setup-python@v4.5.0
+        uses: actions/setup-python@v5
         with:
           python-version: "3.8"
       - name: Create bumpversion
@@ -33,14 +33,14 @@ jobs:
           bumpversion --new-version ${{ steps.tag_version.outputs.new_version }} setup.cfg
       - name: Update Changelog
         if: steps.tag_version.outputs.new_version
-        uses: stefanzweifel/changelog-updater-action@v1.6.2
+        uses: stefanzweifel/changelog-updater-action@v1.10.0
         with:
           latest-version: ${{ steps.tag_version.outputs.new_tag }}
           release-notes: ${{ steps.tag_version.outputs.changelog }}
       - name: Commit bumpversion
         id: bumpversion
         if: steps.tag_version.outputs.new_version
-        uses: stefanzweifel/git-auto-commit-action@v4.16.0
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: ${{ github.ref }}
           commit_message: "docs(bumpversion): ${{ steps.tag_version.outputs.previous_tag }} → ${{ steps.tag_version.outputs.new_version }}"
@@ -53,7 +53,7 @@ jobs:
       tag: ${{ steps.tag_version.outputs.new_tag }}
       changelog: ${{ steps.tag_version.outputs.changelog }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.DEDALO_PAT }}
       - name: Create tag
@@ -66,7 +66,7 @@ jobs:
           default_prerelease_bump: false
       - name: Create a GitHub release
         if: steps.tag_version.outputs.new_tag
-        uses: ncipollo/release-action@v1.12.0
+        uses: ncipollo/release-action@v1.14.0
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}

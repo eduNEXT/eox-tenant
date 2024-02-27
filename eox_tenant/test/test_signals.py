@@ -290,8 +290,8 @@ class CeleryReceiverCLISyncTests(TestCase):
         }
         for number in range(3):
             Site.objects.create(
-                domain="tenant{number}.com".format(number=number),
-                name="tenant{number}.com".format(number=number)
+                domain=f"tenant{number}.com",
+                name=f"tenant{number}.com"
             )
 
     def test_unknown_task(self):
@@ -330,8 +330,8 @@ class CeleryReceiverSyncTests(TestCase):
         """ setup """
         for number in range(3):
             Site.objects.create(
-                domain="tenant{number}.com".format(number=number),
-                name="tenant{number}.com".format(number=number)
+                domain=f"tenant{number}.com",
+                name=f"tenant{number}.com"
             )
 
     def test_sync_process_with_tenant(self):

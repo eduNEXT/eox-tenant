@@ -40,7 +40,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
 
     def __str__(self):
         key = getattr(settings, "EDNX_TENANT_KEY", "No tenant is active at the moment")
-        return "<Tenant proxy as site_configuration: {}>".format(key)
+        return f"<Tenant proxy as site_configuration: {key}>"
 
     @property
     def enabled(self):
@@ -147,7 +147,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         Optimized method, that returns a value for the given org and val_name, from the
         TenantConfig or Microsite model.
         """
-        cache_key = "org-value-{}-{}".format(org, val_name)
+        cache_key = f"org-value-{org}-{val_name}"
         cached_value = cache.get(cache_key)
 
         if cached_value:
@@ -170,7 +170,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         """
         Save in cache the values for all the organizations in TenantConfig and Microsite models.
         """
-        pre_load_value_key = "eox-tenant-pre-load-{}-key".format(val_name)
+        pre_load_value_key = f"eox-tenant-pre-load-{val_name}-key"
 
         if cache.get(pre_load_value_key):
             return
@@ -192,7 +192,7 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
                 org_filter = [org_filter]
 
             for org in org_filter:
-                key = "org-value-{}-{}".format(org, val_name)
+                key = f"org-value-{org}-{val_name}"
                 cls.set_key_to_cache(key, result)
 
         cls.set_key_to_cache(pre_load_value_key, True)

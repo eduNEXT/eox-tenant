@@ -52,9 +52,9 @@ def microsite_css_overrides_file():
         file_path = configuration_helpers.get_value('css_overrides_file')
 
     if file_path is not None:
-        return "<link href='{}' rel='stylesheet' type='text/css'>".format(static(file_path))
-    else:
-        return ""
+        return f"<link href='{static(file_path)}' rel='stylesheet' type='text/css'>"
+
+    return ""
 
 
 @register.simple_tag(name="microsite_rtl")
@@ -178,8 +178,8 @@ def get_login_link():
     """
     if settings.FEATURES.get('ednx_custom_login_link'):
         return settings.FEATURES.get('ednx_custom_login_link')
-    else:
-        return get_lms_root_url() + "/login"
+
+    return get_lms_root_url() + "/login"
 
 
 @register.simple_tag(name="tenant_css_overrides_file")
@@ -197,9 +197,9 @@ def tenant_css_overrides_file():
         file_path = configuration_helpers.get_value('css_overrides_file')
 
     if file_path is not None:
-        return "<link href='{}' rel='stylesheet' type='text/css'>".format(static(file_path))
-    else:
-        return ""
+        return f"<link href='{static(file_path)}' rel='stylesheet' type='text/css'>"
+
+    return ""
 
 
 @register.simple_tag(name="tenant_rtl")

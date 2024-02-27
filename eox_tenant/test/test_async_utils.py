@@ -18,8 +18,8 @@ class AsyncTaskHandlerTests(TestCase):
         """ setup """
         for number in range(3):
             Site.objects.create(
-                domain="tenant{number}.com".format(number=number),
-                name="tenant{number}.com".format(number=number)
+                domain=f"tenant{number}.com",
+                name=f"tenant{number}.com"
             )
 
     def test_get_host_from_siteid(self):

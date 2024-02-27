@@ -56,7 +56,7 @@ class AsyncTaskHandler:
         if not host:
             LOG.warning(
                 "Could not find the host information for eox_tenant.signals "
-                "for the task {sender}".format(sender=self.sender)
+                "for the task %s", self.sender
             )
 
         def get_host(_body):

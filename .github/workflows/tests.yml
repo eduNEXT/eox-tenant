@@ -12,11 +12,11 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        python-version: ["3.8", "3.10", "3.11"]
-        django: ["32"]
+        python-version: ["3.8"]
+        django: ["32", "42"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Cache dependency
         uses: actions/cache@v3.2.3

@@ -25,7 +25,7 @@ def get_version():
         match_string = re.search(version_regex, line, re.M)
         if match_string:
             return match_string.group(1)
-    raise RuntimeError('Unable to find version string in %s.' % (file_path,))
+    raise RuntimeError(f'Unable to find version string in {file_path}.')
 
 
 setup(

@@ -30,7 +30,7 @@ class TenantOrganization(models.Model):
         app_label = "eox_tenant"
 
     def __str__(self):
-        return "<Org: {}>".format(self.name)
+        return f"<Org: {self.name}>"
 
 
 class Microsite(models.Model):
