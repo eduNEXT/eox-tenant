@@ -1,3 +1,36 @@
+## v11.0.0 - 2024-02-27
+
+### [11.0.0](https://github.com/eduNEXT/eox-tenant/compare/v10.1.0...v11.0.0) (2024-02-27)
+
+#### ⚠ BREAKING CHANGES
+
+* add compatibility with quince
+  
+* chore: update github workflows and tests
+  
+* chore: update requirements and remove constraints
+  
+* fix: add get_reponse to the test middlewares
+  
+* fix: some pylint errors
+  
+* fix: remove too-few-public-methods alert and fix f-strings
+  
+* fix: restore old format in the get_configurations
+  
+* fix: restore the logs to %s format
+  
+* fix: pylint tests
+  
+* fix: remove the test in python 310 and 11 for backports-zoneinfo
+  
+* docs: update doc
+  
+
+#### Performance Improvements
+
+* add Quince support DS-776 ([#196](https://github.com/eduNEXT/eox-tenant/issues/196)) ([c42930b](https://github.com/eduNEXT/eox-tenant/commit/c42930bf9715d40d0433563a9188f975ce5ee5a7))
+
 ## v10.1.0 - 2024-02-09
 
 ### [10.1.0](https://github.com/eduNEXT/eox-tenant/compare/v10.0.0...v10.1.0) (2024-02-09)
@@ -364,6 +397,7 @@
 ### Features
 
 - ### Features juniper support
+  
 - 
 - 
 - 
@@ -382,6 +416,7 @@
 ### Removed
 
 - ### Removed hawthorn support
+  
 - 
 - 
 - 
@@ -403,6 +438,7 @@
 
 - Add tests in python 3.5
 - ### Features command to move SignUpSources from a site to another site.
+  
 - 
 - 
 - 
@@ -429,6 +465,7 @@
 ### Fixed
 
 - ### Fixed performance issues with GeneratedCertificates proxy.
+  
 - 
 - 
 - 
