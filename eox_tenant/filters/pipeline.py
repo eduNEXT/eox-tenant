@@ -2,6 +2,7 @@
 The pipeline module defines custom Filters functions that are used in openedx-filters.
 """
 from openedx_filters import PipelineStep
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from openedx_filters.learning.filters import CertificateRenderStarted
 
 from eox_tenant.organizations import get_organizations
@@ -57,3 +58,26 @@ class FilterRenderCertificatesByOrg(PipelineStep):
         raise CertificateRenderStarted.RenderAlternativeInvalidCertificate(
             "You can't generate a certificate from this site.",
         )
+
+
+class FilterTenantAwareLinksFromStudio(PipelineStep):
+    """
+    Filter tenant aware links from Studio.
+    """
+
+    def run_filter(self, context, org, val_name, default):  # pylint: disable=arguments-differ
+        """
+        Filter especific tenant aware link form Studio to the LMS.
+        Example Usage:
+        Add the following configurations to you configuration file
+            "OPEN_EDX_FILTERS_CONFIG": {
+                "org.openedx.learning.tenant_aware_link.render.started.v1": {
+                    "fail_silently": false,
+                    "pipeline": [
+                        "eox_tenant.filters.pipeline.FilterTenantAwareLinksFromStudio"
+                    ]
+                }
+            }
+        """
+        lms_root = configuration_helpers.get_value_for_org(org, val_name, default)
+        return {"context": lms_root}
