@@ -1,3 +1,11 @@
+## v11.0.1 - 2024-02-29
+
+### [11.0.1](https://github.com/eduNEXT/eox-tenant/compare/v11.0.0...v11.0.1) (2024-02-29)
+
+### Bug Fixes
+
+* allow boolean types as values ([898a4cd](https://github.com/eduNEXT/eox-tenant/commit/898a4cd30383c16d09470f9c2a1a281b44c86dc8))
+
 ## v11.0.0 - 2024-02-27
 
 ### [11.0.0](https://github.com/eduNEXT/eox-tenant/compare/v10.1.0...v11.0.0) (2024-02-27)
@@ -437,6 +445,7 @@
 ### Features
 
 - Add tests in python 3.5
+  
 - ### Features command to move SignUpSources from a site to another site.
   
 - 
@@ -481,6 +490,7 @@
 - 
 - 
 - Improve performance get_value_for_org.
+  
 
 ## [2.2.0] - 2019-12-20~~
 
