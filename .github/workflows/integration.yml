@@ -18,28 +18,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          path: env/build/openedx/requirements/eox-tenant
+          path: eox-tenant
 
-      - name: Requirements
+
+      - name: Tutor config
         run: |
-          echo "-e ./eox-tenant/" >> env/build/openedx/requirements/private.txt
+          TUTOR_ROOT="$(pwd)" tutor config save
 
       - name: Introspection
         run: |
           tree -L 5
-          cat env/build/openedx/requirements/private.txt
 
       - name: Tutor Launch
         run: |
+          TUTOR_ROOT="$(pwd)" tutor mounts add eox-tenant
           TUTOR_ROOT="$(pwd)" tutor dev launch -I
 
       - name: Install package
         run: |
-          cd env/build/openedx/requirements/
-          TUTOR_ROOT="$(pwd)" tutor dev run lms pip install -r requirements.txt
-          TUTOR_ROOT="$(pwd)" tutor dev run cms pip install -r requirements.txt
+          TUTOR_ROOT="$(pwd)" tutor local run lms cd ../eox-tenant && pip install -e .
+          TUTOR_ROOT="$(pwd)" tutor local run cms cd ../eox-tenant && pip install -e .
 
       - name: Tutor commands
         run: |
-          TUTOR_ROOT="$(pwd)" tutor dev run lms ./manage.py lms help
-          TUTOR_ROOT="$(pwd)" tutor dev run cms ./manage.py cms help
+          TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help
+          TUTOR_ROOT="$(pwd)" tutor local run cms ./manage.py cms help
