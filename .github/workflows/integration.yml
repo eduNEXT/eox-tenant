@@ -10,12 +10,7 @@ jobs:
     name: Integration with Palm
     runs-on: ubuntu-latest
     steps:
-
-      - name: Introspection
-        run: |
-          tree -L 5
-
-      - name: Tutor
+      - name: Install Tutor
         run: |
           pip install "tutor<17.0.0"
           TUTOR_ROOT="$(pwd)" tutor config save
@@ -36,8 +31,8 @@ jobs:
 
       - name: Tutor Launch
         run: |
-          TUTOR_ROOT="$(pwd)" tutor local launch -I
+          TUTOR_ROOT="$(pwd)" tutor dev launch -I
 
       - name: Tutor commands
         run: |
-          TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help
+          TUTOR_ROOT="$(pwd)" tutor dev run lms ./manage.py lms help
