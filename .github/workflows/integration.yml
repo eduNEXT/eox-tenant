@@ -33,6 +33,13 @@ jobs:
         run: |
           TUTOR_ROOT="$(pwd)" tutor dev launch -I
 
+      - name: Install package
+        run: |
+          cd env/build/openedx/requirements/
+          TUTOR_ROOT="$(pwd)" tutor dev run lms pip install -r requirements.txt
+          TUTOR_ROOT="$(pwd)" tutor dev run cms pip install -r requirements.txt
+
       - name: Tutor commands
         run: |
           TUTOR_ROOT="$(pwd)" tutor dev run lms ./manage.py lms help
+          TUTOR_ROOT="$(pwd)" tutor dev run cms ./manage.py cms help
