@@ -1,0 +1,27 @@
+name: Integration Tests
+
+on:
+  push:
+    branches:
+      - 'fmo/**'
+
+jobs:
+  edx-platform-integration-test:
+    name: Integration with Palm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Introspection
+        run: |
+          tree -L 5
+
+      - name: Tutor
+        run: |
+          pip install "tutor<17.0.0"
+          TUTOR_ROOT="$(pwd)" tutor config save
+
+      - name: Introspection
+        run: |
+          tree -L 5
