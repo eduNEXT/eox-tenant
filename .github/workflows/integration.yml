@@ -10,8 +10,6 @@ jobs:
     name: Integration with Palm
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
 
       - name: Introspection
         run: |
@@ -22,6 +20,25 @@ jobs:
           pip install "tutor<17.0.0"
           TUTOR_ROOT="$(pwd)" tutor config save
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: env/build/openedx/requirements
+
+      - name: Requirements
+        run: |
+          echo "-e ./eox-tenant/" >> env/build/openedx/requirements/private.txt
+
       - name: Introspection
         run: |
           tree -L 5
+          cat env/build/openedx/requirements/private.txt
+
+      - name: Tutor Launch
+        run: |
+          TUTOR_ROOT="$(pwd)" tutor local launch -I
+
+      - name: Introspection
+        run: |
+          tree -L 5
+
