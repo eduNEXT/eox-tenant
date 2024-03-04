@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          path: env/build/openedx/requirements
+          path: env/build/openedx/requirements/eox-tenant
 
       - name: Requirements
         run: |
@@ -38,7 +38,6 @@ jobs:
         run: |
           TUTOR_ROOT="$(pwd)" tutor local launch -I
 
-      - name: Introspection
+      - name: Tutor commands
         run: |
-          tree -L 5
-
+          TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help
