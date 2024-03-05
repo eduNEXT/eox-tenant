@@ -15,18 +15,11 @@ jobs:
         with:
           path: src/eox-tenant
 
-      - name: introspection
-        run: |
-          ls -hla
-          chmod 664 src
-          chmod 664 src/*
-          ls -hla
-
       - name: Prepare Tutor
         run: |
           pip install "tutor<17.0.0"
           TUTOR_ROOT="$(pwd)" tutor config save
-          TUTOR_ROOT="$(pwd)" tutor mounts add lms:$(pwd)/src/eox-tenant:/openedx/src/eox-tenant
+          TUTOR_ROOT="$(pwd)" tutor mounts add lms:$(pwd)/src:/openedx/src
 
       - name: Launch tutor and test
         run: |
