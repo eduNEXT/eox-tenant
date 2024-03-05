@@ -25,21 +25,20 @@ jobs:
         run: |
           TUTOR_ROOT="$(pwd)" tutor config save
 
-      - name: Introspection
-        run: |
-          tree -L 5
 
       - name: Tutor Launch
         run: |
-          TUTOR_ROOT="$(pwd)" tutor mounts add eox-tenant
+          TUTOR_ROOT="$(pwd)" tutor mounts add lms:$(pwd)/eox-tenant:/openedx/eox-tenant
           TUTOR_ROOT="$(pwd)" tutor dev launch -I
 
       - name: Install package
         run: |
-          TUTOR_ROOT="$(pwd)" tutor local run lms cd ../eox-tenant && pip install -e .
-          TUTOR_ROOT="$(pwd)" tutor local run cms cd ../eox-tenant && pip install -e .
+          TUTOR_ROOT="$(pwd)" tutor local run lms  pip install -e ../eox-tenant
+
+      - name: Introspection
+        run: |
+          tree -L 5
 
       - name: Tutor commands
         run: |
           TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help
-          TUTOR_ROOT="$(pwd)" tutor local run cms ./manage.py cms help
