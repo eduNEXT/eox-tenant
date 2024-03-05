@@ -19,11 +19,10 @@ jobs:
         run: |
           pip install "tutor<17.0.0"
           TUTOR_ROOT="$(pwd)" tutor config save
-          TUTOR_ROOT="$(pwd)" tutor config save
           TUTOR_ROOT="$(pwd)" tutor mounts add lms:$(pwd)/eox-tenant:/openedx/eox-tenant
 
       - name: Launch tutor and test
         run: |
           TUTOR_ROOT="$(pwd)" tutor dev launch -I
-          TUTOR_ROOT="$(pwd)" tutor local run lms  pip install -e ../eox-tenant
-          TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help
+          TUTOR_ROOT="$(pwd)" tutor local exec lms pip install -e ../eox-tenant
+          TUTOR_ROOT="$(pwd)" tutor local exec lms ./manage.py lms help
