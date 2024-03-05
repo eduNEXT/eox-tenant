@@ -10,35 +10,20 @@ jobs:
     name: Integration with Palm
     runs-on: ubuntu-latest
     steps:
-      - name: Install Tutor
-        run: |
-          pip install "tutor<17.0.0"
-          TUTOR_ROOT="$(pwd)" tutor config save
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
           path: eox-tenant
 
-
-      - name: Tutor config
+      - name: Prepare Tutor
         run: |
+          pip install "tutor<17.0.0"
           TUTOR_ROOT="$(pwd)" tutor config save
-
-
-      - name: Tutor Launch
-        run: |
+          TUTOR_ROOT="$(pwd)" tutor config save
           TUTOR_ROOT="$(pwd)" tutor mounts add lms:$(pwd)/eox-tenant:/openedx/eox-tenant
+
+      - name: Launch tutor and test
+        run: |
           TUTOR_ROOT="$(pwd)" tutor dev launch -I
-
-      - name: Install package
-        run: |
           TUTOR_ROOT="$(pwd)" tutor local run lms  pip install -e ../eox-tenant
-
-      - name: Introspection
-        run: |
-          tree -L 5
-
-      - name: Tutor commands
-        run: |
           TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help
