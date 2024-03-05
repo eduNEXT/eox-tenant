@@ -112,4 +112,5 @@ class CurrentSiteMiddleware(MiddlewareMixin):
         """
         site = get_current_site(request)
         site.configuration = TenantSiteConfigProxy()
+        site.domain = getattr(settings, 'EDNX_TENANT_DOMAIN', site.domain)
         request.site = site
