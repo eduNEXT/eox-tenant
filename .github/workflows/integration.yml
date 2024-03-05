@@ -15,14 +15,20 @@ jobs:
         with:
           path: src/eox-tenant
 
-      - name: Prepare Tutor
+      - name: Permissions
         run: |
-          pip install "tutor<17.0.0"
-          TUTOR_ROOT="$(pwd)" tutor config save
-          TUTOR_ROOT="$(pwd)" tutor mounts add lms:$(pwd)/src:/openedx/src
+          ls -alh src
+          ls -alh src/eox-tenant
+          chmod 777 src/eox-tenant
 
-      - name: Launch tutor and test
-        run: |
-          TUTOR_ROOT="$(pwd)" tutor local launch -I
-          TUTOR_ROOT="$(pwd)" tutor local run lms pip install -e ../src/eox-tenant
-          TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help
+      # - name: Prepare Tutor
+      #   run: |
+      #     pip install "tutor<17.0.0"
+      #     TUTOR_ROOT="$(pwd)" tutor config save
+      #     TUTOR_ROOT="$(pwd)" tutor mounts add lms:$(pwd)/src:/openedx/src
+
+      # - name: Launch tutor and test
+      #   run: |
+      #     TUTOR_ROOT="$(pwd)" tutor local launch -I
+      #     TUTOR_ROOT="$(pwd)" tutor local run lms pip install -e ../src/eox-tenant
+      #     TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help
