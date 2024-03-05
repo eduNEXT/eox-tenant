@@ -23,6 +23,6 @@ jobs:
 
       - name: Launch tutor and test
         run: |
-          TUTOR_ROOT="$(pwd)" tutor dev launch -I
+          TUTOR_ROOT="$(pwd)" tutor local launch -I
           TUTOR_ROOT="$(pwd)" tutor local run lms pip install -e ../eox-tenant
           TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help
