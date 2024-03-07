@@ -1,3 +1,3 @@
 pip install -e .
 cd ../eox-tenant
-make test-python
+make test-integration-tutor

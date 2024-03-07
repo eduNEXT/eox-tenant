@@ -25,4 +25,4 @@ jobs:
       - name: Launch tutor and test
         run: |
           TUTOR_ROOT="$(pwd)" tutor local launch -I
-          TUTOR_ROOT="$(pwd)" tutor local run lms bash /openedx/eox-tenant/integration.sh
+          TUTOR_ROOT="$(pwd)" tutor local run lms bash /openedx/src/eox-tenant/integration.sh
