@@ -20,7 +20,12 @@ jobs:
           TUTOR_ROOT="$(pwd)" tutor mounts add $(pwd)
           chmod 777 . -R
 
-      - name: Launch tutor and test
+      - name: Instrospection
         run: |
-          TUTOR_ROOT="$(pwd)" tutor local launch -I
-          TUTOR_ROOT="$(pwd)" tutor local run lms bash /openedx/eox-tenant/integration.sh
+          tree -L 2
+          cat config.yml
+
+      # - name: Launch tutor and test
+      #   run: |
+      #     TUTOR_ROOT="$(pwd)" tutor local launch -I
+      #     TUTOR_ROOT="$(pwd)" tutor local run lms bash /openedx/eox-tenant/integration.sh
