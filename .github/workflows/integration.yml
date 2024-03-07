@@ -13,16 +13,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          path: src/eox-tenant
+          path: eox-tenant
 
       - name: Prepare Tutor
         run: |
           pip install "tutor<17.0.0"
           TUTOR_ROOT="$(pwd)" tutor config save
-          TUTOR_ROOT="$(pwd)" tutor mounts add lms:$(pwd)/src:/openedx/src
-          chmod 777 src/eox-tenant -R
+          TUTOR_ROOT="$(pwd)" tutor mounts add lms:$(pwd)
+          chmod 777 eox-tenant -R
 
       - name: Launch tutor and test
         run: |
           TUTOR_ROOT="$(pwd)" tutor local launch -I
-          TUTOR_ROOT="$(pwd)" tutor local run lms bash /openedx/src/eox-tenant/integration.sh
+          TUTOR_ROOT="$(pwd)" tutor local run lms bash /openedx/eox-tenant/integration.sh
