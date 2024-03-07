@@ -25,13 +25,4 @@ jobs:
       - name: Launch tutor and test
         run: |
           TUTOR_ROOT="$(pwd)" tutor local launch -I
-          TUTOR_ROOT="$(pwd)" tutor local run lms pip install -e ../src/eox-tenant
-          TUTOR_ROOT="$(pwd)" tutor local run lms pip list
-          TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help
-          TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help | grep eox
-
-      - name: Second step running tutor
-        run: |
-          TUTOR_ROOT="$(pwd)" tutor local run lms pip list
-          TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help
-          TUTOR_ROOT="$(pwd)" tutor local run lms ./manage.py lms help | grep eox
+          TUTOR_ROOT="$(pwd)" tutor local run lms bash /openedx/eox-tenant/integration.sh
