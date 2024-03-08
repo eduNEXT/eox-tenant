@@ -29,6 +29,7 @@ jobs:
           source venv/bin/activate
           TUTOR_ROOT="$(pwd)" tutor --version
           TUTOR_ROOT="$(pwd)" tutor config save
+          TUTOR_ROOT="$(pwd)" tutor plugins disable mfe
           TUTOR_ROOT="$(pwd)" tutor mounts add lms,cms,lms-worker,cms-worker:$(pwd)/eox-tenant:/openedx/eox-tenant
           chmod 777 . -R
           TUTOR_ROOT="$(pwd)" tutor local launch -I
