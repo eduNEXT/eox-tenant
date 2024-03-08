@@ -7,7 +7,10 @@ on:
 
 jobs:
   edx-platform-integration-test:
-    name: Integration with Palm
+    name: Integration with Tutor
+    strategy:
+      matrix:
+        tutor_version: ["", "<17.0.0", "<16.0.0"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,7 +20,8 @@ jobs:
 
       - name: Prepare Tutor
         run: |
-          pip install "tutor<17.0.0"
+          pip install "tutor${{ matrix.tutor_version }}"
+          TUTOR_ROOT="$(pwd)" tutor --version
           TUTOR_ROOT="$(pwd)" tutor config save
           TUTOR_ROOT="$(pwd)" tutor mounts add lms,cms,lms-worker,cms-worker:$(pwd)/eox-tenant:/openedx/eox-tenant
           chmod 777 . -R
