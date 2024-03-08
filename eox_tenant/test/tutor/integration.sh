@@ -4,8 +4,6 @@ pip install -e ../eox-tenant
 # test that the commands for eox-tenant are being listed
 ./manage.py lms help | grep eox
 
-#
-# cd ../eox-tenant
-# make test-integration-tutor
+# running the tests using the tutor settings
 make test-requirements
-python -Wd -m pytest -p no:randomly --ds=lms.envs.test /openedx/eox-tenant/eox_tenant/test/tutor
+pytest -s --ds=lms.envs.tutor.test /openedx/eox-tenant/eox_tenant/test/tutor
