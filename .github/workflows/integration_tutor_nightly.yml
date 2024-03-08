@@ -24,7 +24,7 @@ jobs:
           chmod 777 tutor -R
           pip install -e "./tutor[full]"
 
-      - name: Prepare Tutor & launch
+      - name: Prepare Tutor
         run: |
           source venv/bin/activate
           TUTOR_ROOT="$(pwd)" tutor --version
@@ -32,7 +32,11 @@ jobs:
           TUTOR_ROOT="$(pwd)" tutor plugins disable mfe
           TUTOR_ROOT="$(pwd)" tutor mounts add lms,cms,lms-worker,cms-worker:$(pwd)/eox-tenant:/openedx/eox-tenant
           chmod 777 . -R
-          TUTOR_ROOT="$(pwd)" tutor images pull all
+          TUTOR_ROOT="$(pwd)" tutor images build openedx
+
+      - name: Launch Tutor
+        run: |
+          source venv/bin/activate
           TUTOR_ROOT="$(pwd)" tutor local launch -I
 
       - name: Run integration tests in lms
