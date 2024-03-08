@@ -17,12 +17,15 @@ jobs:
 
       - name: Get Tutor
         run: |
+          virtualenv venv
+          source venv/bin/activate
           git clone --branch=nightly --depth=1 https://github.com/overhangio/tutor.git
           chmod 777 tutor -R
           pip install -e "./tutor[full]"
 
       - name: Prepare Tutor & launch
         run: |
+          source venv/bin/activate
           TUTOR_ROOT="$(pwd)" tutor --version
           TUTOR_ROOT="$(pwd)" tutor config save
           TUTOR_ROOT="$(pwd)" tutor mounts add lms,cms,lms-worker,cms-worker:$(pwd)/eox-tenant:/openedx/eox-tenant
@@ -31,4 +34,5 @@ jobs:
 
       - name: Run integration tests in lms
         run: |
+          source venv/bin/activate
           TUTOR_ROOT="$(pwd)" tutor local run lms bash /openedx/eox-tenant/eox_tenant/test/tutor/integration.sh
