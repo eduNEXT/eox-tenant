@@ -51,7 +51,4 @@ test-python: clean ## Run test suite.
 	$(TOX) coverage run --source ./eox_tenant manage.py test
 	$(TOX) coverage report -m --fail-under=71
 
-test-integration-tutor: clean ## Run test suite.
-	$(TOX) coverage run --source ./eox_tenant manage.py test
-
 run-tests: test-python quality

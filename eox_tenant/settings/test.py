@@ -3,6 +3,11 @@ Common settings for eox_tenant project.
 """
 from __future__ import absolute_import, unicode_literals
 
+import os
+import codecs
+import yaml
+
+
 from .common import *  # pylint: disable=wildcard-import,unused-wildcard-import
 
 
@@ -10,6 +15,13 @@ class SettingsClass:
     """ dummy settings class """
     OAUTH2_PROVIDER = {}
 
+def get_env_setting(setting):
+    """ Get the environment setting or return exception """
+    try:
+        return os.environ[setting]
+    except KeyError:
+        error_msg = "Set the %s env variable" % setting
+        raise ImproperlyConfigured(error_msg)  # lint-amnesty, pylint: disable=raise-missing-from
 
 ALLOWED_HOSTS = ['*']
 SETTINGS = SettingsClass()
@@ -90,3 +102,8 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         settings.OAUTH2_PROVIDER['OAUTH2_VALIDATOR_CLASS'] = (
             'openedx.core.djangoapps.oauth_dispatch.dot_overrides.validators.EdxOAuth2Validator'
         )
+
+    # setup the databases used in the tutor local environment
+    with codecs.open(get_env_setting('LMS_CFG'), encoding='utf-8') as f:
+        ENV_TOKENS = yaml.safe_load(f)
+    settings.DATABASES = ENV_TOKENS['DATABASES']
