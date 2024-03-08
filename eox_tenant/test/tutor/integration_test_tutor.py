@@ -20,16 +20,16 @@ class TutorIntegrationTestCase(TestCase):
         """
         Running this imports means that our backends import the right signature
         """
-        import eox_tenant.edxapp_wrapper.backends.oauth_dispatch_j_v1
-        import eox_tenant.edxapp_wrapper.backends.branding_api_l_v1
+        import eox_tenant.edxapp_wrapper.backends.oauth_dispatch_j_v1  # isort:skip
+        import eox_tenant.edxapp_wrapper.backends.branding_api_l_v1  # isort:skip
         # fixme: needs to be properly removed if unused at the latest version  # pylint: disable=fixme
         # import eox_tenant.edxapp_wrapper.backends.certificates_module_i_v1
-        import eox_tenant.edxapp_wrapper.backends.site_configuration_module_i_v1
-        import eox_tenant.edxapp_wrapper.backends.theming_helpers_h_v1
+        import eox_tenant.edxapp_wrapper.backends.site_configuration_module_i_v1  # isort:skip
+        import eox_tenant.edxapp_wrapper.backends.theming_helpers_h_v1  # isort:skip
         # fixme: needs to be properly removed if unused at the latest version  # pylint: disable=fixme
         # import eox_tenant.edxapp_wrapper.backends.edx_auth_i_v1
-        import eox_tenant.edxapp_wrapper.backends.users_l_v1
-        import eox_tenant.edxapp_wrapper.backends.bearer_authentication_l_v1
-        import eox_tenant.edxapp_wrapper.backends.edxmako_l_v1
+        import eox_tenant.edxapp_wrapper.backends.users_l_v1  # isort:skip
+        import eox_tenant.edxapp_wrapper.backends.bearer_authentication_l_v1  # isort:skip
+        import eox_tenant.edxapp_wrapper.backends.edxmako_l_v1  # isort:skip
         # fixme: needs to be properly removed if unused at the latest version  # pylint: disable=fixme
         # import eox_tenant.edxapp_wrapper.backends.util_h_v1 # fixme
