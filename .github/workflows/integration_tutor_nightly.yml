@@ -17,6 +17,7 @@ jobs:
 
       - name: Get Tutor
         run: |
+          pip install virtualenv
           virtualenv venv
           source venv/bin/activate
           git clone --branch=nightly --depth=1 https://github.com/overhangio/tutor.git
