@@ -1,4 +1,4 @@
-name: Integration Tests
+name: Integration Tests Quince, Palm
 
 on:
   push:
@@ -9,8 +9,9 @@ jobs:
   edx-platform-integration-test:
     name: Integration with Tutor
     strategy:
-      matrix:
-        tutor_version: ["", "<17.0.0", "<16.0.0"]
+      matrix: #         quince     palm       olive
+        # tutor_version: ["<18.0.0", "<17.0.0", "<16.0.0"]
+        tutor_version: ["<18.0.0", "<17.0.0"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
