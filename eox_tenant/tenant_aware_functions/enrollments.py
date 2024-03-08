@@ -18,8 +18,7 @@ def filter_enrollments(enrollments):
     # If test setting is true, returns the same enrollments,
     # or if we do not have a microsite context, there is nothing we can do.
     if test_skip or not theming_helpers.is_request_in_themed_site():
-        for enrollment in enrollments:
-            yield enrollment
+        yield from enrollments
         return
 
     configuration_helpers = get_configuration_helpers()
