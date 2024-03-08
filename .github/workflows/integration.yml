@@ -21,8 +21,8 @@ jobs:
           TUTOR_ROOT="$(pwd)" tutor config save
           TUTOR_ROOT="$(pwd)" tutor mounts add lms,cms,lms-worker,cms-worker:$(pwd)/eox-tenant:/openedx/eox-tenant
           chmod 777 . -R
+          TUTOR_ROOT="$(pwd)" tutor local launch -I
 
       - name: Launch tutor and test
         run: |
-          TUTOR_ROOT="$(pwd)" tutor local launch -I
           TUTOR_ROOT="$(pwd)" tutor local run lms bash /openedx/eox-tenant/eox_tenant/test/tutor/integration.sh
