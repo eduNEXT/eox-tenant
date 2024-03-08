@@ -19,7 +19,7 @@ jobs:
         with:
           path: eox-tenant
 
-      - name: Prepare Tutor
+      - name: Prepare Tutor & launch
         run: |
           pip install "tutor${{ matrix.tutor_version }}"
           TUTOR_ROOT="$(pwd)" tutor --version
@@ -28,6 +28,6 @@ jobs:
           chmod 777 . -R
           TUTOR_ROOT="$(pwd)" tutor local launch -I
 
-      - name: Launch tutor and test
+      - name: Run integration tests in lms
         run: |
           TUTOR_ROOT="$(pwd)" tutor local run lms bash /openedx/eox-tenant/eox_tenant/test/tutor/integration.sh
