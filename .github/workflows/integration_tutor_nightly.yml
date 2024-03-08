@@ -1,4 +1,4 @@
-name: Integration Tests Quince, Palm
+name: Integration Tests with openedx.master
 
 on:
   push:
@@ -7,11 +7,7 @@ on:
 
 jobs:
   edx-platform-integration-test:
-    name: Integration with Tutor
-    strategy:
-      matrix: #         quince     palm       olive
-        # tutor_version: ["<18.0.0", "<17.0.0", "<16.0.0"]
-        tutor_version: ["<18.0.0", "<17.0.0"]
+    name: Integration with Tutor nightly
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,7 +17,8 @@ jobs:
 
       - name: Get Tutor
         run: |
-          pip install "tutor${{ matrix.tutor_version }}"
+          git clone --branch=nightly --depth=1 https://github.com/overhangio/tutor.git
+          pip install -e "./tutor[full]"
 
       - name: Prepare Tutor & launch
         run: |
