@@ -18,6 +18,7 @@ jobs:
       - name: Get Tutor
         run: |
           git clone --branch=nightly --depth=1 https://github.com/overhangio/tutor.git
+          chmod 777 tutor -R
           pip install -e "./tutor[full]"
 
       - name: Prepare Tutor & launch
