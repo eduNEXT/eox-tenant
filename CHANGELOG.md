@@ -1,3 +1,11 @@
+## v11.0.2 - 2024-03-18
+
+### [11.0.2](https://github.com/eduNEXT/eox-tenant/compare/v11.0.1...v11.0.2) (2024-03-18)
+
+### Bug Fixes
+
+* prioritize current site setting for org value ([#189](https://github.com/eduNEXT/eox-tenant/issues/189)) ([e17e7b0](https://github.com/eduNEXT/eox-tenant/commit/e17e7b0b0ae5cea96c82d6245aa7a68b794f112a))
+
 ## v11.0.1 - 2024-02-29
 
 ### [11.0.1](https://github.com/eduNEXT/eox-tenant/compare/v11.0.0...v11.0.1) (2024-02-29)
