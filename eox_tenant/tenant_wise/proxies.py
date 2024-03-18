@@ -148,18 +148,26 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
         TenantConfig or Microsite model.
         """
         cache_key = f"org-value-{org}-{val_name}"
+
+        # Make use of tenant-external-key to generate unique cache_key per
+        # tenant. This will help to fetch the current tenant value if the org
+        # is configured in multiple tenants/microsites including the current
+        # one.
+        tenant_key = getattr(settings, "EDNX_TENANT_KEY", None)
+        if tenant_key is not None:
+            cache_key = f"{cache_key}-{tenant_key}"
         cached_value = cache.get(cache_key)
 
         if cached_value:
             return cached_value
 
-        result = TenantConfig.get_value_for_org(org, val_name)
+        result = TenantConfig.get_value_for_org(org, val_name, tenant_key)
 
         if result is not None:
             cls.set_key_to_cache(cache_key, result)
             return result
 
-        result = Microsite.get_value_for_org(org, val_name)
+        result = Microsite.get_value_for_org(org, val_name, tenant_key)
         result = result if result else default
         cls.set_key_to_cache(cache_key, result)
 

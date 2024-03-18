@@ -89,25 +89,35 @@ class Microsite(models.Model):
         return microsites[0] if microsites else None
 
     @classmethod
-    def get_value_for_org(cls, org, val_name):
+    def get_value_for_org(cls, org, val_name, current_microsite):
         """
-        Filter the value by the org in the values field.
+        Filter the value by the org in the values field. Value from current
+        microsite is prioritized if org is present in multiple microsites
+        including the current one. Else the first valid value from an org is
+        returned.
 
         Args:
             org: String.
             key: String.
+            current_microsite: String
         Returns:
             The value for the given key and org.
         """
         results = cls.objects.filter(organizations__name=org)
+        first_result = None
 
         for result in results:
             value = result.values.get(val_name)
+            if value is None:
+                continue
 
-            if value:
+            if result.key == current_microsite:
                 return value
 
-        return None
+            if first_result is None:
+                first_result = value
+
+        return first_result
 
 
 class TenantConfigManager(models.Manager):
@@ -201,25 +211,35 @@ class TenantConfig(models.Model):
     objects = TenantConfigManager()
 
     @classmethod
-    def get_value_for_org(cls, org, val_name):
+    def get_value_for_org(cls, org, val_name, current_tenant):
         """
-        Filter the value by the org in the lms_config field.
+        Filter the value by the org in the lms_config field. Value from current
+        tenant is prioritized if org is present in multiple tenants including
+        the current one. Else the first valid value from an org is returned.
+
 
         Args:
             org: String.
-            key: String.
+            val_name: String.
+            current_tenant: String
         Returns:
             The value for the given key and org.
         """
         results = cls.objects.filter(organizations__name=org)
+        first_result = None
 
         for result in results:
             value = result.lms_configs.get(val_name)
+            if value is None:
+                continue
 
-            if value is not None:
+            if result.external_key == current_tenant:
                 return value
 
-        return None
+            if first_result is None:
+                first_result = value
+
+        return first_result
 
 
 class Route(models.Model):

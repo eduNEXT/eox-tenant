@@ -6,7 +6,7 @@ from __future__ import absolute_import
 import json
 
 from django.core.management import call_command
-from django.test import TransactionTestCase
+from django.test import TransactionTestCase, override_settings
 
 from eox_tenant.models import Microsite, TenantConfig
 from eox_tenant.tenant_wise.proxies import TenantSiteConfigProxy
@@ -41,7 +41,8 @@ class TenantSiteConfigProxyTest(TransactionTestCase):
         TenantConfig.objects.create(
             external_key="tenant-key1",
             lms_configs={
-                "course_org_filter": "test4-org"
+                "course_org_filter": ["common-org", "test4-org"],
+                "lms_base": "tenant-1-base",
             },
             studio_configs={},
             theming_configs={},
@@ -51,8 +52,9 @@ class TenantSiteConfigProxyTest(TransactionTestCase):
         TenantConfig.objects.create(
             external_key="tenant-key2",
             lms_configs={
-                "course_org_filter": ["test5-org", "test1-org"],
+                "course_org_filter": ["common-org", "test5-org", "test1-org"],
                 "value-test": "Hello-World3",
+                "lms_base": "tenant-2-base",
             },
             studio_configs={},
             theming_configs={},
@@ -70,6 +72,7 @@ class TenantSiteConfigProxyTest(TransactionTestCase):
             "test3-org",
             "test4-org",
             "test5-org",
+            "common-org",
         ])
 
         self.assertTrue(org_list == TenantSiteConfigProxy.get_all_orgs())
@@ -103,6 +106,49 @@ class TenantSiteConfigProxyTest(TransactionTestCase):
                 default="Default",
             ),
             "Default",
+        )
+
+        # Prioritise current tenant's value if org is present
+        with override_settings(EDNX_TENANT_KEY="tenant-key1"):
+            self.assertEqual(
+                TenantSiteConfigProxy.get_value_for_org(
+                    org="common-org",
+                    val_name="lms_base",
+                    default="tenant-1-base",
+                ),
+                "tenant-1-base",
+            )
+
+        with override_settings(EDNX_TENANT_KEY="tenant-key2"):
+            self.assertEqual(
+                TenantSiteConfigProxy.get_value_for_org(
+                    org="common-org",
+                    val_name="lms_base",
+                    default="tenant-2-base",
+                ),
+                "tenant-2-base",
+            )
+
+        # should return the first valid value if org is not present in current tenant
+        with override_settings(EDNX_TENANT_KEY="tenant-key1"):
+            self.assertEqual(
+                TenantSiteConfigProxy.get_value_for_org(
+                    org="common-org",
+                    val_name="value-test",
+                    default="some-value",
+                ),
+                "Hello-World3",
+            )
+
+        # should return the first valid value if tenant config is not used by
+        # current site
+        self.assertEqual(
+            TenantSiteConfigProxy.get_value_for_org(
+                org="common-org",
+                val_name="value-test",
+                default="some-value",
+            ),
+            "Hello-World3",
         )
 
     def test_create_site_configuration(self):
