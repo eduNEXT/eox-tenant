@@ -1,3 +1,11 @@
+## v11.1.0 - 2024-03-19
+
+### [11.1.0](https://github.com/eduNEXT/eox-tenant/compare/v11.0.2...v11.1.0) (2024-03-19)
+
+#### Features
+
+* add workflow to add items to the Dedalo project DS-831 ([#200](https://github.com/eduNEXT/eox-tenant/issues/200)) ([53d1ccb](https://github.com/eduNEXT/eox-tenant/commit/53d1ccba8d118857379d950e520508c6ebc0c678))
+
 ## v11.0.2 - 2024-03-18
 
 ### [11.0.2](https://github.com/eduNEXT/eox-tenant/compare/v11.0.1...v11.0.2) (2024-03-18)
