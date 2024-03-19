@@ -1,7 +1,5 @@
 """ Backend abstraction. """
-from django.contrib.auth.backends import (  # pylint: disable=import-error
-    AllowAllUsersModelBackend,
-)
+from django.contrib.auth.backends import AllowAllUsersModelBackend  # pylint: disable=import-error
 from openedx.core.djangoapps.user_authn.exceptions import AuthFailedError  # pylint: disable=import-error
 
 
