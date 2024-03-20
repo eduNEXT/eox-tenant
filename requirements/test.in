@@ -9,3 +9,4 @@ coverage
 mock
 testfixtures
 path.py
+pyyaml

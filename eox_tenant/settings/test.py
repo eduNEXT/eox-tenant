@@ -3,6 +3,11 @@ Common settings for eox_tenant project.
 """
 from __future__ import absolute_import, unicode_literals
 
+import codecs
+import os
+
+import yaml
+
 from .common import *  # pylint: disable=wildcard-import,unused-wildcard-import
 
 
@@ -90,3 +95,8 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         settings.OAUTH2_PROVIDER['OAUTH2_VALIDATOR_CLASS'] = (
             'openedx.core.djangoapps.oauth_dispatch.dot_overrides.validators.EdxOAuth2Validator'
         )
+
+    # setup the databases used in the tutor local environment
+    with codecs.open(os.environ['LMS_CFG'], encoding='utf-8') as f:
+        env_tokens = yaml.safe_load(f)
+    settings.DATABASES = env_tokens['DATABASES']
