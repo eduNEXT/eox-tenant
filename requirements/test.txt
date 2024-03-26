@@ -8,16 +8,37 @@ asgiref==3.7.2
     # via
     #   -r requirements/base.txt
     #   django
-astroid==3.0.3
+astroid==3.1.0
     # via pylint
 backports-zoneinfo==0.2.1
     # via
     #   -r requirements/base.txt
     #   django
-coverage==7.4.1
+certifi==2024.2.2
+    # via
+    #   -r requirements/base.txt
+    #   requests
+cffi==1.16.0
+    # via
+    #   -r requirements/base.txt
+    #   cryptography
+charset-normalizer==3.3.2
+    # via
+    #   -r requirements/base.txt
+    #   requests
+coverage==7.4.3
     # via -r requirements/test.in
-ddt==1.7.1
+cryptography==42.0.5
+    # via
+    #   -r requirements/base.txt
+    #   social-auth-core
+ddt==1.7.2
     # via -r requirements/test.in
+defusedxml==0.8.0rc2
+    # via
+    #   -r requirements/base.txt
+    #   python3-openid
+    #   social-auth-core
 dill==0.3.8
     # via pylint
     # via
@@ -40,6 +61,10 @@ edx-opaque-keys[django]==2.5.1
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
+idna==3.6
+    # via
+    #   -r requirements/base.txt
+    #   requests
 isort==5.13.2
     # via pylint
 jsonfield==3.1.0
@@ -48,6 +73,11 @@ mccabe==0.7.0
     # via pylint
 mock==5.1.0
     # via -r requirements/test.in
+oauthlib==3.2.2
+    # via
+    #   -r requirements/base.txt
+    #   requests-oauthlib
+    #   social-auth-core
 openedx-filters==1.6.0
     # via -r requirements/base.txt
 path==16.10.0
@@ -62,36 +92,63 @@ platformdirs==4.2.0
     # via pylint
 pycodestyle==2.11.1
     # via -r requirements/test.in
-pylint==3.0.3
+pycparser==2.21
+    # via
+    #   -r requirements/base.txt
+    #   cffi
+pyjwt==2.8.0
+    # via
+    #   -r requirements/base.txt
+    #   social-auth-core
+pylint==3.1.0
     # via -r requirements/test.in
 pymongo==3.13.0
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
+python3-openid==3.2.0
+    # via
+    #   -r requirements/base.txt
+    #   social-auth-core
 pytz==2024.1
     # via
     #   -r requirements/base.txt
     #   djangorestframework
+requests==2.31.0
+    # via
+    #   -r requirements/base.txt
+    #   requests-oauthlib
+    #   social-auth-core
+requests-oauthlib==1.3.1
+    # via
+    #   -r requirements/base.txt
+    #   social-auth-core
 six==1.16.0
+    # via -r requirements/base.txt
+social-auth-core==4.5.3
     # via -r requirements/base.txt
 sqlparse==0.4.4
     # via
     #   -r requirements/base.txt
     #   django
-stevedore==5.1.0
+stevedore==5.2.0
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
-testfixtures==7.2.2
+testfixtures==8.1.0
     # via -r requirements/test.in
 tomli==2.0.1
     # via pylint
-tomlkit==0.12.3
+tomlkit==0.12.4
     # via pylint
-typing-extensions==4.9.0
+typing-extensions==4.10.0
     # via
     #   -r requirements/base.txt
     #   asgiref
     #   astroid
     #   edx-opaque-keys
     #   pylint
+urllib3==2.2.1
+    # via
+    #   -r requirements/base.txt
+    #   requests
