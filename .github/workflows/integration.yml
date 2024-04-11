@@ -5,7 +5,7 @@ on: push
 jobs:
   edx-platform-integration-test:
     runs-on: ubuntu-latest
-    name: Test integration Felipe
+    name: Test integration Luis Felipe
     steps:
       - uses: luisfelipec95/test-integration@main
         with:
