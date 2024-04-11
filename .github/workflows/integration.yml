@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Test integration Felipe
     steps:
-      - uses: luisfelipec95/test-integration
+      - uses: luisfelipec95/test-integration@main
         with:
           tutor_version: '17.0.0'
           edunext_plugin: 'eox-tenant'
