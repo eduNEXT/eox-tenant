@@ -1,33 +1,16 @@
 name: Integration Tests Quince, Palm
 
-on:
-  push:
-    branches:
-      - 'fmo/**'
+on: push
 
 jobs:
   edx-platform-integration-test:
-    name: Integration with Tutor
-    strategy:
-      matrix: #         quince     palm       olive
-        # tutor_version: ["<18.0.0", "<17.0.0", "<16.0.0"]
-        tutor_version: ["<18.0.0", "<17.0.0"]
     runs-on: ubuntu-latest
+    name: Test integration Felipe
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: luisfelipec95/test-integration
         with:
-          path: eox-tenant
+          tutor_version: '17.0.0'
+          edunext_plugin: 'eox-tenant'
+          edunext_plugin_folder: 'eox_tenant'
+          plugin_branch_name: 'lfc/test-matrix'
 
-      - name: Prepare Tutor & launch
-        run: |
-          pip install "tutor${{ matrix.tutor_version }}"
-          TUTOR_ROOT="$(pwd)" tutor --version
-          TUTOR_ROOT="$(pwd)" tutor config save
-          TUTOR_ROOT="$(pwd)" tutor mounts add lms,cms,lms-worker,cms-worker:$(pwd)/eox-tenant:/openedx/eox-tenant
-          chmod 777 . -R
-          TUTOR_ROOT="$(pwd)" tutor local launch -I
-
-      - name: Run integration tests in lms
-        run: |
-          TUTOR_ROOT="$(pwd)" tutor local run lms bash /openedx/eox-tenant/eox_tenant/test/tutor/integration.sh
