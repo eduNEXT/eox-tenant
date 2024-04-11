@@ -9,7 +9,6 @@ jobs:
     steps:
       - uses: luisfelipec95/test-integration@main
         with:
-          tutor_version: '17.0.0'
           edunext_plugin: 'eox-tenant'
           edunext_plugin_folder: 'eox_tenant'
           plugin_branch_name: 'lfc/test-matrix'
