@@ -1,3 +1,15 @@
+## v11.1.1 - 2024-04-12
+
+### [11.1.1](https://github.com/eduNEXT/eox-tenant/compare/v11.1.0...v11.1.1) (2024-04-12)
+
+### Bug Fixes
+
+* correct user restriction behavior by sign up source in eox-tenant ([#201](https://github.com/eduNEXT/eox-tenant/issues/201)) ([b578820](https://github.com/eduNEXT/eox-tenant/commit/b578820ce23e156c4eed7fd9643bfce2d0337107))
+
+### Code Refactoring
+
+* inherit from social auth exception ([#195](https://github.com/eduNEXT/eox-tenant/issues/195)) ([d0207e8](https://github.com/eduNEXT/eox-tenant/commit/d0207e861c90148f6aada2d1c533f03b1919e7bb)), closes [/github.com/python-social-auth/social-core/blob/29cbbd22b98d81d569a886b1cc0bd9a316cd124f/social_core/exceptions.py#L1](https://github.com/eduNEXT//github.com/python-social-auth/social-core/blob/29cbbd22b98d81d569a886b1cc0bd9a316cd124f/social_core/exceptions.py/issues/L1) [/github.com/python-social-auth/social-app-django/blob/5.4.0/social_django/middleware.py#L35](https://github.com/eduNEXT//github.com/python-social-auth/social-app-django/blob/5.4.0/social_django/middleware.py/issues/L35) [/github.com/openedx/edx-platform/blob/ebcbe1cd9208191c0589d7fe538c6ac13470abe6/common/djangoapps/third_party_auth/middleware.py#L18](https://github.com/eduNEXT//github.com/openedx/edx-platform/blob/ebcbe1cd9208191c0589d7fe538c6ac13470abe6/common/djangoapps/third_party_auth/middleware.py/issues/L18)
+
 ## v11.1.0 - 2024-03-19
 
 ### [11.1.0](https://github.com/eduNEXT/eox-tenant/compare/v11.0.2...v11.1.0) (2024-03-19)
