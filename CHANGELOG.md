@@ -1,3 +1,11 @@
+## v11.2.0 - 2024-04-15
+
+### [11.2.0](https://github.com/eduNEXT/eox-tenant/compare/v11.1.1...v11.2.0) (2024-04-15)
+
+#### Features
+
+* separate studio config and handler ([#185](https://github.com/eduNEXT/eox-tenant/issues/185)) ([17cf513](https://github.com/eduNEXT/eox-tenant/commit/17cf513b6b5fe5a74f4de5ea331a6edb1b0fab45))
+
 ## v11.1.1 - 2024-04-12
 
 ### [11.1.1](https://github.com/eduNEXT/eox-tenant/compare/v11.1.0...v11.1.1) (2024-04-12)
