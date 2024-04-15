@@ -29,6 +29,7 @@ from django.apps.config import AppConfig
 from django.conf import settings as base_settings
 
 from eox_tenant.async_utils import AsyncTaskHandler
+from eox_tenant.constants import CMS_CONFIG_COLUMN, LMS_CONFIG_COLUMN
 from eox_tenant.receivers_helpers import get_tenant_config_by_domain
 from eox_tenant.utils import synchronize_tenant_organizations
 
@@ -38,11 +39,11 @@ LOG = logging.getLogger(__name__)
 EOX_MAX_CONFIG_OVERRIDE_SECONDS = getattr(base_settings, "EOX_MAX_CONFIG_OVERRIDE_SECONDS", 300)
 
 
-def _update_settings(domain):
+def _update_settings(domain, config_key):
     """
     Perform the override procedure on the settings object
     """
-    config, tenant_key = get_tenant_config_by_domain(domain)
+    config, tenant_key = get_tenant_config_by_domain(domain, config_key)
 
     if not config.get("EDNX_USE_SIGNAL"):
         LOG.info("Site %s, does not use eox_tenant signals", domain)
@@ -157,9 +158,24 @@ def _ttl_reached():
     return False
 
 
-def start_tenant(sender, environ, **kwargs):  # pylint: disable=unused-argument
+def start_lms_tenant(sender, environ, **kwargs):  # pylint: disable=unused-argument
     """
-    This function runs every time a request is started.
+    This function runs every time a request is started in LMS.
+    Read documentation of `_start_tenant` for more details.
+    """
+    _start_tenant(environ, LMS_CONFIG_COLUMN)
+
+
+def start_studio_tenant(sender, environ, **kwargs):  # pylint: disable=unused-argument
+    """
+    This function runs every time a request is started in studio.
+    Read documentation of `_start_tenant` for more details.
+    """
+    _start_tenant(environ, CMS_CONFIG_COLUMN)
+
+
+def _start_tenant(environ, config_key):
+    """
     It will analyze the current settings object, the domain from the incoming
     request and the configuration stored in the tenants for this domain.
 
@@ -182,7 +198,7 @@ def start_tenant(sender, environ, **kwargs):  # pylint: disable=unused-argument
         return
 
     # Do the update
-    _update_settings(domain)
+    _update_settings(domain, config_key)
 
 
 def finish_tenant(sender, **kwargs):  # pylint: disable=unused-argument
@@ -219,9 +235,24 @@ def tenant_context_addition(sender, body, headers, *args, **kwargs):  # pylint: 
     body['kwargs']['eox_tenant_sender'] = get_host_func(body)
 
 
-def start_async_tenant(sender, *args, **kwargs):  # pylint: disable=unused-argument
+def start_async_lms_tenant(sender, *args, **kwargs):  # pylint: disable=unused-argument
     """
-    Receiver that runs on the async process to update the settings accordingly to the tenant.
+    Receiver that runs on the LMS async process to update the settings accordingly to the tenant.
+    Read documentation of `_start_tenant` for more details.
+    """
+    _start_async_tenant(sender, LMS_CONFIG_COLUMN)
+
+
+def start_async_studio_tenant(sender, *args, **kwargs):  # pylint: disable=unused-argument
+    """
+    Receiver that runs on the studio async process to update the settings accordingly to the tenant.
+    Read documentation of `_start_tenant` for more details.
+    """
+    _start_async_tenant(sender, CMS_CONFIG_COLUMN)
+
+
+def _start_async_tenant(sender, config_key):
+    """
     Dispatched before a task is executed.
     See:
        https://celery.readthedocs.io/en/latest/userguide/signals.html#task-prerun
@@ -245,7 +276,7 @@ def start_async_tenant(sender, *args, **kwargs):  # pylint: disable=unused-argum
         return
 
     # Do the update
-    _update_settings(domain)
+    _update_settings(domain, config_key)
 
 
 def update_tenant_organizations(instance, **kwargs):  # pylint: disable=unused-argument
