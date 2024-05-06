@@ -8,12 +8,15 @@ from itertools import chain
 import six
 from django.conf import settings
 from django.core.cache import cache
+from django.http import parse_cookie
 
 from eox_tenant.edxapp_wrapper.site_configuration_module import get_site_configuration_models
+from eox_tenant.edxapp_wrapper.language_preference import get_language_preference_middleware
 from eox_tenant.models import Microsite, TenantConfig, TenantOrganization
 from eox_tenant.utils import clean_serializable_values
 
 SiteConfigurationModels = get_site_configuration_models()
+LanguagePreferenceMiddleware = get_language_preference_middleware()
 
 TENANT_ALL_ORGS_CACHE_KEY = "tenant.all_orgs_list"
 EOX_TENANT_CACHE_KEY_TIMEOUT = getattr(
@@ -204,3 +207,29 @@ class TenantSiteConfigProxy(SiteConfigurationModels.SiteConfiguration):
                 cls.set_key_to_cache(key, result)
 
         cls.set_key_to_cache(pre_load_value_key, True)
+
+class LanguagePreferenceMiddlewareProxy(LanguagePreferenceMiddleware):
+    """This Middleware will be used if you have FEATURES["EDNX_SITE_AWARE_LOCALE"] in True.
+        Allow the user set the language preference for the site, avoiding the default LANGUAGE_CODE. 
+    
+        The previous behavior was modified here 
+        https://github.com/openedx/edx-platform/blob/open-release/palm.master/openedx/core/djangoapps/lang_pref/middleware.py#L61-L62
+    """
+
+    class Meta:
+        """ Set as a proxy model. """
+        proxy = True
+
+    def process_request(self, request):
+        """
+        If a user's UserPreference contains a language preference, use the user's preference.
+        Save the current language preference cookie as the user's preferred language.
+        """
+        original_user_language_cookie = parse_cookie(request.META.get("HTTP_COOKIE", "")).get(
+            settings.LANGUAGE_COOKIE_NAME
+        )
+
+        if original_user_language_cookie:
+            request.COOKIES[settings.LANGUAGE_COOKIE_NAME] = original_user_language_cookie
+
+        return self.get_response(request)

@@ -47,6 +47,7 @@ def plugin_settings(settings):
     settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS = 300
     settings.EDXMAKO_MODULE_BACKEND = 'eox_tenant.edxapp_wrapper.backends.edxmako_l_v1'
     settings.UTILS_MODULE_BACKEND = 'eox_tenant.edxapp_wrapper.backends.util_h_v1'
+    settings.LANGUAGE_PREFERENCE_MIDDLEWARE = 'eox_tenant.edxapp_wrapper.backends.lang_pref_middleware_p_v1'
     settings.CHANGE_DOMAIN_DEFAULT_SITE_NAME = "stage.edunext.co"
     settings.EOX_TENANT_LOAD_PERMISSIONS = True
     settings.EOX_TENANT_APPEND_LMS_MIDDLEWARE_CLASSES = False

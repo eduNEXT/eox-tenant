@@ -84,6 +84,8 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     settings.FEATURES['USE_REDIRECTION_MIDDLEWARE'] = False
     settings.GET_SITE_CONFIGURATION_MODULE = 'eox_tenant.edxapp_wrapper.backends.site_configuration_module_test_v1'
     settings.GET_THEMING_HELPERS = 'eox_tenant.edxapp_wrapper.backends.theming_helpers_test_v1'
+    settings.LANGUAGE_PREFERENCE_MIDDLEWARE = 'eox_tenant.edxapp_wrapper.backends.lang_pref_middleware_p_test_v1'
+
     settings.EOX_TENANT_SKIP_FILTER_FOR_TESTS = True
     settings.EOX_TENANT_LOAD_PERMISSIONS = False
     if hasattr(settings, 'OAUTH2_PROVIDER'):
