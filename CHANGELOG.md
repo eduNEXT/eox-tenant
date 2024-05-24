@@ -1,3 +1,11 @@
+## v11.3.0 - 2024-05-24
+
+### [11.3.0](https://github.com/eduNEXT/eox-tenant/compare/v11.2.0...v11.3.0) (2024-05-24)
+
+#### Features
+
+* add integration test ([#204](https://github.com/eduNEXT/eox-tenant/issues/204)) ([df86b60](https://github.com/eduNEXT/eox-tenant/commit/df86b60646b2d3e2323da42edd0afd72504a6bd4))
+
 ## v11.2.0 - 2024-04-15
 
 ### [11.2.0](https://github.com/eduNEXT/eox-tenant/compare/v11.1.1...v11.2.0) (2024-04-15)
