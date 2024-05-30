@@ -1,3 +1,11 @@
+## v11.4.0 - 2024-05-30
+
+### [11.4.0](https://github.com/eduNEXT/eox-tenant/compare/v11.3.0...v11.4.0) (2024-05-30)
+
+#### Features
+
+* add github action integration ([11ca919](https://github.com/eduNEXT/eox-tenant/commit/11ca91934e878a54c26d4eabb3def5b031b361f6))
+
 ## v11.3.0 - 2024-05-24
 
 ### [11.3.0](https://github.com/eduNEXT/eox-tenant/compare/v11.2.0...v11.3.0) (2024-05-24)
