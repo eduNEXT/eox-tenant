@@ -11,3 +11,4 @@ edx-opaque-keys[django]
 openedx_filters
 social-auth-core
 edx-drf-extensions
+edx-organizations
