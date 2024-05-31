@@ -5,6 +5,7 @@ import logging
 import re
 
 import six
+from organizations.models import Organization
 
 from eox_tenant.edxapp_wrapper.users import get_user_signup_source
 from eox_tenant.models import TenantOrganization
@@ -104,3 +105,4 @@ def synchronize_tenant_organizations(instance):
     for org in course_org_filter:
         organization, _ = TenantOrganization.objects.get_or_create(name=org)
         instance.organizations.add(organization)
+        Organization.objects.get_or_create(name=org, short_name=org)
