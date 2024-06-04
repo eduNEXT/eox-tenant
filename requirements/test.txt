@@ -49,12 +49,12 @@ defusedxml==0.8.0rc2
 dill==0.3.8
     # via pylint
     # via
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   django-crum
     #   django-model-utils
     #   django-mysql
-    #   django-simple-history
     #   django-waffle
     #   djangorestframework
     #   drf-jwt
@@ -75,8 +75,9 @@ django-model-utils==4.5.1
     #   edx-organizations
 django-mysql==4.13.0
     # via -r requirements/base.txt
-django-simple-history==3.7.0
+django-simple-history==3.0.0
     # via
+    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.txt
     #   edx-organizations
 django-waffle==4.1.0
