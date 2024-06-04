@@ -1,0 +1,520 @@
+{
+	"info": {
+		"_postman_id": "9f1933c5-e85b-438e-809f-151e8b160436",
+		"name": "eox-tenant API",
+		"description": "# Steps\n\n- You must create a new `access_token` using the `Authorization` endpoint. Make sure you have the correct credentials. To consume the `eox-tenant` API you should create a new application from `{domain}/admin/oauth2_provider/application/`\n- If you are using an environment within **Postman**, once you make the request the access token will be automatically added in the **Header** of all endpoints. The only thing you have to do is to use the variable access_token in the **Token** field of the **Current Token** section.\n    \n- In case it doesn't work, copy the `access_token` from the response and paste it in the **Authorization** tab of this collection. In the **Current Token** section, add the access token manually, and modify the **Header Prefix** field depending on the type of token you are using.\n    \n\n<img src=\"https://content.pstmn.io/209541a7-f794-47fd-8524-8bd733a0de8c/aW1hZ2UucG5n\" alt=\"Current%20Token%20section%20in%20Authorization%20tab\" width=\"573\" height=\"216\">\n\n- Now, you can consume any endpoint without having to manually add the token on each of them.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27731142"
+	},
+	"item": [
+		{
+			"name": "Microsites API",
+			"item": [
+				{
+					"name": "Get MicroSites",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/microsites/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"microsites",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get MicroSite",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/microsites/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"microsites",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create MicroSites",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"key\": \"key\",\n\t\"subdomain\": \"subdomain\",\n\t\"values\": {}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/microsites/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"microsites",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete MicroSite",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/microsites/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"microsites",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update MicroSite",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"key\": \"key\",\n\t\"subdomain\": \"subdomain\",\n\t\"values\": {}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/microsites/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"microsites",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Configs API",
+			"item": [
+				{
+					"name": "Get Configs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/configs/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"configs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Config",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/configs/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"configs",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Config",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"lms_configs\": {},\n\t\"studio_configs\": {},\n\t\"theming_configs\": {},\n\t\"meta\": \"meta\",\n\t\"external_key\": \"external-key\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/configs/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"configs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Config",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/configs/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"configs",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Config",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"lms_configs\": {},\n\t\"studio_configs\": {},\n\t\"theming_configs\": {},\n\t\"meta\": \"meta\",\n\t\"external_key\": \"external-key\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/configs/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"configs",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Routes API",
+			"item": [
+				{
+					"name": "Get Routes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/routes/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"routes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Route",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/routes/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"routes",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Route",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"domain\": \"domain\",\n\t\"config\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/routes/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"routes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Route",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/routes/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"routes",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Route",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"domain\": \"domain\",\n\t\"config\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/eox-tenant/api/v1/routes/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"eox-tenant",
+								"api",
+								"v1",
+								"routes",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authorization",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();",
+							"var bodyToken = responseJson.access_token;",
+							"pm.environment.set(\"access_token\", bodyToken)",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"description": "Can be \"client_credentails\" or \"password\"",
+							"type": "text"
+						},
+						{
+							"key": "token_type",
+							"value": "JWT",
+							"description": "Can be \"Bearer\" or \"JWT\"",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "<your-client-id>",
+							"description": "The client ID of the application",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "<your-client-secret>",
+							"description": "The client secret of the application",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{domain}}/oauth2/access_token",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"oauth2",
+						"access_token"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "headerPrefix",
+				"value": "JWT",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "domain",
+			"value": "http://local.edly.io:8000",
+			"type": "string"
+		}
+	]
+}

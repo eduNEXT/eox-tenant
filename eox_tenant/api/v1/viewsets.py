@@ -3,6 +3,7 @@ API v1 viewsets.
 """
 import logging
 
+from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.parsers import JSONParser
@@ -241,7 +242,7 @@ class MicrositeViewSet(AlternativeFieldLookupMixin, viewsets.ModelViewSet):
         Response: No content status code 204
     """
 
-    authentication_classes = (BearerAuthentication, SessionAuthentication)
+    authentication_classes = (BearerAuthentication, SessionAuthentication, JwtAuthentication)
     parser_classes = [JSONParser]
     permission_classes = [EoxTenantAPIPermission]
     serializer_class = MicrositeSerializer
@@ -439,7 +440,7 @@ class TenantConfigViewSet(AlternativeFieldLookupMixin, viewsets.ModelViewSet):
         Response: No content status code 204
     """
 
-    authentication_classes = (BearerAuthentication, SessionAuthentication)
+    authentication_classes = (BearerAuthentication, SessionAuthentication, JwtAuthentication)
     parser_classes = [JSONParser]
     permission_classes = [EoxTenantAPIPermission]
     serializer_class = TenantConfigSerializer
@@ -450,7 +451,7 @@ class TenantConfigViewSet(AlternativeFieldLookupMixin, viewsets.ModelViewSet):
 class RouteViewSet(viewsets.ModelViewSet):
     """RouteViewSet that allows the basic API actions."""
 
-    authentication_classes = (BearerAuthentication, SessionAuthentication)
+    authentication_classes = (BearerAuthentication, SessionAuthentication, JwtAuthentication)
     parser_classes = [JSONParser]
     permission_classes = [EoxTenantAPIPermission]
     serializer_class = RouteSerializer
