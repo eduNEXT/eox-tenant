@@ -1,3 +1,11 @@
+## v11.5.0 - 2024-06-04
+
+### [11.5.0](https://github.com/eduNEXT/eox-tenant/compare/v11.4.0...v11.5.0) (2024-06-04)
+
+#### Features
+
+* add jwt support ([#206](https://github.com/eduNEXT/eox-tenant/issues/206)) ([40a72eb](https://github.com/eduNEXT/eox-tenant/commit/40a72ebad806fcb582f8f39ef97e715d228883b9))
+
 ## v11.3.0 - 2024-05-24
 
 ### [11.3.0](https://github.com/eduNEXT/eox-tenant/compare/v11.2.0...v11.3.0) (2024-05-24)
