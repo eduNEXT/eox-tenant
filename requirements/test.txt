@@ -15,7 +15,7 @@ backports-zoneinfo==0.2.1
     #   -r requirements/base.txt
     #   django
     #   djangorestframework
-certifi==2024.2.2
+certifi==2024.6.2
     # via
     #   -r requirements/base.txt
     #   requests
@@ -52,12 +52,15 @@ dill==0.3.8
     #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   django-crum
+    #   django-model-utils
     #   django-mysql
+    #   django-simple-history
     #   django-waffle
     #   djangorestframework
     #   drf-jwt
     #   edx-django-utils
     #   edx-drf-extensions
+    #   edx-organizations
     #   jsonfield
     #   openedx-filters
 django-crum==0.7.9
@@ -66,8 +69,16 @@ django-crum==0.7.9
     #   edx-django-utils
 django-fake-model==0.1.4
     # via -r requirements/test.in
+django-model-utils==4.5.1
+    # via
+    #   -r requirements/base.txt
+    #   edx-organizations
 django-mysql==4.13.0
     # via -r requirements/base.txt
+django-simple-history==3.7.0
+    # via
+    #   -r requirements/base.txt
+    #   edx-organizations
 django-waffle==4.1.0
     # via
     #   -r requirements/base.txt
@@ -78,6 +89,7 @@ djangorestframework==3.15.1
     #   -r requirements/base.txt
     #   drf-jwt
     #   edx-drf-extensions
+    #   edx-organizations
 dnspython==2.6.1
     # via
     #   -r requirements/base.txt
@@ -86,16 +98,21 @@ drf-jwt==1.19.2
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-edx-django-utils==5.14.1
+edx-django-utils==5.14.2
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
 edx-drf-extensions==10.3.0
-    # via -r requirements/base.txt
+    # via
+    #   -r requirements/base.txt
+    #   edx-organizations
 edx-opaque-keys[django]==2.9.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
+    #   edx-organizations
+edx-organizations==6.13.0
+    # via -r requirements/base.txt
 idna==3.7
     # via
     #   -r requirements/base.txt
@@ -127,6 +144,10 @@ pbr==6.0.0
     # via
     #   -r requirements/base.txt
     #   stevedore
+pillow==10.3.0
+    # via
+    #   -r requirements/base.txt
+    #   edx-organizations
 platformdirs==4.2.2
     # via pylint
 psutil==5.9.8
@@ -194,7 +215,7 @@ tomli==2.0.1
     # via pylint
 tomlkit==0.12.5
     # via pylint
-typing-extensions==4.12.0
+typing-extensions==4.12.1
     # via
     #   -r requirements/base.txt
     #   asgiref
@@ -205,3 +226,6 @@ urllib3==2.2.1
     # via
     #   -r requirements/base.txt
     #   requests
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools

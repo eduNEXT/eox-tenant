@@ -10,7 +10,7 @@ backports-zoneinfo==0.2.1
     # via
     #   django
     #   djangorestframework
-certifi==2024.2.2
+certifi==2024.6.2
     # via requests
 cffi==1.16.0
     # via
@@ -33,20 +33,27 @@ django==4.2.13
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-crum
+    #   django-model-utils
     #   django-mysql
+    #   django-simple-history
     #   django-waffle
     #   djangorestframework
     #   drf-jwt
     #   edx-django-utils
     #   edx-drf-extensions
+    #   edx-organizations
     #   jsonfield
     #   openedx-filters
 django-crum==0.7.9
     # via
     #   -r requirements/base.in
     #   edx-django-utils
+django-model-utils==4.5.1
+    # via edx-organizations
 django-mysql==4.13.0
     # via -r requirements/base.in
+django-simple-history==3.7.0
+    # via edx-organizations
 django-waffle==4.1.0
     # via
     #   edx-django-utils
@@ -56,18 +63,24 @@ djangorestframework==3.15.1
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
+    #   edx-organizations
 dnspython==2.6.1
     # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
-edx-django-utils==5.14.1
+edx-django-utils==5.14.2
     # via edx-drf-extensions
 edx-drf-extensions==10.3.0
-    # via -r requirements/base.in
+    # via
+    #   -r requirements/base.in
+    #   edx-organizations
 edx-opaque-keys[django]==2.9.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
+    #   edx-organizations
+edx-organizations==6.13.0
+    # via -r requirements/base.in
 idna==3.7
     # via requests
 jsonfield==3.1.0
@@ -82,6 +95,8 @@ openedx-filters==1.8.1
     # via -r requirements/base.in
 pbr==6.0.0
     # via stevedore
+pillow==10.3.0
+    # via edx-organizations
 psutil==5.9.8
     # via edx-django-utils
 pycparser==2.22
@@ -116,9 +131,12 @@ stevedore==5.2.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
-typing-extensions==4.12.0
+typing-extensions==4.12.1
     # via
     #   asgiref
     #   edx-opaque-keys
 urllib3==2.2.1
     # via requests
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools
