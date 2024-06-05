@@ -10,7 +10,7 @@ click==8.1.7
     # via pip-tools
 importlib-metadata==6.11.0
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   build
 packaging==24.0
     # via build

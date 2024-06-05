@@ -20,7 +20,7 @@ charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via edx-django-utils
-cryptography==42.0.7
+cryptography==42.0.8
     # via
     #   pyjwt
     #   social-auth-core
@@ -30,7 +30,7 @@ defusedxml==0.8.0rc2
     #   social-auth-core
 django==4.2.13
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-crum
@@ -54,7 +54,7 @@ django-mysql==4.13.0
     # via -r requirements/base.in
 django-simple-history==3.0.0
     # via
-    #   -c https://raw.githubusercontent.com/edx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   edx-organizations
 django-waffle==4.1.0
     # via
