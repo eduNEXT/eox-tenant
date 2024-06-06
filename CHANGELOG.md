@@ -1,3 +1,11 @@
+## v11.6.0 - 2024-06-06
+
+### [11.6.0](https://github.com/eduNEXT/eox-tenant/compare/v11.5.0...v11.6.0) (2024-06-06)
+
+#### Features
+
+* create edx organization when updating course_org_filter `DS-961` ([#209](https://github.com/eduNEXT/eox-tenant/issues/209)) ([fb03ee5](https://github.com/eduNEXT/eox-tenant/commit/fb03ee5b806df4e6e97fcd3de5df2b6980e8a94d))
+
 ## v11.5.0 - 2024-06-04
 
 ### [11.5.0](https://github.com/eduNEXT/eox-tenant/compare/v11.4.0...v11.5.0) (2024-06-04)
