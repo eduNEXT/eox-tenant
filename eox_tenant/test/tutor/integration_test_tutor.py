@@ -21,3 +21,4 @@ class TutorIntegrationTestCase(TestCase):
         import eox_tenant.edxapp_wrapper.backends.users_l_v1  # isort:skip
         import eox_tenant.edxapp_wrapper.backends.bearer_authentication_l_v1  # isort:skip
         import eox_tenant.edxapp_wrapper.backends.edxmako_l_v1  # isort:skip
+        import eox_tenant.edxapp_wrapper.backends.edx_auth_n_v1  # isort:skip
