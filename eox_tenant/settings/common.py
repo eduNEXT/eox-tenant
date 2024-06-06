@@ -13,7 +13,8 @@ DEBUG = True
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'eox_tenant'
+    'eox_tenant',
+    'organizations',
 ]
 
 TIME_ZONE = 'UTC'

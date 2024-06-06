@@ -9,3 +9,6 @@
 # linking to it here is good.
 
 Django<5
+
+# Common constraints for Open edX repos
+-c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
