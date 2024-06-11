@@ -1,16 +1,49 @@
-
+==========
 EOX tenant
-----------
-Eox-tenant is a multi-tenancy django app for `edx-platform`_. It is build as an `openedx plugin`_ so even as a django app it will auto install in the larger edx-platform core code once installed in the same python environment.
+==========
+|Maintainance Badge| |Test Badge| |PyPI Badge|
 
-The code is written and maintained by `eduNEXT`_ and it is what we use to support our own multi-tenant services. It was initially created as an extension of the `microsites` and `site_configurations` features of the Open edX platform, but it has grown to completely replace them in order to support more robust multi tenancy model.
+.. |Maintainance Badge| image:: https://img.shields.io/badge/Status-Maintained-brightgreen
+   :alt: Maintainance Status
+.. |Test Badge| image:: https://img.shields.io/github/actions/workflow/status/edunext/eox-tenant/.github%2Fworkflows%2Ftests.yml?label=Test
+   :alt: GitHub Actions Workflow Test Status
+.. |PyPI Badge| image:: https://img.shields.io/pypi/v/eox-tenant?label=PyPI
+   :alt: PyPI - Version
+   
+Eox-tenant is a multi-tenancy Django app for `edx-platform`_. It is built as an `openedx plugin`_ so even as a Django app it will autoinstall in the larger edx-platform core code once installed in the same Python environment.
 
-If you are looking for professional development or support with multi tenancy or multi sites in the Open edX platform, you can reach out at sales@edunext.co
+The code is written and maintained by `edunex`_ and we use it to support our multi-tenant services. It was initially created as an extension of the `microsites` and `site_configurations` features of the Open edX platform, however, it has grown to completely replace them to support a more robust multitenancy model.
+
+If you are looking for professional development or support with multitenancy or multi-sites in the Open edX platform, you can reach out to sales@edunext.co
 
 .. _openedx plugin: https://github.com/edx/edx-platform/tree/master/openedx/core/djangoapps/plugins
 .. _edx-platform: https://github.com/edx/edx-platform/
 .. _eduNEXT: https://www.edunext.co
 
+Installation
+============
+
+#. Add this plugin in your Tutor ``config.yml`` with the ``OPENEDX_EXTRA_PIP_REQUIREMENTS`` setting.
+
+   .. code-block:: yaml
+      
+      OPENEDX_EXTRA_PIP_REQUIREMENTS:
+         - eox-tenant=={{version}}
+         
+#. Save the configuration with ``tutor config save``.
+#. Build an open edx image with ``tutor images build openedx``.
+#. Launch your platform with ``tutor local launch``.
+
+Usage
+=====
+Onece your instance is running you can access the Django admin site and locate the ``EDUNEXT OPENEDX MULTITENANCY`` models.
+
+- Microsites
+- Routes
+- Tenant configs
+- Tenant organizations
+
+ 
 Compatibility Notes
 --------------------
 
@@ -38,7 +71,7 @@ Compatibility Notes
 | Redwood          | >= v11.7.0            |
 +------------------+-----------------------+
 
-**NOTE**: Since 6.2 version, eox-tenant does not support Django 2.2
+**NOTE**: Since the 6.2 version, eox-tenant does not support Django 2.2
 
 The following changes to the plugin settings are necessary. If the release you are looking for is
 not listed, then the accumulation of changes from previous releases is enough.
@@ -132,10 +165,9 @@ From version **1.0.0**\ , middlewares **RedirectionsMiddleware** and **PathRedir
    The table corresponding to the Redirection model will not be deleted but it will be discarded from the Django state
 
 Commands
-########
-
+--------
 Synchronize Organizations
-*************************
+^^^^^^^^^^^^^^^^^^^^^^^^^
 This command will synchronize the course_org_filter values in lms_configs(TenantConfig model) or values(Microsite model) with the TenantOrganization registers, if the organization does not exist, it will be created, otherwise it will be add to the organizations model field.
 
 
@@ -146,15 +178,15 @@ This command will synchronize the course_org_filter values in lms_configs(Tenant
   ./manage.py lms synchronize_organizations --model Microsite # only for Microsite
 
 Create/Edit tenant configuration
-********************************
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 `create_or_update_tenant_config` helps to add or edit ``TenantConfig`` and linked ``Routes`` via command line.
 
 .. code-block:: bash
 
-  # this command will create/edit entry in TenantConfig with external_key lacolhost.com and update its JSONField(s) with passed json content.
+  # This command will create/edit an entry in TenantConfig with external_key lacolhost.com and update its JSONField(s) with passed JSON content.
   ./manage.py lms create_or_update_tenant_config --external-key lacolhost.com --config '{"lms_configs": {"PLATFORM_NAME": "Lacolhost"}, "studio_configs": {"PLATFORM_NAME": "Lacolhost"}}' lacolhost.com studio.lacolhost.com preview.lacolhost.com
 
-  # this command will create/edit entry in TenantConfig with external_key lacolhost.com and update its JSONField(s) with passed json config file content.
+  # This command will create/edit an entry in TenantConfig with external_key lacolhost.com and update its JSONField(s) with passed JSON config file content.
   ./manage.py lms create_or_update_tenant_config --external-key lacolhost.com --config-file /tmp/some.json lacolhost.com studio.lacolhost.com preview.lacolhost.com
 
   # Same as above, but it will override configuration instead of updating it.
@@ -163,14 +195,14 @@ Create/Edit tenant configuration
 Caveats
 -------
 
-- SSO that uses the LMS while authenticating does so with server-to-server communication. Therefore, when the `AvailableScreenMiddleware` gets the current domain, it finds that `lms:8000` as in `SOCIAL_AUTH_EDX_OAUTH2_URL_ROOT` which does not exist, then raises 404 exception. In order to avoid this error, set in your LMS settings file:
+- SSO that uses the LMS while authenticating does so with server-to-server communication. Therefore, when the `AvailableScreenMiddleware` gets the current domain, it finds that `lms:8000` as in `SOCIAL_AUTH_EDX_OAUTH2_URL_ROOT` which does not exist, then raises a 404 exception. To avoid this error, set in your LMS settings file:
 
 .. code-block:: python
 
   SOCIAL_AUTH_EDX_OAUTH2_URL_ROOT = SOCIAL_AUTH_EDX_OAUTH2_PUBLIC_URL_ROOT
 
 How to Contribute
------------------
+=================
 
 Contributions are welcome! See our `CONTRIBUTING`_ file for more
 information – it also contains guidelines for how to maintain high code
