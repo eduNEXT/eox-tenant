@@ -1,5 +1,5 @@
 ==========
-EOX tenant
+EOX Tenant
 ==========
 |Maintainance Badge| |Test Badge| |PyPI Badge|
 
@@ -87,7 +87,7 @@ For version  11.X compatible
 
   EOX_TENANT_EDX_AUTH_BACKEND = "eox_tenant.edxapp_wrapper.backends.edx_auth_i_v1"
 
-Those settings can be changed in ``eox_tenant/settings/common.py`` or, for example, in ansible configurations.
+Those settings can be changed in ``eox_tenant/settings/common.py`` or, for example, in the instance settings.
 
 **NOTE**
 
