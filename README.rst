@@ -10,9 +10,9 @@ EOX tenant
 .. |PyPI Badge| image:: https://img.shields.io/pypi/v/eox-tenant?label=PyPI
    :alt: PyPI - Version
    
-Eox-tenant is a multi-tenancy Django app for `edx-platform`_. It is built as an `openedx plugin`_ so even as a Django app it will autoinstall in the larger edx-platform core code once installed in the same Python environment.
+Eox-tenant is a multi-tenancy Django app for `edx-platform`_. It is built as an `openedx plugin`_ so even as a Django app it will be auto-installed in the larger edx-platform core code once is installed in the same Python environment.
 
-The code is written and maintained by `edunex`_ and we use it to support our multi-tenant services. It was initially created as an extension of the `microsites` and `site_configurations` features of the Open edX platform, however, it has grown to completely replace them to support a more robust multitenancy model.
+The code is written and maintained by `edunext`_ and we use it to support our multi-tenant services. It was initially created as an extension of the `microsites` and `site_configurations` features of the Open edX platform, however, it has grown to completely replace them to support a more robust multitenancy model.
 
 If you are looking for professional development or support with multitenancy or multi-sites in the Open edX platform, you can reach out to sales@edunext.co
 
@@ -36,13 +36,15 @@ Installation
 
 Usage
 =====
-Onece your instance is running you can access the Django admin site and locate the ``EDUNEXT OPENEDX MULTITENANCY`` models.
 
-- Microsites
-- Routes
-- Tenant configs
-- Tenant organizations
+Once your instance is running, you can access the Django admin site and locate the ``EDUNEXT OPENEDX MULTITENANCY`` models.
 
+- **Microsites:** Store the microsite configuration.
+- **Routes:** Configure the URL for a tenant.
+- **Tenant configs:** Store the configuration for each tenant.
+- **Tenant organizations:** Link each organization with one or multiple tenants.
+
+Add ``EDNX_USE_SIGNAL = True`` in each microsite/tenant that wants to use the plugin. 
  
 Compatibility Notes
 --------------------
@@ -73,102 +75,33 @@ Compatibility Notes
 
 **NOTE**: Since the 6.2 version, eox-tenant does not support Django 2.2
 
-The following changes to the plugin settings are necessary. If the release you are looking for is
-not listed, then the accumulation of changes from previous releases is enough.
+The plugin is configured for the latest release (Quince). The following changes in the plugin settings should be applied to be used for previous releases.
 
-**Ironwood**
-
-.. code-block:: yaml
-
-  GET_BRANDING_API: 'eox_tenant.edxapp_wrapper.backends.branding_api_h_v1'
-  GET_CERTIFICATES_MODULE: 'eox_tenant.edxapp_wrapper.backends.certificates_module_i_v1'
-  GET_SITE_CONFIGURATION_MODULE: 'eox_tenant.edxapp_wrapper.backends.site_configuration_module_i_v1'
-  GET_THEMING_HELPERS: 'eox_tenant.edxapp_wrapper.backends.theming_helpers_h_v1'
-  EOX_TENANT_EDX_AUTH_BACKEND: "eox_tenant.edxapp_wrapper.backends.edx_auth_i_v1"
-  EOX_TENANT_USERS_BACKEND: 'eox_tenant.edxapp_wrapper.backends.users_i_v1'
-  EDXMAKO_MODULE_BACKEND: 'eox_tenant.edxapp_wrapper.backends.edxmako_h_v1'
-  UTILS_MODULE_BACKEND: 'eox_tenant.edxapp_wrapper.backends.util_h_v1'
-
-**Juniper**
-
-For version >= 3.4
-
-.. code-block:: yaml
-
-  GET_OAUTH_DISPATCH_BACKEND: 'eox_tenant.edxapp_wrapper.backends.oauth_dispatch_j_v1'
-
-**Koa (optional)**
-
-.. code-block:: yaml
-
-  GET_BRANDING_API: 'eox_tenant.edxapp_wrapper.backends.branding_api_l_v1'
-  EOX_TENANT_USERS_BACKEND: 'eox_tenant.edxapp_wrapper.backends.users_l_v1'
-  EDXMAKO_MODULE_BACKEND: eox_tenant.edxapp_wrapper.backends.edxmako_l_v1
-
-**Lilac**
-
-.. code-block:: yaml
-
-  GET_BRANDING_API: 'eox_tenant.edxapp_wrapper.backends.branding_api_l_v1'
-  EOX_TENANT_USERS_BACKEND: 'eox_tenant.edxapp_wrapper.backends.users_l_v1'
-  EDXMAKO_MODULE_BACKEND: eox_tenant.edxapp_wrapper.backends.edxmako_l_v1
+If the release you are looking for is not listed, the actual configuration is sufficient or it is incompatible with the current eox-tenant version.
 
 **Maple**
 
+For version  11.X compatible
+
 .. code-block:: yaml
 
-  GET_BRANDING_API: 'eox_tenant.edxapp_wrapper.backends.branding_api_l_v1'
-  EOX_TENANT_USERS_BACKEND: 'eox_tenant.edxapp_wrapper.backends.users_l_v1'
-  EDXMAKO_MODULE_BACKEND: eox_tenant.edxapp_wrapper.backends.edxmako_l_v1
+  EOX_TENANT_EDX_AUTH_BACKEND = "eox_tenant.edxapp_wrapper.backends.edx_auth_i_v1"
 
 Those settings can be changed in ``eox_tenant/settings/common.py`` or, for example, in ansible configurations.
 
-**NOTE**: the current ``common.py`` works with Open edX Redwood version.
+**NOTE**
 
-Migration notes
----------------
-
-**Migrating from 0.* version to 1.0.0**
-
-From version **1.0.0**\ , middlewares **RedirectionsMiddleware** and **PathRedirectionMiddleware** are not longer supported in this plugin.These middlewares were moved to the **eox-core** plugin `here <https://github.com/eduNEXT/eox-core/>`_. From this, you can have three cases:
-
-
-#. You have already installed eox-core alongside eox-tenant. In this case you need to:
-
-   * Upgrade eox-core to version **2.0.0** (previous releases are not compatible with eox-tenant 1.0.0)
-   * Run the plugin migrations as indicated below:
-
-   .. code-block:: bash
-
-     ./manage.py lms migrate eox_tenant --settings=<your app settings>
-     ./manage.py lms migrate eox_core --fake-initial --settings=<your app settings>
-
-
-#. You only have installed eox-tenant and you want to keep the functionality that middlewares offer. You need to:
-
-   * Install eox-core version **2.0.0** as edx-platform requirement. You can use *Ansible* to add this plugin as an extra requirement.
-
-   * Run the plugin migrations as indicated below:
-
-   .. code-block:: bash
-
-     ./manage.py lms migrate eox_tenant --settings=<your app settings>
-     ./manage.py manage.py lms migrate eox_core --fake-initial --settings=<your app settings>
-
-
-#. In the case your are not using the redirection middlewares, and only have eox-tenant installed, you can simply apply the database migrations for the eox-tenant plugin:
-
-   .. code-block:: bash
-
-     ./manage.py manage.py lms migrate eox_tenant --settings=<your app settings>
-
-   The table corresponding to the Redirection model will not be deleted but it will be discarded from the Django state
+For version > 10.0.0 you need to enable eox-tenant adding in the LMS configuration:
+ 
+.. code-block:: yaml
+  
+  USE_EOX_TENANT = True
 
 Commands
 --------
 Synchronize Organizations
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-This command will synchronize the course_org_filter values in lms_configs(TenantConfig model) or values(Microsite model) with the TenantOrganization registers, if the organization does not exist, it will be created, otherwise it will be add to the organizations model field.
+This command will synchronize the course_org_filter values in lms_configs(TenantConfig model) or values(Microsite model) with the TenantOrganization registers if the organization does not exist, it will be created, otherwise, it will be added to the organizations model field.
 
 
 .. code-block:: bash
@@ -192,6 +125,47 @@ Create/Edit tenant configuration
   # Same as above, but it will override configuration instead of updating it.
   ./manage.py lms create_or_update_tenant_config --external-key lacolhost.com --config-file /tmp/some.json lacolhost.com studio.lacolhost.com preview.lacolhost.com --override
 
+
+Migration notes
+===============
+
+**Migrating from 0.* version to 1.0.0**
+
+From version **1.0.0**, middlewares **RedirectionsMiddleware** and **PathRedirectionMiddleware** are no longer supported in this plugin. These middlewares were moved to the **eox-core** plugin `here <https://github.com/eduNEXT/eox-core/>`_. From this, you can have three cases:
+
+
+#. You have already installed eox-core alongside eox-tenant. In this case, you need to:
+
+   * Upgrade eox-core to version **2.0.0** (previous releases are not compatible with eox-tenant 1.0.0)
+   * Run the plugin migrations as indicated below:
+
+   .. code-block:: bash
+
+     ./manage.py lms migrate eox_tenant --settings=<your app settings>
+     ./manage.py lms migrate eox_core --fake-initial --settings=<your app settings>
+
+
+#. You only have installed eox-tenant and you want to keep the functionality that middlewares offer. You need to:
+
+   * Install eox-core version **2.0.0** as edx-platform requirement. You can use *Ansible* to add this plugin as an extra requirement.
+
+   * Run the plugin migrations as indicated below:
+
+   .. code-block:: bash
+
+     ./manage.py lms migrate eox_tenant --settings=<your app settings>
+     ./manage.py manage.py lms migrate eox_core --fake-initial --settings=<your app settings>
+
+
+#. In the case you are not using the redirection middlewares, and only have eox-tenant installed, you can simply apply the database migrations for the eox-tenant plugin:
+
+   .. code-block:: bash
+
+     ./manage.py manage.py lms migrate eox_tenant --settings=<your app settings>
+
+   The table corresponding to the Redirection model will not be deleted but it will be discarded from the Django state
+
+
 Caveats
 -------
 
@@ -209,3 +183,8 @@ information – it also contains guidelines for how to maintain high code
 quality, which will make your contribution more likely to be accepted.
 
 .. _CONTRIBUTING: https://github.com/eduNEXT/eox-tenant/blob/master/CONTRIBUTING.rst
+
+License
+=======
+
+This project is licensed under the AGPL-3.0 License. See the LICENSE file for details.
