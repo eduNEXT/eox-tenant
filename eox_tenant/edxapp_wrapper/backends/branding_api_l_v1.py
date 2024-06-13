@@ -7,7 +7,7 @@ except ImportError:
 
 def get_branding_api():
     """Allow to get the branding api module
-    https://github.com/edx/edx-platform/blob/open-release/lilac.master/lms/djangoapps/branding/api.py
+    https://github.com/openedx/edx-platform/blob/open-release/lilac.master/lms/djangoapps/branding/api.py
 
     Returns:
         branding_api module.

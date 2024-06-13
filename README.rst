@@ -16,8 +16,8 @@ The code is written and maintained by `edunext`_ and we use it to support our mu
 
 If you are looking for professional development or support with multitenancy or multi-sites in the Open edX platform, you can reach out to sales@edunext.co
 
-.. _openedx plugin: https://github.com/edx/edx-platform/tree/master/openedx/core/djangoapps/plugins
-.. _edx-platform: https://github.com/edx/edx-platform/
+.. _openedx plugin: https://github.com/openedx/edx-platform/tree/master/openedx/core/djangoapps/plugins
+.. _edx-platform: https://github.com/openedx/edx-platform/
 .. _eduNEXT: https://www.edunext.co
 
 Installation
