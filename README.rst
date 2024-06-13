@@ -187,4 +187,4 @@ quality, which will make your contribution more likely to be accepted.
 License
 =======
 
-This project is licensed under the AGPL-3.0 License. See the LICENSE file for details.
+This project is licensed under the AGPL-3.0 License. See the `LICENSE <LICENSE.txt>`_ file for details.
