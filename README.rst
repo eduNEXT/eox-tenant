@@ -35,6 +35,8 @@ Compatibility Notes
 +------------------+-----------------------+
 | Quince           | >= v11.0.0            |
 +------------------+-----------------------+
+| Redwood          | >= v11.7.0            |
++------------------+-----------------------+
 
 **NOTE**: Since 6.2 version, eox-tenant does not support Django 2.2
 
@@ -88,7 +90,7 @@ For version >= 3.4
 
 Those settings can be changed in ``eox_tenant/settings/common.py`` or, for example, in ansible configurations.
 
-**NOTE**: the current ``common.py`` works with Open edX juniper version.
+**NOTE**: the current ``common.py`` works with Open edX Redwood version.
 
 Migration notes
 ---------------
