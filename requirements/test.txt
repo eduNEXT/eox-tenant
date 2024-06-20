@@ -10,8 +10,9 @@ asgiref==3.8.1
     #   django
 astroid==3.2.2
     # via pylint
-backports-zoneinfo==0.2.1
+backports-zoneinfo==0.2.1 ; python_version < "3.9"
     # via
+    #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   django
     #   djangorestframework
@@ -73,7 +74,7 @@ django-model-utils==4.5.1
     # via
     #   -r requirements/base.txt
     #   edx-organizations
-django-mysql==4.13.0
+django-mysql==4.14.0
     # via -r requirements/base.txt
 django-simple-history==3.0.0
     # via
@@ -85,7 +86,7 @@ django-waffle==4.1.0
     #   -r requirements/base.txt
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.15.1
+djangorestframework==3.15.2
     # via
     #   -r requirements/base.txt
     #   drf-jwt
@@ -151,7 +152,7 @@ pillow==10.3.0
     #   edx-organizations
 platformdirs==4.2.2
     # via pylint
-psutil==5.9.8
+psutil==6.0.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils

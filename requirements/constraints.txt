@@ -12,3 +12,6 @@ Django<5
 
 # Common constraints for Open edX repos
 -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
+
+# backports.zoneinfo is only needed for Python < 3.9
+backports.zoneinfo; python_version<'3.9'
