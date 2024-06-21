@@ -16,5 +16,6 @@ Django<5
 # backports.zoneinfo is only needed for Python < 3.9
 backports.zoneinfo; python_version<'3.9'
 
-# Adding pin to avoid any major upgrade
+# Adding pin to avoid any major upgrade.
+# 3.15.1 is the latest version that works with Django 3.2
 djangorestframework<3.15.2
