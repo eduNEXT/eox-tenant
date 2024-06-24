@@ -42,7 +42,7 @@ def plugin_settings(settings):
     settings.GET_SITE_CONFIGURATION_MODULE = 'eox_tenant.edxapp_wrapper.backends.site_configuration_module_i_v1'
     settings.GET_THEMING_HELPERS = 'eox_tenant.edxapp_wrapper.backends.theming_helpers_h_v1'
     settings.EOX_TENANT_EDX_AUTH_BACKEND = "eox_tenant.edxapp_wrapper.backends.edx_auth_n_v1"
-    settings.EOX_TENANT_USERS_BACKEND = 'eox_tenant.edxapp_wrapper.backends.users_l_v1'
+    settings.EOX_TENANT_USERS_BACKEND = 'eox_tenant.edxapp_wrapper.backends.users_p_v1'
     settings.EOX_TENANT_BEARER_AUTHENTICATION = 'eox_tenant.edxapp_wrapper.backends.bearer_authentication_l_v1'
     settings.EOX_MAX_CONFIG_OVERRIDE_SECONDS = 300
     settings.EDXMAKO_MODULE_BACKEND = 'eox_tenant.edxapp_wrapper.backends.edxmako_l_v1'
