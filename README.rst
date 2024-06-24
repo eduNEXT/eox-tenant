@@ -10,15 +10,11 @@ EOX Tenant
 .. |PyPI Badge| image:: https://img.shields.io/pypi/v/eox-tenant?label=PyPI
    :alt: PyPI - Version
    
-Eox-tenant is a multi-tenancy Django app for `edx-platform`_. It is built as an `openedx plugin`_ so even as a Django app it will be auto-installed in the larger edx-platform core code once is installed in the same Python environment.
-
-The code is written and maintained by `edunext`_ and we use it to support our multi-tenant services. It was initially created as an extension of the `microsites` and `site_configurations` features of the Open edX platform, however, it has grown to completely replace them to support a more robust multitenancy model.
+Eox-tenant is a plugin for `Open edX`_, and part of the Edunext Open Extensions (aka EOX), that replaces the microsites and site_configurations features, offering a more robust multi-tenancy model.
 
 If you are looking for professional development or support with multitenancy or multi-sites in the Open edX platform, you can reach out to sales@edunext.co
 
-.. _openedx plugin: https://github.com/openedx/edx-platform/tree/master/openedx/core/djangoapps/plugins
-.. _edx-platform: https://github.com/openedx/edx-platform/
-.. _eduNEXT: https://www.edunext.co
+.. _Open edX: https://github.com/openedx/edx-platform/
 
 Installation
 ============
@@ -31,8 +27,7 @@ Installation
          - eox-tenant=={{version}}
          
 #. Save the configuration with ``tutor config save``.
-#. Build an open edx image with ``tutor images build openedx``.
-#. Launch your platform with ``tutor local launch``.
+#. Build the image and launch your platform with ``tutor local launch``.
 
 Usage
 =====
@@ -45,7 +40,7 @@ Once your instance is running, you can access the Django admin site and locate t
 - **Tenant organizations:** Link each organization with one or multiple tenants.
 
 Add ``EDNX_USE_SIGNAL = True`` in each microsite/tenant that wants to use the plugin. 
- 
+
 Compatibility Notes
 --------------------
 
@@ -73,7 +68,7 @@ Compatibility Notes
 | Redwood          | >= v11.7.0            |
 +------------------+-----------------------+
 
-**NOTE**: Since the 6.2 version, eox-tenant does not support Django 2.2
+⚠️ Since the 6.2 version, eox-tenant does not support Django 2.2
 
 The plugin is configured for the latest release (Quince). The following changes in the plugin settings should be applied to be used for previous releases.
 
@@ -89,18 +84,20 @@ For version  11.X compatible
 
 Those settings can be changed in ``eox_tenant/settings/common.py`` or, for example, in the instance settings.
 
-**NOTE**
+If you are installing a previous version, please refer to the tag to verify the configuration that should be applied.
 
-For version > 10.0.0 you need to enable eox-tenant adding in the LMS configuration:
- 
+🚨 For version > 10.0.0 you need to enable eox-tenant adding in the LMS configuration:
+
 .. code-block:: yaml
   
   USE_EOX_TENANT = True
 
 Commands
 --------
+
 Synchronize Organizations
 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
 This command will synchronize the course_org_filter values in lms_configs(TenantConfig model) or values(Microsite model) with the TenantOrganization registers if the organization does not exist, it will be created, otherwise, it will be added to the organizations model field.
 
 
@@ -112,6 +109,7 @@ This command will synchronize the course_org_filter values in lms_configs(Tenant
 
 Create/Edit tenant configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 `create_or_update_tenant_config` helps to add or edit ``TenantConfig`` and linked ``Routes`` via command line.
 
 .. code-block:: bash
@@ -131,7 +129,7 @@ Migration notes
 
 **Migrating from 0.* version to 1.0.0**
 
-From version **1.0.0**, middlewares **RedirectionsMiddleware** and **PathRedirectionMiddleware** are no longer supported in this plugin. These middlewares were moved to the **eox-core** plugin `here <https://github.com/eduNEXT/eox-core/>`_. From this, you can have three cases:
+From version **1.0.0**, **RedirectionsMiddleware** and **PathRedirectionMiddleware** are no longer supported in this plugin. These middleware were moved to the **eox-core** plugin `here <https://github.com/eduNEXT/eox-core/>`_. From this, you can have three cases:
 
 
 #. You have already installed eox-core alongside eox-tenant. In this case, you need to:
@@ -145,7 +143,7 @@ From version **1.0.0**, middlewares **RedirectionsMiddleware** and **PathRedirec
      ./manage.py lms migrate eox_core --fake-initial --settings=<your app settings>
 
 
-#. You only have installed eox-tenant and you want to keep the functionality that middlewares offer. You need to:
+#. You only have installed eox-tenant and you want to keep the functionality that middleware offer. You need to:
 
    * Install eox-core version **2.0.0** as edx-platform requirement. You can use *Ansible* to add this plugin as an extra requirement.
 
@@ -157,14 +155,13 @@ From version **1.0.0**, middlewares **RedirectionsMiddleware** and **PathRedirec
      ./manage.py manage.py lms migrate eox_core --fake-initial --settings=<your app settings>
 
 
-#. In the case you are not using the redirection middlewares, and only have eox-tenant installed, you can simply apply the database migrations for the eox-tenant plugin:
+#. In the case you are not using the redirection middleware, and only have eox-tenant installed, you can simply apply the database migrations for the eox-tenant plugin:
 
    .. code-block:: bash
 
      ./manage.py manage.py lms migrate eox_tenant --settings=<your app settings>
 
    The table corresponding to the Redirection model will not be deleted but it will be discarded from the Django state
-
 
 Caveats
 -------
