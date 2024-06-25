@@ -18,7 +18,7 @@ EOX_TENANT_MIDDLEWARES = [
 def plugin_settings(settings):  # pylint: disable=function-redefined
     """
     Set of plugin settings used by the Open Edx platform.
-    More info: https://github.com/edx/edx-platform/blob/master/openedx/core/djangoapps/plugins/README.rst
+    More info: https://github.com/openedx/edx-platform/blob/master/openedx/core/djangoapps/plugins/README.rst
     """
     # Backend settings.
     settings.CONTENTSTORE_PATH = getattr(settings, 'ENV_TOKENS', {}).get(
