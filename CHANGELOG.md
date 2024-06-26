@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Integration Tests**: A new GitHub workflow was added to run the integration
-  tests. An integration test was included to validate backend imports and
-  another to validate that the `/eox-info` endpoint works correctly.
+- **Integration Tests**: A new GitHub workflow has been added to run
+  integration tests. Integration test has been included to validate backend
+  imports and to ensure the `/eox-info` endpoint works correctly.
 
 ### Changed
 
