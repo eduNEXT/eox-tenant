@@ -6,8 +6,9 @@
 #
 asgiref==3.8.1
     # via django
-backports-zoneinfo==0.2.1
+backports-zoneinfo==0.2.1 ; python_version < "3.9"
     # via
+    #   -c requirements/constraints.txt
     #   django
     #   djangorestframework
 certifi==2024.6.2
@@ -50,7 +51,7 @@ django-crum==0.7.9
     #   edx-django-utils
 django-model-utils==4.5.1
     # via edx-organizations
-django-mysql==4.13.0
+django-mysql==4.14.0
     # via -r requirements/base.in
 django-simple-history==3.0.0
     # via
@@ -62,6 +63,7 @@ django-waffle==4.1.0
     #   edx-drf-extensions
 djangorestframework==3.15.1
     # via
+    #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
@@ -76,7 +78,7 @@ edx-drf-extensions==10.3.0
     # via
     #   -r requirements/base.in
     #   edx-organizations
-edx-opaque-keys[django]==2.9.0
+edx-opaque-keys[django]==2.10.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
@@ -87,19 +89,19 @@ idna==3.7
     # via requests
 jsonfield==3.1.0
     # via -r requirements/base.in
-newrelic==9.10.0
+newrelic==9.11.0
     # via edx-django-utils
 oauthlib==3.2.2
     # via
     #   requests-oauthlib
     #   social-auth-core
-openedx-filters==1.8.1
+openedx-filters==1.9.0
     # via -r requirements/base.in
 pbr==6.0.0
     # via stevedore
 pillow==10.3.0
     # via edx-organizations
-psutil==5.9.8
+psutil==6.0.0
     # via edx-django-utils
 pycparser==2.22
     # via cffi
@@ -108,7 +110,7 @@ pyjwt[crypto]==2.8.0
     #   drf-jwt
     #   edx-drf-extensions
     #   social-auth-core
-pymongo==4.4.0
+pymongo==4.7.3
     # via edx-opaque-keys
 pynacl==1.5.0
     # via edx-django-utils
@@ -133,11 +135,11 @@ stevedore==5.2.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
-typing-extensions==4.12.1
+typing-extensions==4.12.2
     # via
     #   asgiref
     #   edx-opaque-keys
-urllib3==2.2.1
+urllib3==2.2.2
     # via requests
 
 # The following packages are considered to be unsafe in a requirements file:
