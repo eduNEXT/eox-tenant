@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v11.7.0](https://github.com/eduNEXT/eox-tenant/compare/v11.6.0...v11.7.0) - (2024-06-19)
 
+### Added
+
+- **Integration Tests**: A new GitHub workflow has been added to run
+  integration tests. These tests validate backend imports and ensure the
+  `/eox-info` endpoint functions correctly.
+
 ### Changed
 
 - **Redwood Support**: Upgrade requirements base on edx-platform redwood
