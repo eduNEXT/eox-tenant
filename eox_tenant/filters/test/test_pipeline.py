@@ -8,7 +8,7 @@ import mock
 from django.test import TestCase, override_settings
 from openedx_filters.learning.filters import CertificateRenderStarted, CourseEnrollmentQuerysetRequested
 
-from eox_tenant.filters.pipeline import FilterRenderCertificatesByOrg
+from eox_tenant.filters.pipeline import FilterRenderCertificatesByOrg, FilterTenantAwareLinksFromStudio
 from eox_tenant.tenant_aware_functions.enrollments import filter_enrollments
 
 
@@ -161,3 +161,47 @@ class FilterRenderCertificatesByOrgTestCase(TestCase):
         else:
             FilterRenderCertificatesByOrg.run_filter(self, context, {})
             mock_get_organizations.assert_called_once()
+
+
+class FilterTenantAwareLinksFromStudioTestCase(TestCase):
+    """
+    FilterTenantAwareLinksFromStudioTestCase test cases.
+    """
+
+    def setUp(self):
+        """This method creates Microsite objects in database"""
+
+        # Creating mock to render tenant aware links
+        self.context = "https://lms-base"
+        self.org = "test"
+        self.val_name='LMS_ROOT_URL'
+        self.default = "https://lms-base"
+
+    @override_settings(
+        OPEN_EDX_FILTERS_CONFIG= {
+            "org.openedx.learning.tenant_aware_link.render.started.v1": {
+                "fail_silently": False,
+                "pipeline": [
+                    "eox_tenant.filters.pipeline.TenantAwareLinksFromStudio"
+                ]
+            }
+        },
+        LMS_ROOT_URL="https://test-tenant-aware-link"
+    )
+    @mock.patch('openedx.core.djangoapps.site_configuration.helpers.get_value_for_org')
+    def test_tenant_aware_link_from_studio(self, get_value_for_org_mock):
+        """
+        Test that filter tenant aware link get value for org.
+        """
+        results_get_value = "https://test-tenant-aware-link"
+
+        get_value_for_org_mock.return_value = results_get_value
+
+        lms_root = FilterTenantAwareLinksFromStudio.run_filter(
+            context=self.context,
+            org=self.org,
+            val_name=self.val_name,
+            default=self.default
+        )
+
+        self.assertEqual(results_get_value, lms_root)
