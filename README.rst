@@ -10,7 +10,7 @@ EOX Tenant
 .. |PyPI Badge| image:: https://img.shields.io/pypi/v/eox-tenant?label=PyPI
    :alt: PyPI - Version
    
-Eox-tenant is a plugin for `Open edX`_, and part of the Edunext Open Extensions (aka EOX), that replaces the microsites and site_configurations features, offering a more robust multi-tenancy model.
+Eox-tenant is a plugin for `Open edX`_, and part of the Edunext Open edX Extensions (aka EOX), that replaces the microsites and site_configurations features, offering a more robust multi-tenancy model.
 
 If you are looking for professional development or support with multitenancy or multi-sites in the Open edX platform, you can reach out to sales@edunext.co
 
@@ -44,35 +44,33 @@ Add ``EDNX_USE_SIGNAL = True`` in each microsite/tenant that wants to use the pl
 Compatibility Notes
 --------------------
 
-+------------------+-----------------------+
-| Open edX Release | Version               |
-+==================+=======================+
-| Ironwood         | < 3.0                 |
-+------------------+-----------------------+
-| Juniper          | >= 3.0 < 4.0          |
-+------------------+-----------------------+
-| Koa              | >= 4.0 <= 5.1.3       |
-+------------------+-----------------------+
-| Lilac            | >= 4.0 < 6.2          |
-+------------------+-----------------------+
-| Maple            | >= 6.0                |
-+------------------+-----------------------+
-| Nutmeg           | >= 6.2                |
-+------------------+-----------------------+
-| Olive            | >= 8.0                |
-+------------------+-----------------------+
-| Palm             | >= v11.7.0            |
-+------------------+-----------------------+
-| Quince           | >= v11.7.0            |
-+------------------+-----------------------+
-| Redwood          | >= v11.7.0            |
-+------------------+-----------------------+
++------------------+-----------------+
+| Open edX Release | Version         |
++==================+=================+
+| Ironwood         | < 3.0           |
++------------------+-----------------+
+| Juniper          | >= 3.0 < 4.0    |
++------------------+-----------------+
+| Koa              | >= 4.0 <= 5.1.3 |
++------------------+-----------------+
+| Lilac            | >= 4.0 < 6.2    |
++------------------+-----------------+
+| Maple            | >= 6.0          |
++------------------+-----------------+
+| Nutmeg           | >= 6.2          |
++------------------+-----------------+
+| Olive            | >= 8.0          |
++------------------+-----------------+
+| Palm             | >= v11.7.0      |
++------------------+-----------------+
+| Quince           | >= v11.7.0      |
++------------------+-----------------+
+| Redwood          | >= v11.7.0      |
++------------------+-----------------+
 
 ⚠️ Since the 6.2 version, eox-tenant does not support Django 2.2
 
-The plugin is configured for the latest release (Quince). The following changes in the plugin settings should be applied to be used for previous releases.
-
-If the release you are looking for is not listed, the actual configuration is sufficient or it is incompatible with the current eox-tenant version.
+The plugin is configured for the latest release (Redwood). The following changes in the plugin settings should be applied to be used for previous releases.
 
 **Maple**
 
@@ -84,7 +82,10 @@ For version  11.X compatible
 
 Those settings can be changed in ``eox_tenant/settings/common.py`` or, for example, in the instance settings.
 
-If you are installing a previous version, please refer to the tag to verify the configuration that should be applied.
+🚨 If the release you are looking for is not listed, please note:
+
+- If the Open edX release is compatible with the current eox-tenant version (see `Compatibility Notes <https://github.com/eduNEXT/eox-tenant?tab=readme-ov-file#compatibility-notes>`_), the default configuration is sufficient.
+- If incompatible, you can refer to the README from the relevant version tag for configuration details (e.g., `v6.2.0 README <https://github.com/eduNEXT/eox-tenant/blob/v6.2.0/README.rst>`_).
 
 🚨 For version > 10.0.0 you need to enable eox-tenant adding in the LMS configuration:
 
