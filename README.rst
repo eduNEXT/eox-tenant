@@ -87,7 +87,7 @@ Those settings can be changed in ``eox_tenant/settings/common.py`` or, for examp
 - If the Open edX release is compatible with the current eox-tenant version (see `Compatibility Notes <https://github.com/eduNEXT/eox-tenant?tab=readme-ov-file#compatibility-notes>`_), the default configuration is sufficient.
 - If incompatible, you can refer to the README from the relevant version tag for configuration details (e.g., `v6.2.0 README <https://github.com/eduNEXT/eox-tenant/blob/v6.2.0/README.rst>`_).
 
-🚨 For version > 10.0.0 you need to enable eox-tenant adding in the LMS configuration:
+🚨 For version < 10.0.0 you need to enable eox-tenant adding in the LMS configuration:
 
 .. code-block:: yaml
   
