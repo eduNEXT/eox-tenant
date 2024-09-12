@@ -7,12 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tutor_version: ["<17.0.0", "<18.0.0", "<19.0.0"]
+        tutor_version: ["<17.0.0", "<18.0.0", "<19.0.0", "nightly"]
     steps:
       - uses: actions/checkout@v4
         with:
           path: eox-tenant
-      - uses: eduNEXT/integration-test-in-tutor@main
+      - uses: eduNEXT/integration-test-in-tutor@dcoa/test-int-nightly
         with:
           tutor_version: ${{ matrix.tutor_version }}
           app_name: "eox-tenant"
