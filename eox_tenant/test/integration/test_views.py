@@ -1,32 +1,38 @@
 """
 Test integration file.
 """
-from django.test import TestCase, override_settings
+import requests
+from django.conf import settings as ds
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+
+settings = ds.INTEGRATION_TEST_SETTINGS
 
 
-@override_settings(ALLOWED_HOSTS=['testserver'], SITE_ID=2)
-class TutorIntegrationTestCase(TestCase):
+class TestInfoView(TestCase):
     """
-    Tests integration with openedx
+    Integration test suite for the info view.
     """
 
     def setUp(self):
         """
-        Set up the base URL for the tests
+        Set up the test suite.
         """
-        self.base_url = 'http://local.edly.io'
+        self.url = f"{settings['EOX_TENANT_API_BASE']}{reverse('eox-info')}"
+        super().setUp()
 
-    def test_info_view(self):
+    def test_info_view_success(self) -> None:
+        """Test the info view.
+
+        Expected result:
+        - The status code is 200.
+        - The response contains the version, name and git commit hash.
         """
-        Tests the info view endpoint in Tutor
-        """
-        info_view_url = f'{self.base_url}/eox-tenant/eox-info'
-
-        response = self.client.get(info_view_url)
-
-        self.assertEqual(response.status_code, 200)
+        response = requests.get(self.url)
 
         response_data = response.json()
-        self.assertIn('version', response_data)
-        self.assertIn('name', response_data)
-        self.assertIn('git', response_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("version", response_data)
+        self.assertIn("name", response_data)
+        self.assertIn("git", response_data)
