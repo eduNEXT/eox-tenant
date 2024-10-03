@@ -27,6 +27,7 @@ requirements: ## install environment requirements
 
 install-dev-dependencies: ## install tox
 	pip install -r requirements/tox.txt
+	pip install -r requirements/test.txt
 
 upgrade: export CUSTOM_COMPILE_COMMAND=make upgrade
 upgrade: ## update the requirements/*.txt files with the latest packages satisfying requirements/*.in
