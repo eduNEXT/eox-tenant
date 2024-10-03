@@ -100,6 +100,7 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
         env_tokens = yaml.safe_load(f)
     settings.DATABASES = env_tokens['DATABASES']
 
+
 # Integration test settings
 INTEGRATION_TEST_SETTINGS = {
     "EOX_TENANT_API_BASE": "eox-tenant",
