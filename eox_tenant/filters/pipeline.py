@@ -63,7 +63,7 @@ class FilterRenderCertificatesByOrg(PipelineStep):
         )
 
 
-class FilterTenantAwareLinksFromStudio(PipelineStep):
+class OrgAwareLMSURLStudio(PipelineStep):
     """
     Filter tenant aware links from Studio.
     """
@@ -94,3 +94,24 @@ class FilterTenantAwareLinksFromStudio(PipelineStep):
             settings.LMS_ROOT_URL
         )
         return {"url": lms_root, "org": org}
+
+
+class OrgAwareCourseAboutPageURL(PipelineStep):
+    """
+    Filter tenant aware links from LMS.
+    """
+
+    def run_filter(self, url, org):  # pylint: disable=arguments-differ,unused-argument
+        """
+        The url looks like this:
+        <LMS_ROOT>/courses/course-v1:org+course+number/about
+
+        This method will filter the url to be tenant aware.
+        """
+        lms_root = configuration_helpers.get_value_for_org(
+            org,
+            'LMS_ROOT_URL',
+            settings.LMS_ROOT_URL
+        )
+        course_about_url = url.replace(settings.LMS_ROOT_URL, lms_root)
+        return {"url": course_about_url, "org": org}
