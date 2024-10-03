@@ -49,7 +49,7 @@ quality: clean ## check coding style with pycodestyle and pylint
 
 test-python: clean ## Run test suite.
 	$(TOX) pip install -r requirements/test.txt --exists-action w
-	$(TOX) coverage run --source ./eox_tenant manage.py test
+	$(TOX) coverage run --source="." -m pytest ./eox_tenant --ignore-glob='**/integration/*'
 	$(TOX) coverage report -m --fail-under=71
 
 run-tests: test-python quality
