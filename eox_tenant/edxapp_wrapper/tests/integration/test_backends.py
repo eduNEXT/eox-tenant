@@ -4,7 +4,7 @@ This module tests the backends of the edxapp_wrapper
 
 
 # pylint: disable=import-outside-toplevel,unused-import
-def test_current_settings_code_imports(self):
+def test_current_settings_code_imports():
     """
     Running this imports means that our backends import the right signature
     """
