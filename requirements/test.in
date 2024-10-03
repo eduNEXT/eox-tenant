@@ -5,6 +5,8 @@ django-fake-model
 ddt
 pycodestyle
 pylint
+pytest
+pytest-django
 coverage
 mock
 testfixtures
