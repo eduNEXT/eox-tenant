@@ -65,7 +65,7 @@ class FilterRenderCertificatesByOrg(PipelineStep):
 
 class OrgAwareLMSURLStudio(PipelineStep):
     """
-    Filter tenant aware links from Studio.
+    Generates a new LMS URL for asset URL generation based on the course organization settings.
     """
 
     def run_filter(self, url, org):  # pylint: disable=arguments-differ,unused-argument
@@ -92,7 +92,7 @@ class OrgAwareLMSURLStudio(PipelineStep):
 
 class OrgAwareCourseAboutPageURL(PipelineStep):
     """
-    Filter tenant aware links from LMS.
+    Generates a new course about URL based on the course organization settings.
     """
 
     def run_filter(self, url, org):  # pylint: disable=arguments-differ,unused-argument

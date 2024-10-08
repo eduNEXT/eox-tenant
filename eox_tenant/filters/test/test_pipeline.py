@@ -163,15 +163,15 @@ class FilterRenderCertificatesByOrgTestCase(TestCase):
             mock_get_organizations.assert_called_once()
 
 
-class FilterOrgAwareLMSURLStudioTestCase(TestCase):
+class OrgAwareLMSURLStudioTestCase(TestCase):
     """
-    FilterOrgAwareLMSURLStudioTestCase test cases.
+    Test OrgAwareLMSURLStudioTestCase that generates a new LMS URL for asset URL generation
+    based on the course organization settings.
     """
 
     def setUp(self):
-        """This method creates Microsite objects in database"""
+        """This method initializes the URL and ORG variables for the pipeline"""
 
-        # Creating mock to render tenant aware links
         self.url = "https://lms-base"
         self.org = "test"
 
@@ -187,9 +187,20 @@ class FilterOrgAwareLMSURLStudioTestCase(TestCase):
         LMS_ROOT_URL="https://lms-base"
     )
     @mock.patch('eox_tenant.filters.pipeline.configuration_helpers')
-    def test_org_aware_lms_url_studio(self, configuration_helpers_mock):
+    def test_get_lms_url_based_for_org(self, configuration_helpers_mock):
         """
-        Test that filter tenant aware link get value for org.
+        Test that filter get new LMS URL for asset URL generation
+        based on the course organization settings for org.
+
+        Args:
+            configuration_helpers_mock (patch): mock for configuration_helpers method.
+
+        In the ddt data the following structure is being passed:
+        [organizations, render]
+
+        Expected result:
+        - The url return is equal to expected.
+        - The org return is equal to expected.
         """
         results_get_value = "https://test-tenant-aware-link"
 
@@ -205,15 +216,15 @@ class FilterOrgAwareLMSURLStudioTestCase(TestCase):
         self.assertEqual(result.get("org"), self.org)
 
 
-class FilterOrgAwareCourseAboutPageURLTestCase(TestCase):
+class OrgAwareCourseAboutPageURLTestCase(TestCase):
     """
-    FilterOrgAwareCourseAboutPageURLTestCase test cases.
+    Test OrgAwareCourseAboutPageURLTestCase that generates a new course about URL based
+    on the course organization settings.
     """
 
     def setUp(self):
-        """This method creates Microsite objects in database"""
+        """This method initializes the URL and ORG variables for the pipeline"""
 
-        # Creating mock to render tenant aware links
         self.url = "https://lms-base"
         self.org = "test"
 
@@ -229,9 +240,20 @@ class FilterOrgAwareCourseAboutPageURLTestCase(TestCase):
         LMS_ROOT_URL="https://lms-base"
     )
     @mock.patch('eox_tenant.filters.pipeline.configuration_helpers')
-    def test_org_aware_course_about_page_url_studio(self, configuration_helpers_mock):
+    def test_get_course_about_url_based_for_org(self, configuration_helpers_mock):
         """
-        Test that filter tenant aware link get value for org.
+        Test that filter get new course about URL based
+        on the course organization settings for org.
+
+        Args:
+            configuration_helpers_mock (patch): mock for configuration_helpers method.
+
+        In the ddt data the following structure is being passed:
+        [organizations, render]
+
+        Expected result:
+        - The url return is equal to expected.
+        - The org return is equal to expected.
         """
         results_get_value = "https://test-tenant-aware-link"
 

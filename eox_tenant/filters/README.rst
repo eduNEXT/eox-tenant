@@ -14,8 +14,8 @@ Filters steps list:
 
 * `FilterUserCourseEnrollmentsByTenant`_: Filters the course enrollments of a user from the tenant site where the request is made.
 * `FilterRenderCertificatesByOrg`_: Stop certificate generation process raising a exception if course org is different to tenant orgs.
-* `OrgAwareLMSURLStudio`_: Filter specific org aware link form Studio to the LMS.
-* `OrgAwareCourseAboutPageURL`_: Filter specific org aware course about page URL from Studio to the LMS.
+* `OrgAwareLMSURLStudio`_: Generates a new LMS URL for asset URL generation based on the course organization settings.
+* `OrgAwareCourseAboutPageURL`_: Generates a new course about URL based on the course organization settings.
 
 .. _FilterUserCourseEnrollmentsByTenant: ./pipeline.py#L12
 .. _FilterRenderCertificatesByOrg: ./pipeline.py#L35
