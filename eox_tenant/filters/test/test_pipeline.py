@@ -176,14 +176,6 @@ class OrgAwareLMSURLStudioTestCase(TestCase):
         self.org = "test"
 
     @override_settings(
-        OPEN_EDX_FILTERS_CONFIG={
-            "org.openedx.learning.tenant_aware_link.render.started.v1": {
-                "fail_silently": False,
-                "pipeline": [
-                    "eox_tenant.filters.pipeline.OrgAwareLMSURLStudio"
-                ]
-            }
-        },
         LMS_ROOT_URL="https://lms-base"
     )
     @mock.patch('eox_tenant.filters.pipeline.configuration_helpers')
@@ -194,9 +186,6 @@ class OrgAwareLMSURLStudioTestCase(TestCase):
 
         Args:
             configuration_helpers_mock (patch): mock for configuration_helpers method.
-
-        In the ddt data the following structure is being passed:
-        [organizations, render]
 
         Expected result:
         - The url return is equal to expected.
@@ -229,14 +218,6 @@ class OrgAwareCourseAboutPageURLTestCase(TestCase):
         self.org = "test"
 
     @override_settings(
-        OPEN_EDX_FILTERS_CONFIG={
-            "org.openedx.learning.tenant_aware_link.render.started.v1": {
-                "fail_silently": False,
-                "pipeline": [
-                    "eox_tenant.filters.pipeline.OrgAwareCourseAboutPageURL"
-                ]
-            }
-        },
         LMS_ROOT_URL="https://lms-base"
     )
     @mock.patch('eox_tenant.filters.pipeline.configuration_helpers')
@@ -247,9 +228,6 @@ class OrgAwareCourseAboutPageURLTestCase(TestCase):
 
         Args:
             configuration_helpers_mock (patch): mock for configuration_helpers method.
-
-        In the ddt data the following structure is being passed:
-        [organizations, render]
 
         Expected result:
         - The url return is equal to expected.
