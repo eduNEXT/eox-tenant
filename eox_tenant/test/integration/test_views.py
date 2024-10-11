@@ -29,7 +29,7 @@ class TestInfoView(TestCase):
         - The status code is 200.
         - The response contains the version, name and git commit hash.
         """
-        response = requests.get(self.url)
+        response = requests.get(self.url, timeout=settings["API_TIMEOUT"])
 
         response_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
