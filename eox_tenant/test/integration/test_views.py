@@ -19,7 +19,7 @@ class TestInfoView(TestCase):
         """
         Set up the test suite.
         """
-        self.url = f"{settings['EOX_TENANT_API_BASE']}{reverse('eox-info')}"
+        self.url = f"{settings['EOX_TENANT_BASE_URL']}{reverse('eox-info')}"
         super().setUp()
 
     def test_info_view_success(self) -> None:
