@@ -15,7 +15,7 @@ class TestInfoView(TestCase):
     Integration test suite for the info view.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         """
         Set up the test suite.
         """
