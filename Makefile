@@ -42,8 +42,7 @@ upgrade: ## update the requirements/*.txt files with the latest packages satisfy
 	sed '/^[dD]jango==/d;' requirements/test.txt > requirements/test.tmp
 	mv requirements/test.tmp requirements/test.txt
 
-run-integration-tests:
-	make install-dev-dependencies
+run-integration-tests: install-dev-dependencies
 	pytest -rPf ./eox_tenant/test/integration
 
 quality: clean ## check coding style with pycodestyle and pylint
