@@ -15,13 +15,6 @@ class TestInfoView(TestCase):
     Integration test suite for the info view.
     """
 
-    def setUp(self) -> None:
-        """
-        Set up the test suite.
-        """
-        self.url = f"{settings['EOX_TENANT_BASE_URL']}{reverse('eox-info')}"
-        super().setUp()
-
     def test_info_view_success(self) -> None:
         """Test the info view.
 
@@ -29,7 +22,9 @@ class TestInfoView(TestCase):
         - The status code is 200.
         - The response contains the version, name and git commit hash.
         """
-        response = requests.get(self.url, timeout=settings["API_TIMEOUT"])
+        url = f"{settings['EOX_TENANT_BASE_URL']}{reverse('eox-info')}"
+
+        response = requests.get(url, timeout=settings["API_TIMEOUT"])
 
         response_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
