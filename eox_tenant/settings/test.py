@@ -99,3 +99,11 @@ def plugin_settings(settings):  # pylint: disable=function-redefined
     with codecs.open(os.environ['LMS_CFG'], encoding='utf-8') as f:
         env_tokens = yaml.safe_load(f)
     settings.DATABASES = env_tokens['DATABASES']
+
+
+# Integration test settings
+INTEGRATION_TEST_SETTINGS = {
+    # Retrieved from the Tutor environment where the integration tests run
+    "EOX_TENANT_BASE_URL": f"http://{os.environ.get('LMS_HOST', 'local.edly.io')}/eox-tenant",
+    "API_TIMEOUT": 5,
+}
