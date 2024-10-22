@@ -41,6 +41,10 @@ upgrade: ## update the requirements/*.txt files with the latest packages satisfy
 	sed '/^[dD]jango==/d;' requirements/test.txt > requirements/test.tmp
 	mv requirements/test.tmp requirements/test.txt
 
+run-integration-tests:
+	pip install -r requirements/test.txt
+	pytest -rPf ./eox_tenant/test/integration
+
 quality: clean ## check coding style with pycodestyle and pylint
 	$(TOX) pycodestyle ./eox_tenant
 	$(TOX) pylint ./eox_tenant --rcfile=./setup.cfg
@@ -48,7 +52,7 @@ quality: clean ## check coding style with pycodestyle and pylint
 
 test-python: clean ## Run test suite.
 	$(TOX) pip install -r requirements/test.txt --exists-action w
-	$(TOX) coverage run --source ./eox_tenant manage.py test
+	$(TOX) coverage run --source="." -m pytest ./eox_tenant --ignore-glob='**/integration/*'
 	$(TOX) coverage report -m --fail-under=71
 
 run-tests: test-python quality
