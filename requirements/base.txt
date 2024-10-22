@@ -21,7 +21,7 @@ charset-normalizer==3.4.0
     # via requests
 click==8.1.7
     # via edx-django-utils
-cryptography==43.0.1
+cryptography==43.0.3
     # via
     #   pyjwt
     #   social-auth-core
@@ -61,9 +61,8 @@ django-waffle==4.1.0
     # via
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.15.1
+djangorestframework==3.15.2
     # via
-    #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
@@ -72,7 +71,7 @@ dnspython==2.6.1
     # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
-edx-django-utils==6.0.0
+edx-django-utils==7.0.0
     # via edx-drf-extensions
 edx-drf-extensions==10.4.0
     # via
@@ -89,7 +88,7 @@ idna==3.10
     # via requests
 jsonfield==3.1.0
     # via -r requirements/base.in
-newrelic==10.1.0
+newrelic==10.2.0
     # via edx-django-utils
 oauthlib==3.2.2
     # via
@@ -101,7 +100,7 @@ pbr==6.1.0
     # via stevedore
 pillow==10.4.0
     # via edx-organizations
-psutil==6.0.0
+psutil==6.1.0
     # via edx-django-utils
 pycparser==2.22
     # via cffi
