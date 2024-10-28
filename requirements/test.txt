@@ -35,7 +35,7 @@ click==8.1.7
     #   edx-django-utils
 coverage==7.6.1
     # via -r requirements/test.in
-cryptography==43.0.1
+cryptography==43.0.3
     # via
     #   -r requirements/base.txt
     #   pyjwt
@@ -86,9 +86,8 @@ django-waffle==4.1.0
     #   -r requirements/base.txt
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.15.1
+djangorestframework==3.15.2
     # via
-    #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   drf-jwt
     #   edx-drf-extensions
@@ -101,7 +100,7 @@ drf-jwt==1.19.2
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-edx-django-utils==6.0.0
+edx-django-utils==7.0.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
@@ -132,7 +131,7 @@ mccabe==0.7.0
     # via pylint
 mock==5.1.0
     # via -r requirements/test.in
-newrelic==10.1.0
+newrelic==10.2.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -161,7 +160,7 @@ platformdirs==4.3.6
     # via pylint
 pluggy==1.5.0
     # via pytest
-psutil==6.0.0
+psutil==6.1.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
