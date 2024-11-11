@@ -32,7 +32,6 @@ defusedxml==0.8.0rc2
 django==4.2.16
     # via
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
-    #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-crum
     #   django-model-utils
