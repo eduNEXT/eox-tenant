@@ -9,7 +9,7 @@ EOX Tenant
    :alt: GitHub Actions Workflow Test Status
 .. |PyPI Badge| image:: https://img.shields.io/pypi/v/eox-tenant?label=PyPI
    :alt: PyPI - Version
-   
+
 Eox-tenant is a plugin for `Open edX`_, and part of the Edunext Open edX Extensions (aka EOX), that replaces the microsites and site_configurations features, offering a more robust multi-tenancy model.
 
 If you are looking for professional development or support with multitenancy or multi-sites in the Open edX platform, you can reach out to sales@edunext.co
@@ -22,10 +22,10 @@ Installation
 #. Add this plugin in your Tutor ``config.yml`` with the ``OPENEDX_EXTRA_PIP_REQUIREMENTS`` setting.
 
    .. code-block:: yaml
-      
+
       OPENEDX_EXTRA_PIP_REQUIREMENTS:
          - eox-tenant=={{version}}
-         
+
 #. Save the configuration with ``tutor config save``.
 #. Build the image and launch your platform with ``tutor local launch``.
 
@@ -67,6 +67,8 @@ Compatibility Notes
 +------------------+------------------+
 | Redwood          | >= v11.7.0       |
 +------------------+------------------+
+| Sumac            | >= v12.1.0       |
++------------------+------------------+
 
 ⚠️ Since the 6.2 version, eox-tenant does not support Django 2.2
 
@@ -90,7 +92,7 @@ Those settings can be changed in ``eox_tenant/settings/common.py`` or, for examp
 🚨 For version < 10.0.0 you need to enable eox-tenant adding in the LMS configuration:
 
 .. code-block:: yaml
-  
+
   USE_EOX_TENANT = True
 
 Commands
