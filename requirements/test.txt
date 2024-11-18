@@ -51,7 +51,6 @@ dill==0.3.9
     # via pylint
     # via
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
-    #   -c requirements/constraints.txt
     #   -r requirements/base.txt
     #   django-crum
     #   django-model-utils
@@ -81,7 +80,7 @@ django-simple-history==3.0.0
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   -r requirements/base.txt
     #   edx-organizations
-django-waffle==4.1.0
+django-waffle==4.2.0
     # via
     #   -r requirements/base.txt
     #   edx-django-utils
@@ -104,7 +103,7 @@ edx-django-utils==7.0.0
     # via
     #   -r requirements/base.txt
     #   edx-drf-extensions
-edx-drf-extensions==10.4.0
+edx-drf-extensions==10.5.0
     # via
     #   -r requirements/base.txt
     #   edx-organizations
@@ -142,7 +141,7 @@ oauthlib==3.2.2
     #   social-auth-core
 openedx-filters==1.9.0
     # via -r requirements/base.txt
-packaging==24.1
+packaging==24.2
     # via pytest
 path==17.0.0
     # via path-py
@@ -218,7 +217,7 @@ six==1.16.0
     # via -r requirements/base.txt
 social-auth-core==4.5.4
     # via -r requirements/base.txt
-sqlparse==0.5.1
+sqlparse==0.5.2
     # via
     #   -r requirements/base.txt
     #   django
@@ -229,7 +228,7 @@ stevedore==5.3.0
     #   edx-opaque-keys
 testfixtures==8.3.0
     # via -r requirements/test.in
-tomli==2.0.2
+tomli==2.1.0
     # via
     #   pylint
     #   pytest

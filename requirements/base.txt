@@ -56,7 +56,7 @@ django-simple-history==3.0.0
     # via
     #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
     #   edx-organizations
-django-waffle==4.1.0
+django-waffle==4.2.0
     # via
     #   edx-django-utils
     #   edx-drf-extensions
@@ -72,7 +72,7 @@ drf-jwt==1.19.2
     # via edx-drf-extensions
 edx-django-utils==7.0.0
     # via edx-drf-extensions
-edx-drf-extensions==10.4.0
+edx-drf-extensions==10.5.0
     # via
     #   -r requirements/base.in
     #   edx-organizations
@@ -127,7 +127,7 @@ six==1.16.0
     # via -r requirements/base.in
 social-auth-core==4.5.4
     # via -r requirements/base.in
-sqlparse==0.5.1
+sqlparse==0.5.2
     # via django
 stevedore==5.3.0
     # via
