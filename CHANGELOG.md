@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v12.1.0](https://github.com/eduNEXT/eox-core/compare/v12.0.0...v12.1.0) - (2024-11-18)
+
+### Changed
+
+- **Sumac Support**: Upgrade requirements base on edx-platform Sumac
+release and update integration tests to use new Sumac release with Tutor.
+
 ## [v12.0.0](https://github.com/eduNEXT/eox-tenant/compare/v11.7.0...v12.0.0) - (2024-10-22)
 
 #### ⚠ BREAKING CHANGES
