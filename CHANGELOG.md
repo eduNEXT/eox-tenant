@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v12.2.0](https://github.com/eduNEXT/eox-tenant/compare/v12.1.0...v12.2.0) - (2025-01-20)
+
+#### Features
+
+- adds FilterTenantAwareLinksFromStudio in filters pipeline ([2b82024](https://github.com/eduNEXT/eox-tenant/commit/2b820245433f8889448e70390b5b9efed9aa0dba))
+
 ## [v12.1.0](https://github.com/eduNEXT/eox-core/compare/v12.0.0...v12.1.0) - (2024-11-18)
 
 ### Changed
