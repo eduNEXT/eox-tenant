@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v13.1.0](https://github.com/eduNEXT/eox-tenant/compare/v13.0.0...v13.1.0) - (2025-02-27)
+
+### Features
+- **API:** Added `update-by-domain` action in `TenantConfigViewSet` to allow updates using `route__domain` as a lookup field. This enhances flexibility for scenarios where only the domain is known.
+
+### Improvements
+- **Validation:** Enforced dictionary validation for `lms_configs`, `studio_configs`, `theming_configs`, and `meta` fields in `TenantConfigSerializer`. These fields now strictly accept only dictionary values, preventing unexpected data types.
+
 ## [v13.0.0](https://github.com/eduNEXT/eox-tenant/compare/v12.1.0...v13.0.0) - (2025-01-20)
 
 #### Features
