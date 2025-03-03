@@ -32,6 +32,30 @@ class TenantConfigSerializer(serializers.ModelSerializer):
         model = TenantConfig
         fields = '__all__'
 
+    def validate_lms_configs(self, value):
+        """Ensure lms_configs is a dictionary."""
+        if not isinstance(value, dict):
+            raise serializers.ValidationError("lms_configs must be a dictionary.")
+        return value
+
+    def validate_studio_configs(self, value):
+        """Ensure studio_configs is a dictionary."""
+        if not isinstance(value, dict):
+            raise serializers.ValidationError("studio_configs must be a dictionary.")
+        return value
+
+    def validate_theming_configs(self, value):
+        """Ensure theming_configs is a dictionary."""
+        if not isinstance(value, dict):
+            raise serializers.ValidationError("theming_configs must be a dictionary.")
+        return value
+
+    def validate_meta(self, value):
+        """Ensure meta is a dictionary."""
+        if not isinstance(value, dict):
+            raise serializers.ValidationError("meta must be a dictionary.")
+        return value
+
 
 class RouteSerializer(serializers.ModelSerializer):
     """Serializer class for Route model."""

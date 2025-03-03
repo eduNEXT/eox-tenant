@@ -4,9 +4,11 @@ API v1 viewsets.
 import logging
 
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
 
 from eox_tenant.api.v1.permissions import EoxTenantAPIPermission
 from eox_tenant.api.v1.serializers import MicrositeSerializer, RouteSerializer, TenantConfigSerializer
@@ -446,6 +448,58 @@ class TenantConfigViewSet(AlternativeFieldLookupMixin, viewsets.ModelViewSet):
     serializer_class = TenantConfigSerializer
     alternative_lookup_field = 'external_key'
     queryset = TenantConfig.objects.all()
+
+    @action(detail=False, methods=['patch'], url_path='update-by-domain')
+    def update_by_domain(self, request):
+        """
+        Custom endpoint to update a TenantConfig using `route__domain`.
+
+        **Request Format:**
+        ```
+        PATCH /eox-tenant/api/v1/configs/update-by-domain/?domain=site3.localhost
+        Content-Type: application/json
+
+        {
+            "lms_configs": {
+                "PLATFORM_NAME": "Updated Name"
+            }
+        }
+        ```
+
+        **Response Format:**
+        ```
+        {
+            "id": 2,
+            "external_key": "xAer5z6FEbW",
+            "lms_configs": {
+                "PLATFORM_NAME": "Updated Name"
+            },
+            ...
+        }
+        ```
+        """
+        domain = request.query_params.get("domain")
+
+        if not domain:
+            return Response(
+                {"error": "The 'domain' query parameter is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            tenant_config = TenantConfig.objects.get(route__domain=domain)
+        except TenantConfig.DoesNotExist:  # pylint: disable=no-member
+            return Response(
+                {"error": f"No TenantConfig found for domain '{domain}'."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = self.get_serializer(tenant_config, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RouteViewSet(viewsets.ModelViewSet):
