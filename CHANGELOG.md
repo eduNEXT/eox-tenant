@@ -1,6 +1,6 @@
 ## v7.1.1 - 2025-03-30
 
-## [v7.1.1](https://github.com/eduNEXT/eox-tenant/compare/v7.0.0...v7.0.1) - (2025-03-30)
+## [v7.1.1](https://github.com/eduNEXT/eox-tenant/compare/v7.0.0...v7.1.1) - (2025-03-30)
 
 ### Features
 - **API:** Added `update-by-domain` action in `TenantConfigViewSet` to allow updates using `route__domain` as a lookup field. This enhances flexibility for scenarios where only the domain is known.
