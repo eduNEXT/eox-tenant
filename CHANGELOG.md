@@ -6,7 +6,6 @@
 - **API:** Added `update-by-domain` action in `TenantConfigViewSet` to allow updates using `route__domain` as a lookup field. This enhances flexibility for scenarios where only the domain is known.
 
 ### Improvements
-- **Validation:** Enforced dictionary validation for `lms_configs`, `studio_configs`, `theming_configs`, and `meta` fields in `TenantConfigSerializer`. These fields now strictly accept only dictionary values, preventing unexpected data types.
 - Fixes issue with login not being tenant-aware.
 
 ## v7.0.0 - 2022-12-19
