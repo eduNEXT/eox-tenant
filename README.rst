@@ -69,10 +69,10 @@ Compatibility Notes
 +------------------+------------------+
 | Sumac            | >= v12.1.0       |
 +------------------+------------------+
+| Teak             | >= v14.0.0       |
++------------------+------------------+
 
-⚠️ Since the 6.2 version, eox-tenant does not support Django 2.2
-
-The plugin is configured for the latest release (Redwood). The following changes in the plugin settings should be applied to be used for previous releases.
+The plugin is configured for the latest release (Teak). The following changes in the plugin settings should be applied to be used for previous releases.
 
 **Maple**
 
