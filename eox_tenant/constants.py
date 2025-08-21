@@ -5,3 +5,9 @@ LMS_ENVIRONMENT = getattr(settings, "SERVICE_VARIANT", None) == "lms"
 CMS_ENVIRONMENT = getattr(settings, "SERVICE_VARIANT", None) == "cms"
 LMS_CONFIG_COLUMN = "lms_configs"
 CMS_CONFIG_COLUMN = "studio_configs"
+BASE_ALLOWED_APPLICATIONS = [
+    "cms-sso",
+    "cms-sso-dev",
+    "superset-sso",
+    "superset-sso-dev"
+]
