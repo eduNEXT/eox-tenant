@@ -7,7 +7,5 @@ LMS_CONFIG_COLUMN = "lms_configs"
 CMS_CONFIG_COLUMN = "studio_configs"
 BASE_ALLOWED_APPLICATIONS = [
     "cms-sso",
-    "cms-sso-dev",
-    "superset-sso",
-    "superset-sso-dev"
+    "cms-sso-dev"
 ]
