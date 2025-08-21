@@ -6,7 +6,7 @@ import logging
 from crum import get_current_request
 from django.conf import settings
 
-from eox_tenant.constants import BASE_ALLOWED_APPLICATIONS
+from eox_tenant.constants import DEFAULT_ALLOWED_AUTH_APPLICATIONS
 from eox_tenant.edxapp_wrapper.oauth_dispatch import get_edx_oauth2_validator_class
 
 EdxOAuth2Validator = get_edx_oauth2_validator_class()
@@ -23,7 +23,7 @@ class EoxTenantOAuth2Validator(EdxOAuth2Validator):
         """Return the application if the current url is allowed."""
         current_url = get_current_request().build_absolute_uri('/')
         allowed_auth_applications = getattr(settings, 'ALLOWED_AUTH_APPLICATIONS', [])
-        allowed_applications = allowed_auth_applications + BASE_ALLOWED_APPLICATIONS
+        allowed_applications = allowed_auth_applications + DEFAULT_ALLOWED_AUTH_APPLICATIONS
         application = super()._load_application(client_id, request)
 
         if not application:
