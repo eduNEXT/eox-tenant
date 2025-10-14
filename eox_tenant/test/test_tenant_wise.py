@@ -232,4 +232,6 @@ class TenantSiteConfigProxyTest(TransactionTestCase):
 
             with self.assertRaises(TypeError):
                 json.dumps(unserializable_settings)
-            self.assertDictContainsSubset(site_values, unserializable_settings)
+            for key, value in site_values.items():
+                self.assertIn(key, unserializable_settings)
+                self.assertEqual(unserializable_settings[key], value)

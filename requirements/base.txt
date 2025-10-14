@@ -4,33 +4,32 @@
 #
 #    make upgrade
 #
-asgiref==3.8.1
+asgiref==3.10.0
     # via django
-certifi==2025.4.26
+certifi==2025.10.5
     # via requests
-cffi==1.17.1
+cffi==2.0.0
     # via
     #   cryptography
     #   pynacl
-charset-normalizer==3.4.2
+charset-normalizer==3.4.3
     # via requests
-click==8.2.1
+click==8.3.0
     # via edx-django-utils
-cryptography==45.0.4
-    # via
-    #   pyjwt
-    #   social-auth-core
+cryptography==46.0.2
+    # via pyjwt
 defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
-django==4.2.23
+django==5.2.7
     # via
-    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
+    #   -c requirements/constraints.txt
     #   -r requirements/base.in
     #   django-crum
     #   django-model-utils
     #   django-mysql
+    #   django-simple-history
     #   django-waffle
     #   djangorestframework
     #   drf-jwt
@@ -45,27 +44,25 @@ django-crum==0.7.9
     #   edx-django-utils
 django-model-utils==5.0.0
     # via edx-organizations
-django-mysql==4.17.0
+django-mysql==4.19.0
     # via -r requirements/base.in
-django-simple-history==3.0.0
-    # via
-    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
-    #   edx-organizations
-django-waffle==4.2.0
+django-simple-history==3.10.1
+    # via edx-organizations
+django-waffle==5.0.0
     # via
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.16.0
+djangorestframework==3.16.1
     # via
     #   -r requirements/base.in
     #   drf-jwt
     #   edx-drf-extensions
     #   edx-organizations
-dnspython==2.7.0
+dnspython==2.8.0
     # via pymongo
 drf-jwt==1.19.2
     # via edx-drf-extensions
-edx-django-utils==8.0.0
+edx-django-utils==8.0.1
     # via edx-drf-extensions
 edx-drf-extensions==10.6.0
     # via
@@ -77,38 +74,37 @@ edx-opaque-keys[django]==3.0.0
     #   edx-drf-extensions
     #   edx-organizations
     #   openedx-filters
-edx-organizations==7.1.0
+edx-organizations==7.3.0
     # via -r requirements/base.in
-idna==3.10
+idna==3.11
     # via requests
-jsonfield==3.1.0
+jsonfield==3.2.0
     # via -r requirements/base.in
-oauthlib==3.2.2
+oauthlib==3.3.1
     # via
     #   requests-oauthlib
     #   social-auth-core
 openedx-filters==2.1.0
     # via -r requirements/base.in
-pbr==6.1.1
-    # via stevedore
-pillow==11.2.1
+pillow==11.3.0
     # via edx-organizations
-psutil==7.0.0
+psutil==7.1.0
     # via edx-django-utils
-pycparser==2.22
+pycparser==2.23
     # via cffi
 pyjwt[crypto]==2.10.1
     # via
     #   drf-jwt
     #   edx-drf-extensions
+    #   pyjwt
     #   social-auth-core
-pymongo==4.13.0
+pymongo==4.15.3
     # via edx-opaque-keys
-pynacl==1.5.0
+pynacl==1.6.0
     # via edx-django-utils
 python3-openid==3.2.0
     # via social-auth-core
-requests==2.32.4
+requests==2.32.5
     # via
     #   edx-drf-extensions
     #   requests-oauthlib
@@ -119,20 +115,18 @@ semantic-version==2.10.0
     # via edx-drf-extensions
 six==1.17.0
     # via -r requirements/base.in
-social-auth-core==4.6.1
+social-auth-core==4.8.1
     # via -r requirements/base.in
 sqlparse==0.5.3
     # via django
-stevedore==5.4.1
+stevedore==5.5.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
-typing-extensions==4.14.0
+typing-extensions==4.15.0
     # via edx-opaque-keys
-urllib3==2.2.3
-    # via
-    #   -c https://raw.githubusercontent.com/openedx/edx-lint/master/edx_lint/files/common_constraints.txt
-    #   requests
+urllib3==2.5.0
+    # via requests
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

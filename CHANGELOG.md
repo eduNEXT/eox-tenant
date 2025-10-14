@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v14.2.0](https://github.com/eduNEXT/eox-tenant/compare/v14.1.2...v14.2.0) - (2025-10-13)
+
+### Changed
+
+- **Ulmo Support**: Upgrade requirements base on edx-platform Ulmo
+release, update GitHub Workflows with new actions version.
+
 ## [v14.1.2](https://github.com/eduNEXT/eox-tenant/compare/v14.1.1...v14.1.2) - (2025-09-09)
 
 ### Changed
