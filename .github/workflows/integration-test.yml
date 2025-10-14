@@ -1,16 +1,56 @@
 name: Tutor Integration Tests
+
 on: [pull_request]
 
 jobs:
-  integration-test:
-    name: Tutor Integration Tests
+  create_sequence:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/setup-node@v4
+      - run: npm install -g jq
+      
+      - id: set-matrix
+        name: Build Sequential Dependency List
+        run: |
+          VERSIONS="<20.0.0 <21.0.0 main"
+          PREV_JOB="initial-step"
+          
+          MATRIX_JSON="[]"
+          
+          for VERSION in $VERSIONS; do
+            CURRENT_JOB="test-$(echo $VERSION | sed 's/[<>]//g' | tr -d .)"
+            
+            MATRIX_JSON=$(echo $MATRIX_JSON | jq --arg ver "$VERSION" --arg prev "$PREV_JOB" --arg current "$CURRENT_JOB" \
+              '. += [{id: $current, tutor_version: $ver, needs_job: $prev}]')
+            
+            PREV_JOB=$CURRENT_JOB
+          done
+          
+          echo "matrix=$(echo $MATRIX_JSON | jq -c .)" >> $GITHUB_OUTPUT
+
+  initial-step:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Starting the sequential run."
+
+  integration-test:
+    needs: [create_sequence, initial-step]
+    
+    runs-on: ubuntu-latest
+    
     strategy:
       fail-fast: false
       matrix:
-        tutor_version: ['<20.0.0', '<21.0.0', 'main']
+        include: ${{ fromJSON(needs.create_sequence.outputs.matrix) }}
+    id: ${{ matrix.id }}
+    name: "Tutor Integration Tests - ${{ matrix.tutor_version }}"
+    needs: 
+      - ${{ matrix.needs_job }}
+
     steps:
-      - name: Run Integration Tests
+      - name: Run Integration Tests with Tutor ${{ matrix.tutor_version }}
         uses: eduNEXT/integration-test-in-tutor@main
         with:
           tutor_version: ${{ matrix.tutor_version }}
