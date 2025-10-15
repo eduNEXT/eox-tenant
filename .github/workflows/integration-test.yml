@@ -4,7 +4,7 @@ on: [pull_request]
 jobs:
   integration-test:
     name: Tutor Integration Tests
-    runs-on: large-runner-8cpu
+    runs-on: 'large-runner-8cpu'
     strategy:
       fail-fast: false
       max-parallel: 1
