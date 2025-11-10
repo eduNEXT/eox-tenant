@@ -12,7 +12,7 @@ jobs:
         tutor_version: ['<20.0.0', '<21.0.0', 'main']
     steps:
       - name: Run Integration Tests
-        uses: eduNEXT/integration-test-in-tutor@main
+        uses: eduNEXT/integration-test-in-tutor@and/modify_inline_plugins_order
         with:
           tutor_version: ${{ matrix.tutor_version }}
           app_name: 'eox-tenant'
