@@ -232,7 +232,7 @@ def tenant_context_addition(sender, body, headers, *args, **kwargs):  # pylint: 
 
     get_host_func = AsyncTaskHandler().get_host_from_task(sender)
     headers['eox_tenant_sender'] = get_host_func(body)
-    body['kwargs']['eox_tenant_sender'] = get_host_func(body)
+    body[1]['eox_tenant_sender'] = get_host_func(body)  # body = (args, kwargs, Mapping embed)
 
 
 def start_async_lms_tenant(sender, *args, **kwargs):  # pylint: disable=unused-argument
