@@ -300,9 +300,9 @@ class CeleryReceiverCLISyncTests(TestCase):
 
     def setUp(self):
         """ setup """
-        self.body = {
-            'kwargs': {},
-        }
+        args = []
+        kwargs = {}  # This is the default value for kwargs
+        self.body = (args, kwargs)
         for number in range(3):
             Site.objects.create(
                 domain=f"tenant{number}.com",
@@ -354,9 +354,10 @@ class CeleryReceiverSyncTests(TestCase):
         When the task is called from a sync proccess it is used the value of the 'host' key in the request dict.
         """
         headers = {}
-        body = {
-            'kwargs': {},
-        }
+        args = []
+        kwargs = {}
+        body = (args, kwargs)
+
         with self.settings(EDNX_TENANT_DOMAIN="some.tenant.com"):
             tenant_context_addition("some.task", headers=headers, body=body)
 

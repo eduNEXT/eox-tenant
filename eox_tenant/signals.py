@@ -232,6 +232,7 @@ def tenant_context_addition(sender, body, headers, *args, **kwargs):  # pylint: 
 
     get_host_func = AsyncTaskHandler().get_host_from_task(sender)
     headers['eox_tenant_sender'] = get_host_func(body)
+    body[1]['eox_tenant_sender'] = get_host_func(body)  # body = (args, kwargs, Mapping embed)
 
 
 def start_async_lms_tenant(sender, *args, **kwargs):  # pylint: disable=unused-argument
@@ -262,6 +263,7 @@ def _start_async_tenant(sender, config_key):
     context = sender.request
     headers = context.get('headers') or {}
     http_host = headers.get('eox_tenant_sender')
+    http_host = context.get('kwargs', {}).pop('eox_tenant_sender', http_host)
 
     if not http_host:  # Reset settings in case of no tenant.
         LOG.warning("Could not find the host information for eox_tenant.signals. ")
