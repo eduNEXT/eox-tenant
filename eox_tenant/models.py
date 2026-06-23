@@ -23,6 +23,7 @@ class TenantOrganization(models.Model):
         max_length=100,
         unique=True,
         db_index=True,
+        db_collation="utf8mb4_bin",
     )
 
     class Meta:
