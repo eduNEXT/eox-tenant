@@ -107,3 +107,5 @@ INTEGRATION_TEST_SETTINGS = {
     "EOX_TENANT_BASE_URL": f"http://{os.environ.get('LMS_HOST', 'local.edly.io')}/eox-tenant",
     "API_TIMEOUT": 5,
 }
+
+TESTING_MIGRATIONS = True
