@@ -5,9 +5,13 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-    db_collation_name = "utf8mb4_bin"
-    if getattr(settings, 'TESTING_MIGRATIONS', False):
-        db_collation_name = "BINARY"
+    db_engine = settings.DATABASES['default']['ENGINE']
+    # If the engine is SQLite, use BINARY
+    if 'sqlite' in db_engine:
+        db_collation_name = 'BINARY'
+    # Otherwise, default to MySQL's utf8mb4_bin
+    elif 'mysql' in db_engine:
+        db_collation_name = 'utf8mb4_bin'
 
     dependencies = [
         ('eox_tenant', '0008_synchronize_tenants'),
