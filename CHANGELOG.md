@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v14.4.0](https://github.com/eduNEXT/eox-tenant/compare/v14.3.0...v14.4.0) - (2026-06-24)
+
+### Changed
+
+- **Verawood Support**: Update integration tests to use new Verawood release with Tutor,
+  update GitHub Actions versions, and update integration-test workflow to add Verawood
+  and remove oldest Tutor version support.
+
 ## [v14.3.0](https://github.com/eduNEXT/eox-tenant/compare/v14.2.1...v14.3.0) - (2026-03-12)
 
 ### Fixed

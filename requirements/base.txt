@@ -4,25 +4,27 @@
 #
 #    make upgrade
 #
-asgiref==3.10.0
+asgiref==3.11.1
     # via django
-certifi==2025.10.5
+certifi==2026.6.17
     # via requests
 cffi==2.0.0
     # via
     #   cryptography
     #   pynacl
-charset-normalizer==3.4.3
+charset-normalizer==3.4.7
     # via requests
-click==8.3.0
+click==8.4.2
     # via edx-django-utils
-cryptography==46.0.2
-    # via pyjwt
+cryptography==49.0.0
+    # via
+    #   pyjwt
+    #   social-auth-core
 defusedxml==0.7.1
     # via
     #   python3-openid
     #   social-auth-core
-django==5.2.7
+django==5.2.15
     # via
     #   -c requirements/constraints.txt
     #   -r requirements/base.in
@@ -46,13 +48,13 @@ django-model-utils==5.0.0
     # via edx-organizations
 django-mysql==4.19.0
     # via -r requirements/base.in
-django-simple-history==3.10.1
+django-simple-history==3.12.0
     # via edx-organizations
 django-waffle==5.0.0
     # via
     #   edx-django-utils
     #   edx-drf-extensions
-djangorestframework==3.16.1
+djangorestframework==3.17.1
     # via
     #   -r requirements/base.in
     #   drf-jwt
@@ -68,15 +70,15 @@ edx-drf-extensions==10.6.0
     # via
     #   -r requirements/base.in
     #   edx-organizations
-edx-opaque-keys[django]==3.0.0
+edx-opaque-keys[django]==4.0.0
     # via
     #   -r requirements/base.in
     #   edx-drf-extensions
     #   edx-organizations
     #   openedx-filters
-edx-organizations==7.3.0
+edx-organizations==8.0.0
     # via -r requirements/base.in
-idna==3.11
+idna==3.18
     # via requests
 jsonfield==3.2.0
     # via -r requirements/base.in
@@ -84,27 +86,27 @@ oauthlib==3.3.1
     # via
     #   requests-oauthlib
     #   social-auth-core
-openedx-filters==2.1.0
+openedx-filters==3.7.0
     # via -r requirements/base.in
-pillow==11.3.0
+pillow==12.2.0
     # via edx-organizations
-psutil==7.1.0
+psutil==7.2.2
     # via edx-django-utils
-pycparser==2.23
+pycparser==3.0
     # via cffi
-pyjwt[crypto]==2.10.1
+pyjwt[crypto]==2.13.0
     # via
     #   drf-jwt
     #   edx-drf-extensions
     #   pyjwt
     #   social-auth-core
-pymongo==4.15.3
+pymongo==4.17.0
     # via edx-opaque-keys
-pynacl==1.6.0
+pynacl==1.6.2
     # via edx-django-utils
 python3-openid==3.2.0
     # via social-auth-core
-requests==2.32.5
+requests==2.34.2
     # via
     #   edx-drf-extensions
     #   requests-oauthlib
@@ -115,17 +117,17 @@ semantic-version==2.10.0
     # via edx-drf-extensions
 six==1.17.0
     # via -r requirements/base.in
-social-auth-core==4.8.1
+social-auth-core==5.0.1
     # via -r requirements/base.in
-sqlparse==0.5.3
+sqlparse==0.5.5
     # via django
-stevedore==5.5.0
+stevedore==5.8.0
     # via
     #   edx-django-utils
     #   edx-opaque-keys
 typing-extensions==4.15.0
     # via edx-opaque-keys
-urllib3==2.5.0
+urllib3==2.7.0
     # via requests
 
 # The following packages are considered to be unsafe in a requirements file:
